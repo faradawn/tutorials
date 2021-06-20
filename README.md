@@ -6,7 +6,7 @@
 ```
 点击“new repository”
 ```
-新建文件夹
+新建文件夹  
 ```
 git init
 git branch -m main
