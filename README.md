@@ -38,6 +38,43 @@ git push -u origin dev
 ```
 git stash
 ```
+删除已经push的文件
+```
+git rm --cached .DS_Store
+git commit -m 'rm DS_Store'
+git push
+```
+
+### 第三步：部署远程hook
+在Ubuntu18.04
+```
+cd /var; sudo mkdir repo; cd repo; sudo mkdir django-api.git; cd django-api.git
+
+sudo apt install git
+sudo git init --bare
+cd hooks
+sudo vi post-receive
+
+===
+#!/bin/sh
+git --work-tree=/home/faradawn/django-api --git-dir=/var/repo/django-api.git checkout -f
+===
+
+chmod +x post-receive
+
+sudo chown -R faradawn:www-data /var/repo/django-api.git
+sudo chown -R faradawn:www-data /home/faradawn/django-api
+```
+若出问题，可看教程 [deploy git ubuntu](https://kags.me.ke/post/digitalocean-setup-git-server-deploy-with-hooks-ubuntu/)  
+
+
+在mac电脑上
+```
+git remote add live faradawn@103.79.76.243:/var/repo/django-api.git
+git add & commmit
+git push live master
+// 成功！
+```
 
 
 
