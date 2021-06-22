@@ -23,7 +23,21 @@ git push -u origin main
 ```
 添加ssh
 ```
-todo
+// on mac
+ssh-keygen -t rsa -f mygit_rsa
+  按回车跳过 passphrase
+
+vi ~/.ssh/config
+
+===
+Host github.com
+  AddKeysToAgent yes
+  IdentityFile ~/.ssh/mygit_rsa
+===
+
+pbcopy < ~/.ssh/mygit_rsa.pub
+  去github - settings SSH and GPG keys - add SSH key
+  黏贴，完成！
 ```
 
 ### 第二步：进阶操作
