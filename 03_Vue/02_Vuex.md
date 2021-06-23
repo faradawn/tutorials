@@ -1,6 +1,8 @@
 # Vuex
 
 ## 难度一：简单计数器
+![image counter](./src/img/img1_counter.png)
+
 在最外层 main.js
 ```
 import Vue from "vue"
@@ -80,6 +82,8 @@ export default {
 ```
 
 ## 难度二：获取URL笑话集
+![image2 joke](./src/img/img2_joke.png)
+
 在main.js相同的代码  
 
 在/store/index.js里添加 actions
