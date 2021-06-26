@@ -1,7 +1,7 @@
 # 01 - Vue Routing 的指南
 
 ## 难度一：基本routing
-![img routing](./src/img_routing.png)
+![img routing](./src/img/img_routing.png)
 
 安装 vue-router
 ```
