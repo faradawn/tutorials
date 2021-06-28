@@ -1,6 +1,6 @@
-# Vuex
+# 如何添加 Vuex 到网站
 
-## 难度一：简单计数器
+## 第一部分：简单计数器
 ![image counter](./src/img/img1_counter.png)
 
 在最外层 main.js
@@ -81,7 +81,7 @@ export default {
 </script>
 ```
 
-## 难度二：获取URL笑话集
+## 第二部分：获取URL笑话集
 ![image2 joke](./src/img/img2_joke.png)
 
 在main.js相同的代码  

@@ -17,14 +17,24 @@
           let fns = this.events[name] || [];
           fns.push(fn);
           this.events[name] = fns;
-          console.log('added', this.events[name][0]);
-          return this; // check
+          console.log('added', this.events[name][this.events[name].length-1]);
+          return this; 
 
         };
 
+        once(name, fn){
+          let newFn = (...params)=>{
+            fn.apply(this.params); // check
+            this.off(name, newFn);
+          }
+
+          this.on(name, newFn);
+          return this;
+        }
+
         emit(name, ...params){
           if(!this.events[name]){
-            console.log('no referece in dictionary');
+            console.log("no event registered");
             return;
           } else {
             this.events[name].forEach(fn => fn(...params));
@@ -54,6 +64,11 @@
       event1.emit('hi', 'hi', 'herer');
       event1.off('hi', (c)=>console.log('second fn', c));
       event1.emit('hi', 'a', 'b');
+
+      event1.once('once', (d)=>console.log('oncebaby', 'hi'));
+      event1.emit('once', 'babay1');
+      event1.emit('once', 'baby2');
+
 
 
 

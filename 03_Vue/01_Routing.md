@@ -1,6 +1,6 @@
-# 01 - Vue Routing 的指南
+# 如何添加 Vue Routing？
 
-## 难度一：基本routing
+## 第一部分：基本routing
 ![img routing](./src/img/img_routing.png)
 
 安装 vue-router
@@ -86,7 +86,7 @@ export default {
 ```
 恭喜完成！
 
-## 难度二：带参数的 programmatic routing
+## 第二部分：带参数的 programmatic routing
 使用push和replace
 ```
 //

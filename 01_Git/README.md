@@ -1,6 +1,6 @@
-# 一份给忙碌者的教程
-## Part 1：学习git🔮
-### 第一步：配置global config
+# 一份给忙碌者的 Git 教程
+
+## 第一步：配置global config
 在全局ignore files
 ```
 cd ~
@@ -40,7 +40,7 @@ pbcopy < ~/.ssh/mygit_rsa.pub
   黏贴，完成！
 ```
 
-### 第二步：进阶操作
+## 第二步：进阶操作
 新建并切换分支
 ```
 git branch -a // 查看现在的branch
@@ -59,7 +59,7 @@ git commit -m 'rm DS_Store'
 git push
 ```
 
-### 第三步：部署远程hook
+## 第三步：部署远程hook
 在Ubuntu18.04
 ```
 cd /var; sudo mkdir repo; cd repo; sudo mkdir django-api.git; cd django-api.git
@@ -88,12 +88,7 @@ git remote add live faradawn@103.79.76.243:/var/repo/django-api.git
 git add & commmit
 git push live master
 // 成功！
-```
-
-
-
-
-
+``
 
 
 
