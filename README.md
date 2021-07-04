@@ -13,8 +13,8 @@
 [第四部分 React](./04_React) | React hooks, useEffect
 
 
-## 我的问题集�
-React 问题 6.28.2021 字节一面
+## 我的问题集🤔
+React 问题 2021.6.28 字节云一面
 - [ ] 数据结构 Map，Set 都是什么?
 - [ ] CSS 里 box-sizing 是什么?
 - [ ] React 里 hooks function 每次都吊用，怎么保留 state 的？
@@ -24,7 +24,10 @@ React 问题 6.28.2021 字节一面
 Js 问题
 - [ ] 什么是 callbackfunction
 - [ ] 什么是 (... args)
-- [] 什么是 
+- [] 什么是
+
+React Native 开发问题 2021.7.03
+- [x] "cannot update differnt component", 原因 onPress={(没加括号)=>}, onChangeInput={setPassword}
 
 ## 祝度过愉快的一天 🥳
 -- 远南岛
