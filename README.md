@@ -26,8 +26,9 @@ Js 问题
 - [ ] 什么是 (... args)
 - [] 什么是
 
-React Native 开发问题 2021.7.03
+React Native 问题和解法 2021.7.03
 - [x] "cannot update differnt component", 原因 onPress={(没加括号)=>}, onChangeInput={setPassword}
+- [x] "Error: could not find react-redux context value. please ensure the component is wrapped in a <Provider>", 原因：useSelector 放在了App.js, which 在<Provider/> 外部
 
 ## 祝度过愉快的一天 🥳
 -- 远南岛
