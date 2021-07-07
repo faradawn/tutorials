@@ -28,7 +28,8 @@ Js 问题
 
 React Native 问题和解法 2021.7.03
 - [x] "cannot update differnt component", 原因 onPress={(没加括号)=>}, onChangeInput={setPassword}
-- [x] "Error: could not find react-redux context value. please ensure the component is wrapped in a <Provider>", 原因：useSelector 放在了App.js, which 在<Provider/> 外部
+- [x] "Error: could not find react-redux context value. please ensure the component is wrapped in a <Provider>", 原因：useSelector 放在了App.js, which 在<Provider/> 外部.  
+- [x] "小程序 bad value with message", 解决：用{{item['生日']}} 而不是 item.生日  
 
 ## 祝度过愉快的一天 🥳
 -- 远南岛
