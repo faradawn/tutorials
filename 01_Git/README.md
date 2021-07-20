@@ -24,6 +24,7 @@ git push -u origin main
 添加ssh
 ```
 // on mac
+mkdir .ssh; cd .ssh
 ssh-keygen -t rsa -f mygit_rsa
   按回车跳过 passphrase
 
