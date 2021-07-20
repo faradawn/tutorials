@@ -12,6 +12,25 @@
 [第三部分 Vue](./03_Vue) | Vue 的路由器，Vuex等
 [第四部分 React](./04_React) | React hooks, useEffect
 
+## 配置bash和git
+配置 .bash_profie
+```
+alias ..="cd .."
+alias cl="clear"
+alias gi="git push"
+alias gl="git pull"
+```
+配置 git 用户名
+```
+git config --global --edit
+git config --global user.name "bob"
+git config --global user.email bob@gmail.com
+git config --global init.defaultBranch master
+```
+设置 git ssh
+```
+在git tutorial
+```
 
 ## 我的问题集🤔
 React 问题 2021.6.28 字节云一面
