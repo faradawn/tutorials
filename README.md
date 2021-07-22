@@ -31,6 +31,19 @@ git config --global init.defaultBranch master
 ```
 在git tutorial
 ```
+VS Code 设置
+```
+下载插件：
+vim, one dark pro, 
+
+允许按住键盘：
+defaults write -g ApplePressAndHoldEnabled -bool false
+defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
+
+跳到上一个编辑：
+control -, control shift -
+
+```
 
 ## 我的问题集🤔
 React 问题 2021.6.28 字节云一面
