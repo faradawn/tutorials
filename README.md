@@ -44,6 +44,22 @@ defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
 control -, control shift -
 
 ```
+HTML Template
+```
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Title</title>
+</head>
+<body>
+  <div id="root"></div>
+</body>
+</html>
+
+```
+
 
 ## 我的问题集🤔
 React 问题 2021.6.28 字节云一面
