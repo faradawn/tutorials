@@ -41,4 +41,46 @@ listButton = item.answerArr.map((val, i) => (
 ));
 ```
 
+### 问题集
+- 声明变量 let，var，const 区别？
+    - `let` 最小局部
+    - `var` 变量
+    - `const` 常量
+- Js的数组为什么能扩容？
+
+- 随机生成数组算法
+    - while 比 for 快？
+    - let i 写在 for 里快？
+    - indexOf 比 find 快？
+    - 每次计算 arr.length 比存起来快？（for里i<arr.length只计算一遍？)
+    - ```
+      outArr.indexOf(rand) !== -1 
+      outArr.find((val) => val===rand)
+      outArr.find(val => val===rand)
+      // 速度：indexOf > find((val) => > find(val =>
+      
+      ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
