@@ -43,8 +43,19 @@ defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
 跳到上一个编辑：
 control -, control shift -
 
+设置 tab size 空格
+"editor.tabSize": 4,
+"[javascript]": {
+    "editor.tabSize": 2
+},
+"[json]": {
+    "editor.tabSize": 2
+},
+
+"editor.insertSpaces": true
+
 ```
-HTML Template
+HTML 中文语言模版
 ```
 <!DOCTYPE html>
 <html lang="zh-Hans">
