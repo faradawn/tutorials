@@ -44,6 +44,12 @@ listButton = item.answerArr.map((val, i) => (
 ### 问题集
 - 声明变量 let，var，const 区别？
     - `var` 自动初始化undefined，声明提升
+      - ```
+        if(false){
+          var a = 10;
+        }
+        console.log(a); // undefined
+        ```
     - `let` 不初始化，局部大括号
     - `const` 必须初始化，局部大括号
 - Js的数组为什么能扩容？
