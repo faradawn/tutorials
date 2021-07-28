@@ -43,9 +43,9 @@ listButton = item.answerArr.map((val, i) => (
 
 ### 问题集
 - 声明变量 let，var，const 区别？
-    - `let` 最小局部
-    - `var` 变量
-    - `const` 常量
+    - `var` 自动初始化undefined，声明提升
+    - `let` 不初始化，局部大括号
+    - `const` 必须初始化，局部大括号
 - Js的数组为什么能扩容？
 
 - 随机生成数组算法
