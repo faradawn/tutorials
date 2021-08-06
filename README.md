@@ -73,7 +73,6 @@ HTML 中文语言模版
 
 
 ## 我的问题集🤔
-React 问题 2021.6.28 字节云一面
 - [ ] 数据结构 Map，Set 都是什么?
 - [ ] CSS 里 box-sizing 是什么?
 - [ ] React 里 hooks function 每次都吊用，怎么保留 state 的？
