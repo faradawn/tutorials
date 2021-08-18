@@ -7,39 +7,16 @@
 [第一节 DOM](./01_DOM.md) | 如何获取HTML里元素和属性
 [第二节 Event](./02_Event.md) | 如何实现一个Event类
 
+### 有用的小技巧
+替代 Math.floor() 快速化整
+```
+let i = Math.random() * 10 << 2
+```
+把数字转换成字母
+```
+(i+10).toString(36).toUpperCase();
+```
 
-## 问题积累
-- 声明变量 let，var，const 区别？
-    - `var` 自动初始化undefined，声明提升
-      - ```
-        if(false){
-          var a = 10;
-        }
-        console.log(a); // undefined
-        ```
-    - `let` 不初始化，局部大括号
-    - `const` 必须初始化，局部大括号
-- Js的数组为什么能扩容？
-
-- 随机生成数组算法
-    - while 比 for 快？
-    - let i 写在 for 里快？
-    - indexOf 比 find 快？
-    - 每次计算 arr.length 比存起来快？（for里i<arr.length只计算一遍？)
-    - ```
-      outArr.indexOf(rand) !== -1 
-      outArr.find((val) => val===rand)
-      outArr.find(val => val===rand)
-      // 速度：indexOf > find((val) => > find(val =>
-      
-      ```
-
-
-### 有用的小函数
-- 把数字转换成字母
-  - ```
-    (i+10).toString(36).toUpperCase();
-    ```
 
 ### 数组的变换
 给 state array 添加和删除元素
@@ -70,26 +47,31 @@ listButton = item.answerArr.map((val, i) => (
 ```
 
 
+## 问题积累
+- 声明变量 let，var，const 区别？
+    - `var` 自动初始化undefined，声明提升
+      - ```
+        if(false){
+          var a = 10;
+        }
+        console.log(a); // undefined
+        ```
+    - `let` 不初始化，局部大括号
+    - `const` 必须初始化，局部大括号
+- Js的数组为什么能扩容？
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- 随机生成数组算法
+    - while 比 for 快？
+    - let i 写在 for 里快？
+    - indexOf 比 find 快？
+    - 每次计算 arr.length 比存起来快？（for里i<arr.length只计算一遍？)
+    - ```
+      outArr.indexOf(rand) !== -1 
+      outArr.find((val) => val===rand)
+      outArr.find(val => val===rand)
+      // 速度：indexOf > find((val) => > find(val =>
+      
+      ```
 
 
 
