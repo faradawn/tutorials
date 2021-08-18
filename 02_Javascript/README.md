@@ -7,7 +7,7 @@
 [第一节 DOM](./01_DOM.md) | 如何获取HTML里元素和属性
 [第二节 Event](./02_Event.md) | 如何实现一个Event类
 
-### 有用的小技巧
+## 有用的小技巧
 替代 Math.floor() 快速化整
 ```
 let i = Math.random() * 10 << 2
