@@ -15,10 +15,21 @@
 ## 配置bash和git
 配置 .bash_profie
 ```
+PS1="\[\e[1;36m\w \e[m\]"
+
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
+export NVM_DIR=~/.nvm
+source $(brew --prefix nvm)/nvm.sh
+
+alias by="cd ~/cs-home/byto-web/byto-web; code .; yarn serve"
+
 alias ..="cd .."
-alias cl="clear"
 alias gi="git push"
 alias gl="git pull"
+alias ga="git add ."
+alias gc="git commit -m"
+alias cl="clear"
 ```
 配置 git 用户名
 ```
