@@ -15,7 +15,7 @@
 ## 配置bash和git
 配置 .bash_profie
 ```
-PS1="\[\e[1;36m\w \e[m\]"
+PS1="\[\033[1;36m\]\w "
 
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
