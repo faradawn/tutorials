@@ -17,12 +17,12 @@
 ### ssh 连接 ubuntu
 复制 public key 到服务器的 /.ssh/authorized_keys
 ```
-ssh-copy-id -i ~/.ssh/mygit_rsa.pub user@cs154.cs.server
+ssh-copy-id -i ~/.ssh/mygit_rsa.pub user@cs154.cs.server.xxx
 ```
 下一次直接
 ```
 ssh 'faradawn@cs154.cs.uchicago.edu'
-或者 ssh -i ~/.ssh/mygit_rsa.pub faradawn@cs154.cs.uchicago.edu
+或者 ssh -i ~/.ssh/mygit_rsa.pub user@cs154.cs.server.xxx
 ```
 
 ### bash和git
