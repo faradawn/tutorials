@@ -12,7 +12,20 @@
 [第三部分 Vue](./03_Vue) | Vue 的路由器，Vuex等
 [第四部分 React](./04_React) | React hooks, useEffect
 
-## 配置bash和git
+## 一些小配置
+
+### ssh 连接 ubuntu
+复制 public key 到服务器的 /.ssh/authorized_keys
+```
+ssh-copy-id -i ~/.ssh/mygit_rsa.pub user@cs154.cs.server
+```
+下一次直接
+```
+ssh 'faradawn@cs154.cs.uchicago.edu'
+或者 ssh -i ~/.ssh/mygit_rsa.pub faradawn@cs154.cs.uchicago.edu
+```
+
+### bash和git
 配置 .bash_profie
 ```
 PS1="\[\033[1;36m\]\w "
@@ -42,7 +55,8 @@ git config --global init.defaultBranch master
 ```
 在git tutorial
 ```
-VS Code 设置
+
+### VS Code 设置
 ```
 下载插件：
 vim, one dark pro, 
