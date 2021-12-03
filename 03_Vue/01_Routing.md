@@ -1,15 +1,15 @@
 # 如何添加 Vue Routing？
 
 ## 第一部分：基本routing
-![img routing](./src/img/img_routing.png)
+<img src="./src/img/img_routing.png" height="200px"/>
 
 安装 vue-router
-```
+```js
 yarn add vue-router 
 ```
 
 新建文件夹 /router/index.js
-```
+```js
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '../views/Home'
@@ -33,12 +33,13 @@ export default new Router({
       name: 'About',
       component: About,
     },
-  ]
+  ],
+  mode: "history" // 就不用输入 # 了
 })
 ```
 
 在 main.js 添加
-```
+```js
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -52,7 +53,7 @@ new Vue({
 ```
 
 在 App.vue 里添加
-```
+```js
 <template>
   <div id="#app">
     <router-view></router-view>
@@ -65,10 +66,9 @@ export default {
 }
 </script>
 ```
-之后输入 /#/about 即可
 
 选做：在 Home.vue 里添加
-```
+```js
 <template>
   <div>
     <h1> 欢迎来到 Home！ </h1>
@@ -86,13 +86,47 @@ export default {
 ```
 恭喜完成！
 
+
 ## 第二部分：带参数的 programmatic routing
-使用push和replace
+route 的 index.js
+```js
+import Vue from 'vue'
+import Router from 'vue-router'
+import Resume from '../components/Resume.vue'
+
+Vue.use(Router);
+
+export default new Router({
+  routes: [
+    {
+      path: '*',
+      name: 'BytoWeb',
+      beforeEnter() {
+        window.location.href = "https://byto.tech";
+      }
+    },
+    {
+      path: '/resume/:id',
+      name: 'Resume',
+      component: Resume
+    },
+  ],
+  mode: "history"
+})
 ```
-//
+
+在data()里面
+```js
+id: this.$route.params.id
 ```
+就可以了！
 
 
 ## 问题集
-- [ ] router replace 和 push 的区别？
+Veutify: Unable to locate target data-app -> 在App.vue 的 div 上 添加 data-app 就好. 
+<img src="https://user-images.githubusercontent.com/73060648/144673111-8e7cf914-f2ce-4888-a71c-2887667830a7.png" height="200"/>
+
+v-img doesn't display? -> :src="require('')"
+
+
 
