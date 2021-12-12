@@ -69,4 +69,32 @@ export default {
 }
 ```
 
+#### 开始 deploy！
+```
+yarn add firebase-tools
+- 本地下载
+
+yarn firebase login
+- 会跳转浏览器登录Google，黏贴验证码
+
+yarn firebase init
+- 弹出选择
+- collect usage, no
+- existing project, yes
+- public directory, dist
+- single page, yes,
+- github, no
+
+yarn build
+- 创建dist文件夹
+
+yarn firebase deploy
+- 完成！
+
+在 package json 添加
+"deploy": "yarn build && firebase deploy"
+就好了！
+```
+
+
 
