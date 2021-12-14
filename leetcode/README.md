@@ -4,7 +4,7 @@
 - [x] divide-and-conquer 
 - [x] dynamic programming  
 - [x] greedy algorithms   
-- [ ] graph search  
+- [x] graph search  
 
 
 ## 💧 C++ 如何上手
@@ -16,6 +16,7 @@
     // func(nums);
     // int func(vector<int> &nums){ } // passing by reference -> not null
     
+    nums.push_back(10);
     
     vector<int> vec(n+1, 0);
  
