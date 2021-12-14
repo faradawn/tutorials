@@ -4,7 +4,8 @@
 - [x] divide-and-conquer 
 - [x] dynamic programming  
 - [x] greedy algorithms   
-- [x] graph search  
+- [x] graph search 
+- [x] sorting 
 
 
 ## 💧 C++ 如何上手
@@ -24,6 +25,31 @@
         cout << i << ' ';
     }
  ```
+
+### 如何传递vector
+by reference （推荐）
+```c++
+vector<int> vec = {1,2,3};
+func(vec);
+// vector<int> func(vector<int> &vec){ }
+```
+
+by pointer (老旧)
+```c++
+vector<int> nums = {1,2,3};
+func(&nums);
+
+vector<int>* func(vector<int>* nums){
+    vector<int> &vec = *nums;
+    for(int i=0; i<vec.size(); i++){
+        cout<<vec[i]<<endl;
+    }
+    return &vec;
+}
+```
+
+
+
 ### 如何读取 input
 ```c++
 int x;
