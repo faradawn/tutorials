@@ -1,11 +1,17 @@
-# Basic C++ syntax
+# 💪 一切为了算法
 
-## Honors Algorithm 大纲
+## Honors Algorithm Topics
 - [x] divide-and-conquer 
 - [x] dynamic programming  
 - [x] greedy algorithms   
-- [x] graph search 
+- [x] graph search （DFS, BFS)
+## Leetcode Topics
 - [x] sorting 
+- [ ] hash
+- [ ] union
+- [ ] math, geometry, combination
+- [ ] segment tree, trie, red-black tree 
+- [ ] String
 
 
 ## 💧 C++ 如何上手
