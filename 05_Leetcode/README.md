@@ -7,7 +7,7 @@
 - [x] graph search （DFS, BFS)
 ## Leetcode Topics
 - [x] sorting 
-- [ ] hash
+- [x] hash
 - [ ] union
 - [ ] math, geometry, combination
 - [ ] segment tree, trie, red-black tree 
@@ -53,7 +53,23 @@ vector<int>* func(vector<int>* nums){
     return &vec;
 }
 ```
+### 如何使用 unordered_map?
+```c++
+#include <unordered_map>
+#include <list>
 
+unordered_map<int, int> map;
+
+void printMap(unordered_map<int, int> &map){
+    for(auto &it : map){
+        cout<< it.first << " " << it.second<<endl;
+    }
+}
+
+// unordered_map 可参考 hash/twoSum.cpp
+// list 可参考 hash/hashList.cpp
+
+```
 
 
 ### 如何读取 input
