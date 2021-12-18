@@ -3,38 +3,29 @@
 
 using namespace std;
 
-class RB{
+typedef struct Node{
     int val;
     int color;
-    RB* l;
-    RB* r;
+    Node* l;
+    Node* r;
+    Node(int x){val=x; l=NULL; r=NULL;}
+}Node;
+
+class RB{
+    private:
+        Node* tree;
     public:
-        RB(int);
-        RB* insert(int, RB*);
-        void showTree(RB*);
+        RB();
+        RB* insert(int);
+        void showRB();
 };
 
-RB :: RB(int x){
-    val=x;
-    color=0;
-    l=NULL;
-    r=NULL;
+RB :: RB(){
+    tree=NULL;
 }
 
-RB* RB :: insert(int x, RB* tree){
-    cout<<x<<endl;
+void showTree(Node* tree){
     if(!tree){
-        return new RB(x);
-    }
-    tree->l = new RB(10);
-    tree->r = new RB(20);
-    cout<<tree->l->val<<endl;
-    return tree;
-}
-
-void RB :: showTree(RB* tree){
-    if(!tree){
-        cout<<"done"<<endl;
         return;
     }
     showTree(tree->l);
@@ -42,14 +33,45 @@ void RB :: showTree(RB* tree){
     showTree(tree->r);
 }
 
+void RB :: showRB(){
+    showTree(tree);
+}
+
+
+Node* bstInsert(int x, Node* tree){
+    if(!tree){
+        return new Node(x);
+    }
+    
+    if(x < tree->val){
+        tree->l = bstInsert(x, tree->l);
+    }else{
+        tree->r = bstInsert(x, tree->r);
+    }
+    
+    return tree;
+}
+
+RB* RB :: insert(int x){
+    if(!tree){
+        tree=new Node(x);
+    }else{
+        tree=bstInsert(x, tree);
+    }
+    
+    return NULL;
+
+}
 
 int main(){
-    RB t = NULL;
-    RB *root=NULL;
-    t.insert(5, root);
-    t.insert(15, root);
+    int arr[] = {3,5,1,2,7,0,9};
+
+    RB t;
+    for(int i=0; i<sizeof(arr)/sizeof(arr[0]); i++){
+        t.insert(arr[i]);
+    }
     
-    t.showTree(root);
+    t.showRB();
     
     
 
