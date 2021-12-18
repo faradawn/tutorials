@@ -79,14 +79,31 @@ Node* bstInsert(int x, Node* tree, Node*& cur){ // reference to pointer
 }
 
 
-int rGrandChild(Node* tree){
-    if(tree->p->p->r){
-        if(tree->p->p->r->val == tree->p->val){
+int rGrandChild(Node* cur){
+    if(cur->p->p->r && cur->p->p->r->val == cur->p->val){
+            return 1;
+    }
+    return 0;
+}
+
+int rParentChild(Node* cur){
+    if(cur->p->r && cur->p->r->val == cur->val){
+        return 1;
+    }
+    return 0;
+}
+
+int uncleBlack(Node* cur, int right){
+    if(right){
+        if(!cur->p->p->r || cur->p->p->r->color==1){
+            return 1;
+        }
+    }else{
+        if(!cur->p->p->l || cur->p->p->l->color==1){
             return 1;
         }
     }
     return 0;
-
 }
 
 void changeThreeColors(Node*& tree, int right){
@@ -103,21 +120,52 @@ void changeThreeColors(Node*& tree, int right){
     }
 }
 
-void rotateP(Node*& cur, int right){
+void rotateCur(Node*& cur, Node*& treeCopy, int right){
+    Node* y = right ? cur->l : cur->r;
+    Node* temp = right ? y->r : y->l;
+
     if(right){
-        Node* grand = cur->p->p;
-        Node* temp1 = cur->p;
-        Node* temp2 = cur->r;
-        grand->r = cur;
-        temp1->l=temp2;
-        temp1->p=cur;
-        temp2->p=temp1;
-        cur->p=grand;
+        cur->l=temp;
+        y->r=cur;
+        y->p=cur->p;
+        if(temp){
+            temp->p=cur;
+        }
+        if(cur->p){
+            if(cur->p->r && cur->p->r->val == cur->val){ // 改成地址比较？
+                cur->p->r=y; 
+            }else if(cur->p->l && cur->p->l->val == cur->val){
+                cur->p->l=y;
+            }
+        }else{  // root
+            treeCopy=y;
+        }
+        cur->p=y;
+
+
+    }else{
+        cur->r=temp;
+        y->l=cur;
+        y->p=cur->p;
+        if(temp){
+            temp->p=cur;
+        }
+        if(cur->p){
+            if(cur->p->l && cur->p->l->val == cur->val){
+                cur->p->l=y;
+            }else if(cur->p->r && cur->p->r->val == cur->val){
+                cur->p->r=y;
+            }
+        }else{
+            treeCopy=y;
+        }
+        cur->p=y;        
     }
 
 }
 
 void RB :: insert(int x){
+    // first bst insert
     Node* cur = NULL;
     if(!tree){
         tree=new Node(x);
@@ -127,35 +175,38 @@ void RB :: insert(int x){
         tree=bstInsert(x, tree, cur);
     }
 
-    // 
-
-    // trangle case
-    Node* y = cur;
-    while(cur->color == cur->p->color){
-        if(rGrandChild(cur)){
-            // case 1 - color change
-            if(cur->p->p->l && cur->p->p->color==0){ // red
+    // then main loop
+    Node* treeCopy = tree;
+    while(cur!=tree && cur->p && cur->color == cur->p->color){ // add stop condition
+        if(rGrandChild(cur)){ 
+            if(!uncleBlack(cur, 0)){ // if uncle red
                 changeThreeColors(cur, 1); // right
                 continue;
-            }
-
-            // case 2 - triangle
-            if(!cur->p->p->l || cur->p->p->l->color==1){ // if left uncle black
-                rotateP(cur, 0);
-                cout<<"rotated right"<<endl;
-                break;
+            }else{
+                if(!rParentChild(cur)){
+                    cur=cur->p;
+                    rotateCur(cur, treeCopy, 1);
+                }
+                cur->p->color=1;
+                cur->p->p->color=0;
+                rotateCur(cur->p->p, treeCopy, 0);
+                cout<<"total fix right branch"<<endl;
             }
 
 
         }else{
-            if(cur->p->p->r && cur->p->p->color==0){ // red
-                changeThreeColors(cur, 0); // left
+            if(!uncleBlack(cur, 1)){ // if uncle red (uncle on the right)
+                changeThreeColors(cur, 0); 
                 continue;
-            }
-            if(!cur->p->p->r || cur->p->p->r->color==1){ // if left uncle black
-                rotateP(cur, 1);
-                cout<<"rotated left"<<endl;
-                break;
+            }else{
+                if(rParentChild(cur)){
+                    cur=cur->p;
+                    rotateCur(cur, treeCopy, 0); // rotate left
+                }
+                cur->p->color=1;
+                cur->p->p->color=0;
+                rotateCur(cur->p->p, treeCopy, 1);
+                cout<<"total fix left branch"<<endl;
             }
         }
     }
