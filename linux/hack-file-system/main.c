@@ -6,6 +6,8 @@
 #include <string.h>
 #include <unistd.h>
 #include "time.h"
+#include <sys/types.h> 
+#include <sys/wait.h>
 
 #define BLOCKSIZE 4096
 #define NUM_READ  2560
@@ -16,7 +18,7 @@ int total_file_length(int file_to_read) {
     return res;
 }
 
-void sequential_io(int file_to_read, int file_to_write, int direct_io, int read_or_write)
+double sequential_io(int file_to_read, int file_to_write, int direct_io, int read_or_write)
 {
     clock_t start, end;
     double total_read_time = 0, total_write_time = 0;
@@ -47,19 +49,29 @@ void sequential_io(int file_to_read, int file_to_write, int direct_io, int read_
             total_write_time += (double)(end-start)/(double)(CLOCKS_PER_SEC);
         }
     }
-    
-    if (direct_io) {
-        if (read_or_write == 1)
-            printf("Time taken for sequential direct I/O reading:   %.10lf\n", total_read_time);
-        else
-            printf("Time taken for sequential direct I/O writing:   %.10lf\n", total_write_time);
-    } else {
-        if (read_or_write == 1)
-            printf("Time taken for sequential indirect I/O reading: %.10lf\n", total_read_time);
-        else
-            printf("Time taken for sequential indirect I/O writing: %.10lf\n", total_write_time);
-    }
     free(buffer);
+
+    if (direct_io) {
+        if (read_or_write == 1){
+            printf("Time taken for sequential direct I/O reading:   %.10lf\n", total_read_time);
+            return total_read_time;
+        }
+        else{
+            printf("Time taken for sequential direct I/O writing:   %.10lf\n", total_write_time);
+            return total_write_time;
+        }
+    } else {
+        if (read_or_write == 1){
+            printf("Time taken for sequential indirect I/O reading: %.10lf\n", total_read_time);
+            return total_read_time;
+        }
+        else{
+            printf("Time taken for sequential indirect I/O writing: %.10lf\n", total_write_time);
+            return total_write_time;
+        }
+    }
+    return 0;
+    
 }
 
 int generate_random_number(int range)
@@ -67,7 +79,6 @@ int generate_random_number(int range)
     int random = (((rand() & 255)<<8 | (rand() & 255))<<8 | (rand() & 255))<<7 | (rand() & 127);
     return (random % range) / BLOCKSIZE * BLOCKSIZE;
 }
-
 
 void random_read(int file_to_read, int total_file_length, int direct_io)
 {
@@ -99,8 +110,26 @@ void random_read(int file_to_read, int total_file_length, int direct_io)
     free(buffer);
 }
 
+void wrapper_seq_read(int file_to_read, int file_to_write, int direct_io, int read_or_write){
+    double num=10;
+    double sum=0;
+    pid_t pid;
+    for(int i=0; i<num; i++){
+        sum += sequential_io(file_to_read, file_to_write, direct_io, read_or_write);
+        if((pid=fork())==0){
+            char* argv[]={"vmtouch","-e", "1048576.txt", NULL};
+            if(execvp(argv[0], argv)<0){
+                perror("why error!!");
+                exit(1);
+            }
+        }else{
+            while(wait(NULL)>0){;}
+        }
+    }
 
-
+    printf("avg time %.10lf\n", sum/num);
+    printf("avg MB/s %.10lf\n", 60/(sum/num));
+}
 
 int main(int argc, char *argv[])
 {
@@ -176,7 +205,7 @@ int main(int argc, char *argv[])
     int file_length = total_file_length(file_to_read);
 
     if (sequential_or_random == 1)
-        sequential_io(file_to_read, file_to_write, direct_io, read_or_write);
+        wrapper_seq_read(file_to_read, file_to_write, direct_io, read_or_write);
     else
         random_read(file_to_read, file_length, direct_io);
 

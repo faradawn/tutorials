@@ -1,0 +1,5 @@
+#!/bin/bash
+echo -e "\n\n"
+base64 -d <<<"H4sIAJM2MVYAA1NQgAEDIIhHBsgCBmgAU8TAQJsL2SgU41AFiDALYRhUF8I0NAEUCbBZUB7MBGRrUXX
+g8DC6CagORwkYtDCDcw3IMwDdOBL1IyRRwpBI7cihTlSYkRRNUHcRnUZgXIQGIlOoOQC/4ufk0gIAAA==" | gunzip
+echo -e "\n\n"
