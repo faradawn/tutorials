@@ -4,10 +4,6 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-# ./create_file 1
-# gcc -o create_file create_file.c
-# gcc -o main main.c
-
 ./create_file 1 $1 -o
 
 run() {
@@ -28,6 +24,3 @@ echo "avg 1/($sum/$1/1000000)"
 echo "done clean!"
 
 # https://raw.githubusercontent.com/faradawn/tutorials/main/linux/hack-file-system/mykernel.sh
-# gcc -o main main.c
-# ./main -d -s -r -f 1mb.txt
-# ./counter.sh 10
