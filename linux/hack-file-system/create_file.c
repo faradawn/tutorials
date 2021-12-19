@@ -11,9 +11,9 @@ int main(int argc, char* argv[])
         fprintf(stderr, "Length not specified\n");
         exit(-1);
     }
-    int length = atoi(argv[1]);
+    int length = atoi(argv[1])*1048576;
     char* file_name = calloc(1, 20);
-    sprintf(file_name, "%d.txt", length);
+    sprintf(file_name, "%smb.txt", argv[1]);
     if (open(file_name, O_RDONLY) != -1) {
         remove(file_name);
         printf("The original file removed\n");
