@@ -9,6 +9,8 @@ gcc -o main main.c
 gcc -o create_file create_file.c
 chmod 700 counter.sh
 
-echo "done"
+echo "./counter.sh 50 -i"
+./counter.sh 50 -i
+
 
 # https://raw.githubusercontent.com/faradawn/tutorials/main/linux/bash_scripts/make.sh
