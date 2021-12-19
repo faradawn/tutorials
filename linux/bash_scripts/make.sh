@@ -7,5 +7,8 @@ curl -O https://raw.githubusercontent.com/faradawn/tutorials/main/linux/hack-fil
 
 gcc -o main main.c
 gcc -o create_file create_file.c
+chmod 700 counter.sh
 
 echo "done"
+
+# https://raw.githubusercontent.com/faradawn/tutorials/main/linux/bash_scripts/make.sh

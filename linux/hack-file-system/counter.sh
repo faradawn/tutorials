@@ -4,6 +4,7 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
+mkdir -p output
 ./create_file 1 $1 -o
 
 run() {
@@ -17,10 +18,10 @@ sum=0
 
 while read -r line; do
     sum=$((sum+line))
-done < <(run $1)
+done < <(run $1 $2)
 
-echo "avg 1/($sum/$1/1000000)"
+echo "1/($sum/$1/1000000)"
 
-echo "done clean!"
+echo "done!"
 
 # https://raw.githubusercontent.com/faradawn/tutorials/main/linux/hack-file-system/mykernel.sh
