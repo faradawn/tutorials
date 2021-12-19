@@ -1,14 +1,19 @@
 #!/bin/bash
 if [ $# -eq 0 ]; then
-    echo "usage: ./counter 10"
+    echo "usage: ./counter 10 -d"
     exit 1
 fi
 
-echo -e "===\nBash v${BASH_VERSION}...\n==="
+# ./create_file 1
+# gcc -o create_file create_file.c
+# gcc -o main main.c
+
+./create_file 1 $1 -o
 
 run() {
     for i in $(seq 1 $1); do
-        echo "$i"
+        vmtouch -e ./output/1mb_$i.txt >> out.log
+        ./main $2 -a -r -f ./output/1mb_$i.txt
     done
 }
 
@@ -18,8 +23,11 @@ while read -r line; do
     sum=$((sum+line))
 done < <(run $1)
 
-echo "sum is $sum"
+echo "avg 1/($sum/$1/1000000)"
 
-echo "done!"
+echo "done clean!"
 
 # https://raw.githubusercontent.com/faradawn/tutorials/main/linux/hack-file-system/mykernel.sh
+# gcc -o main main.c
+# ./main -d -s -r -f 1mb.txt
+# ./counter.sh 10
