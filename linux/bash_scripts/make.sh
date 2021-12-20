@@ -1,5 +1,6 @@
 echo "start"
-rm *main* *create_file*
+mkdir -p test
+cd test
 
 curl -O https://raw.githubusercontent.com/faradawn/tutorials/main/linux/hack-file-system/counter.sh
 curl -O https://raw.githubusercontent.com/faradawn/tutorials/main/linux/hack-file-system/main.c
