@@ -22,6 +22,8 @@ done < <(run $1 $2)
 
 echo "1/($sum/$1/1000000)"
 
-echo "done!"
+rm -rf output
+rm out.log
+echo "done clean!"
 
 # https://raw.githubusercontent.com/faradawn/tutorials/main/linux/hack-file-system/mykernel.sh
