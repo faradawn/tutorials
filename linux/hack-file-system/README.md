@@ -3,6 +3,9 @@
 ## modify read function
 **links:**
 - file: https://elixir.bootlin.com/linux/v4.4.200/source/include/linux/fs.h#L875
+- how to find filepath from file: https://stackoverflow.com/questions/17885676/in-linux-how-can-i-get-the-filename-from-the-struct-file-structure-while-ste
+- vfs_read(): https://elixir.bootlin.com/linux/v4.4.200/source/fs/read_write.c#L442
+- do_sys_open(): https://elixir.bootlin.com/linux/v4.4.200/source/fs/open.c#L1029
 
 
 **file structure**
