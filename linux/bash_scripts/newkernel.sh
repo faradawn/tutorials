@@ -13,6 +13,6 @@ make menuconfig
 
 echo "ready to make? tmux - control b + d - tmux attach"
 echo "tmux a -t mysession"
-tmux new -d -s mysession 'make && sudo make modules_install && sudo make install'
+tmux new -d -s mysession 'make -j32 && sudo make modules_install -j32 && sudo make install'
 
 echo "done"
