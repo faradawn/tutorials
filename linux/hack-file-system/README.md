@@ -1,12 +1,12 @@
 # How to modify kernel
 
 ## modify read function
-links:
+**links:**
 - file: https://elixir.bootlin.com/linux/v4.4.200/source/include/linux/fs.h#L875
 
 
-file structure
-```
+**file structure**
+```c
 struct file {
 	struct path		f_path;
 	struct inode		*f_inode;	/* cached value */
@@ -21,8 +21,8 @@ file->f_path.dentry->d_iname
 
 ```
 
-goto
-```
+**How is file read?**
+```c
 read() → vfs_read() → __vfs_read() → new_sync_read() → call_read_iter() → generic_file_read_iter()
 
 int open(const char *path, int oflag, .../*,mode_t mode */);
