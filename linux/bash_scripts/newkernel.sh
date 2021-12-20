@@ -1,0 +1,18 @@
+mkdir -p mykernel
+cd mykernel
+sudo apt-get install git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison
+wget https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/snapshot/linux-4.4.200.tar.gz
+tar xvf linux-4.4.200.tar.gz
+cd linux-4.4.200
+cp -v /boot/config-$(uname -r) .config
+
+echo "executing: make menucondig"
+make menuconfig
+
+# modify kernel, then make
+
+echo "ready to make? tmux - control b + d - tmux attach"
+echo "tmux a -t mysession"
+tmux new -d -s mysession 'make && sudo make modules_install && sudo make install'
+
+echo "done"
