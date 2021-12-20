@@ -6,14 +6,21 @@ tar xvf linux-4.4.200.tar.gz
 cd linux-4.4.200
 cp -v /boot/config-$(uname -r) .config
 
-echo "executing: make menucondig"
-make menuconfig
+sleep 0.5
+echo "done downloading linux-4.4.200!"
+sleep 0.5
+echo "here are the later instructions after make menuconfig:"
+sleep 0.5
 
-# modify kernel, then make
-
-echo "ready to make? tmux - control b + d - tmux attach"
-read var
+echo "tmux new -s mysession"
+echo "make -j32"
+echo "sudo make modules_install -j32"
+echo "sudo make install"
+echo "control b + d"
 echo "tmux a -t mysession"
-tmux new -d -s mysession 'make -j32 && sudo make modules_install -j32 && sudo make install'
 
-echo "done"
+sleep 0.5
+echo -e "now ready to execute: make menucondig"
+sleep 0.5
+
+make menuconfig
