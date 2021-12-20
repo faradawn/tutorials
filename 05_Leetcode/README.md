@@ -16,20 +16,50 @@
 
 ## 💧 C++ 如何上手
 
+### 如何使用 list
+add at back, delete at front
+```c++
+#include <list>
+using namespace std;
+
+list<int> *adj = new list<int>[10];
+adj[0].push_back(15);
+cout<<G.adj[0].front()<<endl;
+```
+
+如何 iterate a list?
+```c++
+list<int> ls;
+list<int>::iterator i;
+for(i=ls.begin(); i != ls.end(); i++){
+    cout <<*i<<endl; // i->
+}
+// or
+for(auto &i : ls){
+    cout<<i<<endl;
+}
+```
+
 ### 如何使用 vector
 ```c++
 #include <vector>
-    vector<int> nums={1,2,3};
-    // func(nums);
-    // int func(vector<int> &nums){ } // passing by reference -> not null
-    
-    nums.push_back(10);
-    
-    vector<int> vec(n+1, 0);
- 
-    for (int i: vec) {
-        cout << i << ' ';
-    }
+vector<int> nums={1,2,3};
+// func(nums);
+// int func(vector<int> &nums){ } // passing by reference -> not null
+
+vector<int> vec(n+1, 0);
+
+for (int i: vec) {
+    cout << i << ' ';
+}
+
+// or
+for(auto &it : vec){
+    cout << it <<endl; // it.sth
+}
+for(auto it : vec){
+    cout << *it <<endl; // it->sth
+}
  ```
 
 ### 如何传递vector
