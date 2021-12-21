@@ -9,6 +9,7 @@
 
 
 **How to force direct IO on certain files?**
+solution 1
 ```c
 // solution: fs/read_write.c - vfs_read()
 #include <linux/string.h>
@@ -17,11 +18,23 @@ if(strstr(file->f_path.dentry->d_iname, "1mb_") != NULL){
 }
 
 ```
-
-**How is file read?**
+solution 2
 ```c
-read() → vfs_read() → __vfs_read() → new_sync_read() → call_read_iter() → generic_file_read_iter()
-
-int open(const char *path, int oflag, .../*,mode_t mode */);
-ssize_t read(int fd, void *buf, size_t count);
+#include <linux/string.h>
+#include <linux/dcache.h>
+char mybuf[256];
+char* mypath;
+mypath = d_path(&(file->f_path), mybuf, 256);
+if(strstr(mypath, "/home/") != NULL){
+	file->f_flags |= O_DIRECT;
+}
 ```
+solution 3
+```c
+if (!strcmp(file->f_inode->i_sb->s_type->name, "ext2") && (count % 512 == 0) && ((*pos) % 512 == 0)){
+	file->f_flags |= O_DIRECT;
+}
+```
+
+
+
