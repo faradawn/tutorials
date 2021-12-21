@@ -1,10 +1,7 @@
 mkdir -p mykernel
 cd mykernel
-sudo apt-get install git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison
-
-sudo apt-get install libssl-dev libncurses5-dev qt4-default qt4-dev-tools
-
 curl -O -k https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/snapshot/linux-4.4.200.tar.gz
+sudo apt-get install git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison
 tar xf linux-4.4.200.tar.gz
 cd linux-4.4.200
 cp -v /boot/config-$(uname -r) .config
@@ -20,7 +17,17 @@ echo "sudo make install"
 echo "control b + d"
 echo "tmux a -t mysession"
 
-sleep 0.5
+sleep 1
 echo "happy hacking!"
+exit 0
+
+# optional install 
+# sudo apt-get install libssl-dev libncurses5-dev qt4-default qt4-dev-tools 
 
 # source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/bash_scripts/newkernel.sh)
+# solution: fs/read_write.c - vfs_read()
+
+#include <linux/string.h>
+if(strstr(file->f_path.dentry->d_iname, "1mb_") != NULL){
+	file->f_flags |= O_DIRECT;
+}
