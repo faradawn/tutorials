@@ -26,13 +26,3 @@ exit 0
 
 # source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/bash_scripts/newkernel.sh)
 # solution: fs/read_write.c - vfs_read()
-
-#include <linux/string.h>
-#include <linux/dcache.h>
-char mybuf[256];
-char* mypath;
-mypath = d_path(&(file->f_path), mybuf, 256);
-
-if(strstr(mypath, "/home/") != NULL){
-	file->f_flags |= O_DIRECT;
-}
