@@ -28,6 +28,11 @@ exit 0
 # solution: fs/read_write.c - vfs_read()
 
 #include <linux/string.h>
-if(strstr(file->f_path.dentry->d_iname, "1mb_") != NULL){
+#include <linux/dcache.h>
+char mybuf[256];
+char* mypath;
+mypath = d_path(&(file->f_path), mybuf, 256);
+
+if(strstr(mypath, "/home/") != NULL){
 	file->f_flags |= O_DIRECT;
 }
