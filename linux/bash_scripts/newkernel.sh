@@ -1,11 +1,13 @@
 mkdir -p mykernel
 cd mykernel
 sudo apt-get install git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison
+
+sudo apt-get install libssl-dev libncurses5-dev qt4-default qt4-dev-tools
+
 curl -O -k https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/snapshot/linux-4.4.200.tar.gz
 tar xf linux-4.4.200.tar.gz
 cd linux-4.4.200
 cp -v /boot/config-$(uname -r) .config
-
 
 echo "done!"
 sleep 0.5
