@@ -17,10 +17,12 @@ struct file {
 	unsigned int 		f_flags;
 }
 
-struct path
 
-// for file* file
-file->f_path.dentry->d_iname
+// solution: fs/read_write.c - vfs_read()
+#include <string.h>
+if(strstr(file->f_path.dentry->d_iname, "1mb_") != NULL){
+	file->f_flags |= O_DIRECT;
+}
 
 ```
 
