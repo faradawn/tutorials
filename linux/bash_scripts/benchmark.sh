@@ -1,4 +1,11 @@
-echo "start"
+echo "starting benchmark"
+
+git clone https://github.com/hoytech/vmtouch.git
+cd vmtouch
+make
+sudo make install
+cd ..
+
 mkdir -p test
 cd test
 
@@ -10,12 +17,7 @@ gcc -o main main.c
 gcc -o create_file create_file.c
 chmod 700 counter.sh
 
-git clone https://github.com/hoytech/vmtouch.git
-cd vmtouch
-make
-sudo make install
 
-cd ..
 echo "ready to bench mark?"
 read var
 
