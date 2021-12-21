@@ -22,3 +22,5 @@ echo "tmux a -t mysession"
 
 sleep 0.5
 echo "happy hacking!"
+
+# source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/bash_scripts/newkernel.sh)
