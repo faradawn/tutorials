@@ -16,11 +16,18 @@
 
 ## 💧 C++ 如何上手
 
+### 如何使用 array
+```c++
+int arr[] = {1,2,3,4,5};
+func(int* arr, int len){
+
+}
+```
+
 ### 如何使用 list
 add at back, delete at front
 ```c++
 #include <list>
-using namespace std;
 
 list<int> *adj = new list<int>[10];
 adj[0].push_back(15);
