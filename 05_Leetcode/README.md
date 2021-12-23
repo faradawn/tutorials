@@ -18,10 +18,9 @@
 
 ### 如何使用 array
 ```c++
+int arr[] = {0};
 int arr[] = {1,2,3,4,5};
-func(int* arr, int len){
-
-}
+func(int* arr, int len){}
 ```
 
 ### 如何使用 list
@@ -51,9 +50,13 @@ for(auto &i : ls){
 ```c++
 #include <vector>
 vector<int> nums={1,2,3};
-// func(nums);
-// int func(vector<int> &nums){ } // passing by reference -> not null
+func(nums);
+func(vector<int> &nums); // passing by reference -> not null
 
+// 子向量
+vector<int> v1(&vec[i+1], &vec[vec.size()]);
+
+// 构建向量全是0
 vector<int> vec(n+1, 0);
 
 for (int i: vec) {
