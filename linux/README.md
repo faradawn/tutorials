@@ -39,6 +39,10 @@ done < <(run $1 $2)
 ```
 
 
+## How format USB on Mac?
+Apple forum: https://discussions.apple.com/thread/8132218
+
+
 
 
 
