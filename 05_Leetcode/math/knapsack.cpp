@@ -2,33 +2,29 @@
 
 using namespace std;
 
-int brute_force(int* W, int* V, int len, int maxW){
-    int maxVal=0;
-    for(int k=1; k<=len; k++){
-        for(int j=0; j<len-k+1; j++){
-            int vSum=0;
-            int wSum=0;
-            for(int i=j; i<j+k; i++){
-                if(wSum+W[i]<=maxW){
-                    vSum+=V[i];
-                    wSum+=W[i];
-                    if(k==5){
-                        cout<<V[i] << ": " <<vSum<<" "<< wSum <<endl;
-                    }
+int max(int a, int b){return a > b ? a : b;}
+
+int maxVal(int* wt, int* vt, int W, int len){
+    int *dp= new int[W+1]{0};
+    for(int i=0; i<len; i++){
+        int thisWeight = wt[i];
+        int thisVal = vt[i];
+        for(int j=W; j>=0; j--){    
+            if(thisWeight<=j){
+                if(thisVal+dp[j-thisWeight] > dp[j]){
+                    dp[j]=thisVal + dp[j-thisWeight];
                 }
-            }
-            if(vSum>maxVal){
-                maxVal=vSum;
             }
         }
     }
-    return maxVal;
+    return dp[W];
 }
 
 int main(){
-    int W[]={6,4,2,10,7};
-    int V[]={8,3,1,14,9};
-    int maxW=15;
-    int len = sizeof(W)/sizeof(W[0]);
-    cout<< "res "<<brute_force(W, V, len, maxW)<<endl;
+    int wt[]={1,2,3};
+    int vt[]={2,3,5};
+    int W=5;
+    int len=sizeof(wt)/sizeof(wt[0]);
+    cout<<maxVal(wt, vt, W, len);
+
 }
