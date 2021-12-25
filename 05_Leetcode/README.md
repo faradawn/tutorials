@@ -6,12 +6,12 @@
 - [x] greedy algorithms   
 - [x] graph search （DFS, BFS)
 ## Leetcode Topics
-- [x] sorting 
-- [x] hash
-- [ ] union
-- [ ] math, geometry, combination
-- [ ] segment tree, trie, red-black tree 
-- [ ] String
+- [x] sort: 4 types
+- [x] graphs: BFS, DFS
+- [ ] tree: red-black, segment, trie
+- [ ] math: dp, combination, multiplication
+- [ ] union: 
+- [ ] string: balanced parathesis
 
 
 ## 💧 C++ 如何上手
