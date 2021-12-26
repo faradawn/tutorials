@@ -1,6 +1,7 @@
 {
     "files.associations": {
-        "list": "cpp"
+        "list": "cpp",
+        "unordered_map": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
