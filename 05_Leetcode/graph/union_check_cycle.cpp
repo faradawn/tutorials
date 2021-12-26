@@ -4,7 +4,6 @@
 #include <numeric>
 #include <unordered_map>
 
-
 using namespace std;
 
 typedef vector<int> Arr;
@@ -21,21 +20,6 @@ void create_list(int s, vector<int> &arr){
     for(auto &i : arr){
         adj[s].push_back(i);
     }
-}
-
-vector<EdgeGraph> create_edge_graph(vector<int> *adjList){
-    vector<EdgeGraph> edgeList;
-    unordered_map<int, int> myHash;
-    for(int i=0; i<numV; i++){
-        for(auto &j : adjList[i]){
-            if(myHash[j] != i){
-                edgeList.push_back(EdgeGraph(i, j));
-                myHash[i]=j;
-                cout<<"["<<i<<" - "<<j<<"] ";
-            }
-        }
-    }
-    return edgeList;
 }
 
 int findParent(int x, vector<int> &parents){
@@ -66,11 +50,50 @@ Arr createUnion(Arr *adjList){
     return parents;
 }
 
+vector<EdgeGraph> create_edge_graph(vector<int> *adjList){
+    vector<EdgeGraph> edgeList;
+    unordered_map<int, int> myHash;
+    for(int i=0; i<numV; i++){
+        for(auto &j : adjList[i]){
+            if(myHash[j] != i){
+                edgeList.push_back(EdgeGraph(i, j));
+                myHash[i]=j;
+                cout<<"["<<i<<" - "<<j<<"] ";
+            }
+        }
+    }
+    return edgeList;
+}
+
+int checkCycle(vector<EdgeGraph> &edgeList){
+    vector<int> parents(numV);
+    iota(begin(parents), end(parents), 0);
+    for(auto &i : edgeList){
+        int l = findParent(i.left, parents);
+        int r = findParent(i.right, parents);
+        if(l == r){
+            for(auto &i : parents){
+                cout<< i << " ";
+            }
+            cout<<endl;
+            return 1;
+        }else{
+            joinTwo(l, r, parents);
+        }
+    }
+    for(auto &i : parents){
+        cout<< i << " ";
+    }
+    cout<<endl;
+    return 0;
+}
+
+
 int main(){
     Arr arr0={3,1};
-    Arr arr1={0};
+    Arr arr1={0,4};
     Arr arr3={0,4};
-    Arr arr4={3};
+    Arr arr4={3,1};
     Arr arr5={2};
     Arr arr2={5};
     create_list(0, arr0);
@@ -81,4 +104,6 @@ int main(){
     create_list(5, arr5);
     
     vector<EdgeGraph> edgeList = create_edge_graph(adj);
+    cout<< "\nis cycle? " << checkCycle(edgeList)<<endl;
+   
 }
