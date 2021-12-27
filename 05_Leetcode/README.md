@@ -8,9 +8,9 @@
 ## Leetcode Topics
 - [x] sort: 4 types
 - [x] graphs: BFS, DFS
+- [x] union-find: check cycle
 - [ ] tree: red-black, segment, trie
-- [ ] math: dp, combination, multiplication
-- [ ] union: 
+- [ ] math: dp, combination, mult and exp
 - [ ] string: balanced parathesis
 
 
