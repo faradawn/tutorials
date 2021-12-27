@@ -20,53 +20,57 @@ string longestWord(vector<string> &words){
     string res="";
     Node* node=new Node(0);
     Node* head=node;
+
+    // build trie
     for(const string &s : words){
-        int missingFlag=0;
-        int len=0;
         node=head;
-        cout<<"\n"<<s<<endl;
 
         for(int i=0; i<s.length(); i++){
-            
             char c=s[i];
             if(!node->map[c]){
                 if(i==s.length()-1){
-                    cout<<"new complete node "<<c<<endl;
                     node->map[c]=new Node(0);
                 }else{
                     node->map[c]=new Node(1);
-                    cout<<"new missing node "<<c<<endl;
                 }
 
             }else{
-                cout<<"yes "<<c<<endl;
                 if(i==s.length()-1){
                     node->map[c]->missing=0;
                 }
             }
 
-            if(node->map[c]->missing == 1){
-                missingFlag=1;
-                cout<<"set missing flag"<<endl;
-            }
-            len++;
             node=node->map[c];
         }
+    }
 
-        if(!missingFlag && len>max){
+    // look up 
+    for(const string &s : words){
+        node=head;
+        int len=0;
+        for(char c : s){
+            if(node->map[c] && node->map[c]->missing == 0){
+                len++;
+                node=node->map[c];
+            }else{
+                break;
+            }
+        }
+
+        if(len>max){
             max=len;
             res=s;
-            cout<<"update res "<<s << " "<< len<<endl;
-
+        }else if(len==max){
+            if(s.compare(res)<0){
+                res=s;
+            }
         }
-        
-        
     }
-    return res;
 
+    return res;
 }
 
 int main(){
-    vector<string> words={"ap", "a", "app", "apple"};
+    vector<string> words={"ap", "a", "banan", "app", "apply", "appl", "appla"};
     cout<<"res is "<<longestWord(words)<<endl;
 }

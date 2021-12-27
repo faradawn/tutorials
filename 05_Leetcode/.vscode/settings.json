@@ -3,7 +3,8 @@
         "list": "cpp",
         "unordered_map": "cpp",
         "unordered_set": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "ostream": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
