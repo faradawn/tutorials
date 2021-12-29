@@ -40,12 +40,13 @@ void heapSort(vector<int> &arr){
 }
 
 int main(){
-    vector<int>arr={1, 12, 9, 5, 6, 10};
+    vector<int>arr={1, 12, 9, 5, 6, 10, 5};
     // build heap
     int p=arr.size()/2-1;
     for(int i=p; i>=0; i--){
         heapify(arr, i, arr.size());
     }
+    printArr(arr);
     // sort heap
     heapSort(arr);
     printArr(arr);

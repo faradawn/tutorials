@@ -1,6 +1,11 @@
 #include <iostream>
 #include <vector>
-#include "helper.h"
+using namespace std;
+
+void printArr(vector<int> &arr){
+    for(int i : arr){ cout<<i<<" "; }
+    cout<<endl;
+}
 
 vector<int> insertion(vector<int> &nums){
     for(int i=1; i<nums.size(); i++){
@@ -16,8 +21,7 @@ vector<int> insertion(vector<int> &nums){
 }
 
 int main(){
-    vector<int> nums={1,5,3,4,2};
+    vector<int> nums={1,2,3,4,5,2};
     insertion(nums);
     printArr(nums);
-    foo(10);
 }

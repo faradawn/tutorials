@@ -24,34 +24,48 @@ void heapifyUp(int i, vector<int> &arr){
     }
 }
 
-void heapifyDown(vector<int> &arr){
-    int i=0;
+void heapifyDown(vector<int> &arr, int i){
     int l=2*i+1;
     int r=2*i+2;
-    while(l<arr.size()){
-        if(l==arr.size()-1){
-            if(arr[l]<arr[i]){
-                swap(arr[l], arr[i]);
-                return;
-            }
+    int smallest=i;
+    while(l<arr.size()){        
+        if(l<arr.size() && arr[l]<arr[i]){
+            smallest=l;
+        }
+        if(r<arr.size() && arr[r]<arr[smallest]){
+            smallest=r;
+        }
+        if(smallest!=i){
+            swap(&arr[smallest], &arr[i]);
+            i=smallest;
+            l=2*i+1;
+            r=2*i+2;
+            smallest=i;
         }else{
-            if(arr[l]<arr[r] && arr[l]<arr[i]){
-                swap(arr[l], arr[i]);
-                i=l;
-                l=2*i+1;
-                r=2*1+2;
-            }else if(arr[r]<arr[l] && arr[i]<arr[r]){
-                swap(arr[r], arr[i]);
-                i=r;
-                l=2*i+1;
-                r=2*i+2;
-            }
+            return;
         }
     }
 }
 
+ void heapDown(vector<int> &heap, int i){
+        int l=(2*i)+1;
+        int r=(2*i)+2;
+            int smallest=i;
+            if(l<heap.size() && heap[l]<heap[i]){
+                smallest=l;
+            }
+            if(r<heap.size() && heap[r]<heap[smallest]){
+                smallest=r;
+            }
+            if(smallest!=i){
+                swap(&heap[smallest], &heap[i]);
+                heapDown(smallest);
+            }
+
+    }
+
 int main(){
     vector<int> arr={25,15,20,17};
-    heapifyDown(arr);
+    heapifyDown(arr, 0);
     printArr(arr);
 }
