@@ -15,7 +15,14 @@
 
 
 ## 💧 C++ 如何上手
-
+### vim
+```
+/search, n N
+list of edits: g; g, 
+[[ go last function
+`. go last edit (marker) 
+cntl E, cntl Y scroll
+```
 ### 如何使用 array
 ```c++
 int arr[] = {0};
