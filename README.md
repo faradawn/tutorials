@@ -14,15 +14,16 @@
 
 ## 一些小配置
 
-### ssh 连接 ubuntu
-复制 public key 到服务器的 /.ssh/authorized_keys
+### 如何配置SSH
 ```
-ssh-copy-id -i ~/.ssh/mygit_rsa.pub user@cs154.cs.server.xxx
-```
-下一次直接
-```
-ssh 'faradawn@cs154.cs.uchicago.edu'
-或者 ssh -i ~/.ssh/mygit_rsa.pub user@cs154.cs.server.xxx
+ssh-keygen -f ~/.ssh/mykey
+ssh-copy-id -i ~/.ssh/mykey user@192...
+vi config
+
+Host 232
+  HostName 192.168.56.232
+  User student
+  IdentityFile ~/.ssh/vbox232
 ```
 
 ### bash和git
