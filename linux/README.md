@@ -4,8 +4,15 @@
 ```
 list -
 disas
-x/20xg 
-info frame
+
+x/20xg, x/20xw $esp
+p/x
+
+info frame, info stack
+b *bad_echo+34
+
+vim :sp shellcode.h
+
 ```
 
 ## run bash script from web
