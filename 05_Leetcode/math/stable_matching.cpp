@@ -54,6 +54,7 @@ int check_match(vector<vector<int>> &pref1, vector<vector<int>> &pref2){
     int n=pref1[0].size();
     vector<int> map(n);
     iota(map.begin(), map.end(), 0);
+    printArr(map);
     int count=0;
     
 
@@ -71,7 +72,7 @@ int check_match(vector<vector<int>> &pref1, vector<vector<int>> &pref2){
             if(a_idx < b_cur_idx){
                 int other=find(map.begin(), map.end(), b)-map.begin();
                 iter_swap(map.begin()+i, map.begin()+other);
-                // cout<<"new map "; printArr(map);
+                cout<<"new map "; printArr(map);
 
                 if(count>100){
                     cout<<"over 100\n";
@@ -98,8 +99,8 @@ int main(){
     // int arr[4][4]={{2,3,4,1},{2,3,1,4},{3,2,1,4},{1,4,2,3}};
     // int arr2[4][4]={{3,2,4,1},{4,3,1,2},{4,1,3,2},{3,1,2,4}};
 
-    int arr[3][3]={{1,2,3},{1,2,3},{1,2,3}};
-    int arr2[3][3]={{3,2,1},{1,3,2},{3,2,1}};
+    int arr[3][3]={{3,2,1},{2,3,1},{1,2,3}};
+    int arr2[3][3]={{1,2,3},{1,2,3},{2,1,3}};
     int n=3;
 
     vector<vector<int>> pref1;
@@ -116,6 +117,6 @@ int main(){
 
     // stable_matching(pref1, pref2);
 
-    check_permute(pref1, pref2);
+    check_match(pref1, pref2);
     
 }
