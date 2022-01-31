@@ -1,9 +1,6 @@
 echo 'make sure sudo su'
-
-sleep 1
-
-now start
-
+sleep 2
+echo 'now start'
 sleep 1
 
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
