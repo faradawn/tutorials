@@ -7,34 +7,14 @@ launch an image: CC-CentOS7-2003
 check version: cat /etc/centos-release
 
 # install dependencies
-sudo yum check-update
-sudo yum install -y yum-utils device-mapper-persistent-data lvm2 firewalld
+sudo su 
+yum check-update
+yum install -y yum-utils device-mapper-persistent-data lvm2 firewalld docker kubelet kubeadm kubectl
 
-sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-sudo yum install docker
-
-sudo systemctl start docker
-sudo systemctl enable docker
-sudo systemctl status docker
+systemctl enable docker && systemctl start docker
+systemctl enable kubelet && systemctl start kubelet
 ```
 
-### 2 - Install Kubernete
-```
-sudo vi /etc/kubernetes.repo
-
-[kubernetes]
-name=Kubernetes
-baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
-enabled=1
-gpgcheck=1
-repo_gpgcheck=1
-gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-EOF
-
-sudo yum install -y kubelet kubeadm kubectl
-systemctl enable kubelet
-systemctl start kubelet
-```
 
 ### 3 - Set Hostname and Firewall
 ```
@@ -62,18 +42,6 @@ firewall-cmd  --reload
 cat <<EOF > /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
-EOF
-# update IP table
-
-# setup repo
-cat <<EOF > /etc/yum.repos.d/kubernetes.repo
-[kubernetes]
-name=Kubernetes
-baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
-enabled=1
-gpgcheck=1
-repo_gpgcheck=1
-gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
 
 sysctl --system
@@ -103,7 +71,7 @@ kubectl get nodes
 ### 5 - Workder Nodes
 ```
 sudo su
-sudo yum check-update && sudo yum install -y yum-utils device-mapper-persistent-data lvm2 firewalld
+sudo yum check-update && sudo yum install -y yum-utils device-mapper-persistent-data lvm2 firewalld docker
 systemctl start firewalld
 
 sudo hostnamectl set-hostname worker-node-1
