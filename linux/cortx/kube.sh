@@ -19,53 +19,59 @@
 # systemctl enable docker && systemctl start docker
 # systemctl enable kubelet && systemctl start kubelet
 
+# sleep 1
+# echo -e '\n === Part2: configure firewall === \n'
+# sleep 3
+
+# sudo hostnamectl set-hostname master-node
+
+# cat <<EOF>> /etc/hosts
+# 129.114.109.64 master-node
+# 129.114.108.45 worker-node-1
+# 129.114.108.102 worker-node-2
+# EOF
+
+# systemctl start firewalld
+# firewall-cmd --permanent --add-port=6783/tcp
+# firewall-cmd --permanent --add-port=6783/udp
+# firewall-cmd --permanent --add-port=10250/tcp
+# firewall-cmd --permanent --add-port=10251/tcp
+# firewall-cmd --permanent --add-port=10252/tcp
+# firewall-cmd --permanent --add-port=2379-2380/tcp
+# firewall-cmd --permanent --add-port=30000-32767/tcp
+# firewall-cmd  --reload
+
+# # update IP table
+# cat <<EOF > /etc/sysctl.d/k8s.conf
+# net.bridge.bridge-nf-call-ip6tables = 1
+# net.bridge.bridge-nf-call-iptables = 1
+# EOF
+
+# sysctl --system
+
+# # SElinx permissive mode
+# setenforce 0
+# sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+
+# sed -i '/swap/d' /etc/fstab
+# swapoff -a
+
+
 sleep 1
-echo -e '\n === Part2: configure firewall === \n'
+echo -e '\n === Part3: Kuber Init ===\n'
+
+kubeadm init
+
+mkdir -p $HOME/.kube && cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && chown $(id -u):$(id -g) $HOME/.kube/config
+
+export kubever=$(kubectl version | base64 | tr -d '\n')
+
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever"
+
+kubectl get nodes
+
 sleep 3
+echo -e '\n === done, congrats! === \n`
 
-sudo hostnamectl set-hostname master-node
-
-cat <<EOF>> /etc/hosts
-129.114.109.64 master-node
-129.114.108.45 worker-node-1
-129.114.108.102 worker-node-2
-EOF
-
-systemctl start firewalld
-firewall-cmd --permanent --add-port=6783/tcp
-firewall-cmd --permanent --add-port=6783/udp
-firewall-cmd --permanent --add-port=10250/tcp
-firewall-cmd --permanent --add-port=10251/tcp
-firewall-cmd --permanent --add-port=10252/tcp
-firewall-cmd --permanent --add-port=2379-2380/tcp
-firewall-cmd --permanent --add-port=30000-32767/tcp
-firewall-cmd  --reload
-
-# update IP table
-cat <<EOF > /etc/sysctl.d/k8s.conf
-net.bridge.bridge-nf-call-ip6tables = 1
-net.bridge.bridge-nf-call-iptables = 1
-EOF
-
-sysctl --system
-
-# SElinx permissive mode
-setenforce 0
-sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
-
-sed -i '/swap/d' /etc/fstab
-swapoff -a
-
-
-sleep 1
-echo -e '\n === done install, next steps ===\nkubeadm init'
-
-echo -e 'mkdir -p $HOME/.kube && cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && chown $(id -u):$(id -g) $HOME/.kube/config'
-
-echo -e 'export kubever=$(kubectl version | base64 | tr -d '\n')'
-echo -e 'kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever"'
-
-echo -e 'kubectl get nodes'
-
-
+# source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
 
