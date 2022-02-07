@@ -8,19 +8,19 @@ do
     case $opt in
         "master")
             echo "set-hostname master-node"
-            set-hostname master-node
+            hostnamectl set-hostname master-node
             sleep 1
             break
             ;;
         "worker-1")
             echo "set-hostname worker-node-1"
-            set-hostname worker-node-1
+            hostnamectl set-hostname worker-node-1
             sleep 1
             break
             ;;
         "worker-2")
             echo "set-hostname worker-node-2"
-            set-hostname worker-node-2
+            hostnamectl set-hostname worker-node-2
             sleep 1
             break
             ;;
