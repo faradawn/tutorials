@@ -1,5 +1,40 @@
 echo 'make sure sudo su'
 sleep 3
+
+PS3='Please enter your choice: '
+options=("master" "worker-1" "worker-2" "quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "master")
+            echo "set-hostname master-node"
+            set-hostname master-node
+            sleep 1
+            break
+            ;;
+        "worker-1")
+            echo "set-hostname worker-node-1"
+            set-hostname worker-node-1
+            sleep 1
+            break
+            ;;
+        "worker-2")
+            echo "set-hostname worker-node-2"
+            set-hostname worker-node-2
+            sleep 1
+            break
+            ;;
+        "quit")
+            echo "exiting..."
+            sleep 1
+            exit 1
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
+
+
+
 echo -e '\n === Part1: install kubernetes and docker === \n'
 sleep 1
 
@@ -22,8 +57,6 @@ systemctl enable kubelet && systemctl start kubelet
 sleep 1
 echo -e '\n === Part2: configure firewall === \n'
 sleep 3
-
-sudo hostnamectl set-hostname worker-node-1
 
 cat <<EOF>> /etc/hosts
 129.114.109.64 master-node
@@ -61,18 +94,33 @@ sleep 1
 echo -e '\n === Part3: Kuber Init ===\n'
 sleep 3
 
-kubeadm init
+PS3='Please enter your choice: '
+options=("kubeadm init" "quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "kubeadm init")
+            echo "kubeadm init"
+            kubeadm init
+            sleep 3
+            mkdir -p $HOME/.kube && cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && chown $(id -u):$(id -g) $HOME/.kube/config
+            export kubever=$(kubectl version | base64 | tr -d '\n')
+            kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever"
+            sleep 3
+            kubectl get nodes
+            sleep 1
+            break
+            ;;
+        "quit")
+            echo "exiting..."
+            sleep 1
+            exit 1
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
 
-mkdir -p $HOME/.kube && cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && chown $(id -u):$(id -g) $HOME/.kube/config
-
-export kubever=$(kubectl version | base64 | tr -d '\n')
-kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever"
-
-sleep 3
-
-kubectl get nodes
-
-sleep 3
+sleep 1
 echo -e '\n === done, congrats! === \n'
 
 # source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
