@@ -29,14 +29,13 @@ EOF
 
 # firewall
 (systemctl start firewalld)
-firewall-cmd --permanent --add-port=6783/tcp
-firewall-cmd --permanent --add-port=6783/udp
-firewall-cmd --permanent --add-port=10250/tcp
-firewall-cmd --permanent --add-port=10251/tcp
-firewall-cmd --permanent --add-port=10252/tcp
-firewall-cmd --permanent --add-port=2379-2380/tcp
-firewall-cmd --permanent --add-port=30000-32767/tcp
-firewall-cmd  --reload
+sudo firewall-cmd --permanent --add-port=6443/tcp
+sudo firewall-cmd --permanent --add-port=2379-2380/tcp
+sudo firewall-cmd --permanent --add-port=10250/tcp
+sudo firewall-cmd --permanent --add-port=10251/tcp
+sudo firewall-cmd --permanent --add-port=10252/tcp
+sudo firewall-cmd --permanent --add-port=10255/tcp
+sudo firewall-cmd --reload
 
 # update IP table
 cat <<EOF > /etc/sysctl.d/k8s.conf
@@ -88,14 +87,11 @@ sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig
 
 systemctl start firewalld
 
-firewall-cmd --permanent --add-port=6783/tcp
-firewall-cmd --permanent --add-port=6783/udp
-firewall-cmd --permanent --add-port=10250/tcp
-firewall-cmd --permanent --add-port=10251/tcp
-firewall-cmd --permanent --add-port=10252/tcp
-firewall-cmd --permanent --add-port=2379-2380/tcp
-firewall-cmd --permanent --add-port=30000-32767/tcp
-firewall-cmd  --reload
+sudo firewall-cmd --permanent --add-port=6783/tcp
+sudo firewall-cmd --permanent --add-port=10250/tcp
+sudo firewall-cmd --permanent --add-port=10255/tcp
+sudo firewall-cmd --permanent --add-port=30000-32767/tcp
+sudo firewall-cmd  --reload
 
 # update IP table
 
