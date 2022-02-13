@@ -1,7 +1,40 @@
 # What is CORTX
 
-## Installing CORTX
-install helm
+## Overview of CORTX
+### Concepts 
+- master node: API, control, scheduler, etc storage
+- virtual network
+- worker node: several pods
+- Container <- Pods <- service
+- Ingress (ampp.com) -> serice (external IP) -> pods (internel ip
+- DB - app, communicate with service 
+
+### Creating a deployment
+```
+kubectl create -f deployment.yaml
+kubectl get deployments
+kubectl describe deployment rss-site
+
+1. install helm
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+2. uniform device path 
+don't need config?
+
+3. kernel parameters
+sysctl -w vm.max_map_count=30000000
+
+4. Rancher local path provisioner
+kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml
+
+5. open LDAP
+    mkdir -p /etc/3rd-party/openldap
+    mkdir -p /var/data/3rd-party
+    mkdir -p /var/log/3rd-party
+
+```
+
+## 
 ```
 
 
