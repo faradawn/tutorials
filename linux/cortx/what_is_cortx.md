@@ -1,6 +1,15 @@
-# What is Motre
+# What is CORTX
 
-## Overview
+## Installing CORTX
+install helm
+```
+
+
+```
+
+
+
+## What is Motre
 ### distributed file storage system 
 - distributed storage system, a cluster of nodes 
 - each node attaches a persistent storage
