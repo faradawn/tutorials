@@ -54,10 +54,14 @@ function cleanupFolders()
 }
 
 
+installHelm
 cleanupFolders
 increaseResources
 prepCortxDeployment
 prepOpenLdapDeployment
 
+echo "done"
+
+# source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/prereq.sh)
 
 
