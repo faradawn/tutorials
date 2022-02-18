@@ -1,4 +1,23 @@
-11 3
+11 22
 s a 6
 s d 3
 s g 3
+a b 2
+d a 5
+d g -1
+d e 9
+b c 2
+b e 6
+b d -6
+c t 7
+e f -6
+f c -2
+f t 6
+f i 9
+f h -1
+f b 2
+g h 3
+h d -1
+h e 8
+h i 10
+i t -3
