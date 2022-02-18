@@ -1,5 +1,20 @@
 # Linux Guide
 
+## GDB commands [2022-01-22]
+```
+list -
+disas
+
+x/20xg, x/20xw $esp
+p/x
+
+info frame, info stack
+b *bad_echo+34
+
+vim :sp shellcode.h
+
+```
+
 ## run bash script from web
 ```sh
 source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/bash_scripts/benchmark.sh)
