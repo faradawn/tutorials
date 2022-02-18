@@ -64,8 +64,10 @@ int main(){
     for(auto &tuple : out['s']){
         dp[0][ ((int)get<1>(tuple))-97 ]=get<2>(tuple);
     }
+    cout<<"1 step: ";
+    printArr(dp[0]);
 
-    for(int i=1; i<n-2; i++){
+    for(int i=1; i<n-1; i++){
         for(int j=0; j<n; j++){
             if(j==n-2){
                 dp[i][j]=0;
@@ -101,7 +103,6 @@ int main(){
             }
 
             if(cur==116-97){break;}
-
         }
         cout<<i+1<<" step: ";
         printArr(dp[i]);
