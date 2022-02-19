@@ -1,6 +1,10 @@
 # CORTX and Kubernetes
 
 ## How to install Kubernets on Centos 7.8?
+using script:
+```
+source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
+```
 ### 1 - Install Docker
 ```
 launch an image: CC-CentOS7-2003
@@ -16,7 +20,7 @@ systemctl enable kubelet && systemctl start kubelet
 ```
 
 
-### 3 - Set Hostname and Firewall
+### 2 - Set Hostname and Firewall
 ```
 sudo hostnamectl set-hostname master-node
 
@@ -53,7 +57,7 @@ sed -i '/swap/d' /etc/fstab
 swapoff -a
 ```
 
-### 4 - Init Cluster
+### 3 - Init Cluster
 ```
 kubeadm init
 
@@ -67,7 +71,7 @@ kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever"
 kubectl get nodes
 ```
 
-### 5 - Workder Nodes
+### 4 - (For Workder Nodes)
 ```
 sudo su
 sudo yum check-update && sudo yum install -y yum-utils device-mapper-persistent-data lvm2 firewalld docker
@@ -84,9 +88,7 @@ EOF
 setenforce 0
 sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
 
-
 systemctl start firewalld
-
 sudo firewall-cmd --permanent --add-port=6783/tcp
 sudo firewall-cmd --permanent --add-port=10250/tcp
 sudo firewall-cmd --permanent --add-port=10255/tcp
@@ -94,6 +96,10 @@ sudo firewall-cmd --permanent --add-port=30000-32767/tcp
 sudo firewall-cmd  --reload
 
 # update IP table
+cat <<EOF > /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
 
 # setup repo
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
