@@ -1,25 +1,11 @@
-# What is CORTX
-
-## Some YAML commands
-scp
-```
-scp -i ~/.ssh/master.pem ~/Downloads/test_ymal/solution.yaml cc@129.114.109.64:/home/cc
-```
-cut 
-```
-cut -d ',' -f 2 employees.txt (delimiter, second field)
-```
-
-## Overview of CORTX
-### Concepts 
-- master node: API, control, scheduler, etc storage
-- virtual network
-- worker node: several pods
-- Container <- Pods <- service
-- Ingress (ampp.com) -> serice (external IP) -> pods (internel ip
-- DB - app, communicate with service 
-
+# How to Deploy CORTX
 ### Creating a deployment
+Install Kubernetes
+```
+source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
+```
+
+Install CORTX
 ```
 # tyring one
 curl -O https://raw.githubusercontent.com/Seagate/cortx-k8s/integration/k8_cortx_cloud/prereq-deploy-cortx-cloud.sh; chmod +x ./prereq-deploy-cortx-cloud.sh; touch solution.yaml
@@ -70,11 +56,16 @@ kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisione
 
 ```
 
-## 
+## Some YAML commands
+scp
+```
+scp -i ~/.ssh/master.pem ~/Downloads/test_ymal/solution.yaml cc@129.114.109.64:/home/cc
+```
+cut 
+```
+cut -d ',' -f 2 employees.txt (delimiter, second field)
 ```
 
-
-```
 
 
 
