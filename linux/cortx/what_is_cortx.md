@@ -1,5 +1,11 @@
 # What is CORTX
 
+## Some YAML commands
+cut 
+```
+cut -d ',' -f 2 employees.txt (delimiter, second field)
+```
+
 ## Overview of CORTX
 ### Concepts 
 - master node: API, control, scheduler, etc storage
