@@ -3,6 +3,46 @@
 Install Kubernetes
 ```
 source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
+git clone https://github.com/Seagate/cortx-k8s
+vi ./cortx-k8s/k8_cortx_cloud/solution.yaml
+
+fdisk /dev/sdg
+n
+- primary / extended
+- partition number 1
+- first sector
+- last sector: 2907029167
+w
+
+# sudo mkfs -t ext4 /dev/sdg1
+
+
+./cortx-k8s/k8_cortx_cloud/prereq-deploy-cortx-cloud.sh /dev/sdg1 ./cortx-k8s/k8_cortx_cloud/solution.yaml 
+
+# remove storage (sdk)
+dmsetup remove /dev/mapper/ceph--4071e4ca--48bb--43d2--a7c6--4a47a46ff329-osd--block--4d5b0bc9--4d50--4e5c--b0ff--ab69ff890e21
+fdisk /dev/sdk
+
+cd cortx-k8s/k8_cortx_cloud
+./prereq-deploy-cortx-cloud.sh /dev/sdk1 ./solution.yaml
+./deploy-cortx-cloud.sh solution.yaml
+
+
+# error 
+# Deploy Consul
+statefulset.apps/consul-server restarted
+Error from server (NotFound): daemonsets.apps "consul" not found
+
+# Deploy Kafka                                        
+Registry: ghcr.io
+Repository: seagate/kafka
+Tag: 3.0.0-debian-10-r7
+Error: INSTALLATION FAILED: timed out waiting for the condition
+
+
+
+
+"For storage, I only had cvg-01, and had /dev/sdc for metadata and /dev/sdd and /dev/sde for data"
 ```
 
 Install CORTX
@@ -65,21 +105,3 @@ cut
 ```
 cut -d ',' -f 2 employees.txt (delimiter, second field)
 ```
-
-
-
-
-## What is Motre
-### distributed file storage system 
-- distributed storage system, a cluster of nodes 
-- each node attaches a persistent storage
-- How requests are made? An application request to local Motr instance, which decides execute here or forward 
-- What is object storage vs. key value store? 
-  - Amazon S3 bucket 
-  - Red Hat Ceph Storage
-  - ActiveScale Cold Storage
-- Different storage systems
--   Object / block storage (no fs, fixed chunks, referenced by logic block address)
--   Key-value storage (unstructured, no meta-data)  
--   File-level storage device 
--   
