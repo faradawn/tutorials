@@ -1,5 +1,6 @@
-echo 'make sure sudo su'
-sleep 3
+# source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
+
+echo 'Welcome! Make sure you are root!'
 
 ME="NULL"
 PS3='Please enter your choice: '
@@ -53,14 +54,12 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cl
 EOF
 
 yum check-update
-y | yum install -y yum-utils device-mapper-persistent-data lvm2 firewalld docker kubelet kubeadm kubectl
+echo y | yum install -y yum-utils device-mapper-persistent-data lvm2 firewalld docker kubelet kubeadm kubectl
 
 systemctl enable docker && systemctl start docker
 systemctl enable kubelet && systemctl start kubelet
 
-sleep 1
 echo -e '\n === Part2: configure firewall === \n'
-sleep 3
 
 cat <<EOF>> /etc/hosts
 129.114.109.64 master-node
@@ -104,9 +103,8 @@ sed -i '/swap/d' /etc/fstab
 swapoff -a
 
 
-sleep 1
+
 echo -e '\n === Part3: Kuber Init ===\n'
-sleep 3
 
 if [[ $ME -eq "master" ]]
 then
@@ -120,8 +118,4 @@ then
   kubectl get nodes
 fi
 
-sleep 3
 echo -e '\n === done, congrats! === \n'
-
-# source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
-
