@@ -102,14 +102,11 @@ solution:
       type: ios
       devices:
         metadata:
-          device: /dev/sdc
+          device: /dev/sdh
           size: 5Gi
         data:
           d1:
-            device: /dev/sdd
-            size: 5Gi
-          d2:
-            device: /dev/sde
+            device: /dev/sdi
             size: 5Gi
   nodes:
     node1:
