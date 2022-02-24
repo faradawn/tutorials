@@ -3,30 +3,30 @@
 Install Kubernetes
 ```
 source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
-git clone https://github.com/Seagate/cortx-k8s
+git clone https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.yaml
+./prereq-deploy-cortx-cloud.sh /dev/sdj1
+./deploy-cortx-cloud.sh solution.yaml
+
 vi ./cortx-k8s/k8_cortx_cloud/solution.yaml
 
-fdisk /dev/sdg
+# meta: shh, cgv1: sdi; disk sdj
+
+fdisk /dev/sdj
 n
 - primary / extended
 - partition number 1
 - first sector
-- last sector: 2907029167
+- last sector: 2507029167
 w
 
-# sudo mkfs -t ext4 /dev/sdg1
-
-
-./cortx-k8s/k8_cortx_cloud/prereq-deploy-cortx-cloud.sh /dev/sdg1 ./cortx-k8s/k8_cortx_cloud/solution.yaml 
-
-# remove storage (sdk)
-dmsetup remove /dev/mapper/ceph--4071e4ca--48bb--43d2--a7c6--4a47a46ff329-osd--block--4d5b0bc9--4d50--4e5c--b0ff--ab69ff890e21
-fdisk /dev/sdk
 
 cd cortx-k8s/k8_cortx_cloud
 ./prereq-deploy-cortx-cloud.sh /dev/sdk1 ./solution.yaml
 ./deploy-cortx-cloud.sh solution.yaml
 
+# remove storage (sdk)
+dmsetup remove /dev/mapper/ceph--4071e4ca--48bb--43d2--a7c6--4a47a46ff329-osd--block--4d5b0bc9--4d50--4e5c--b0ff--ab69ff890e21
+fdisk /dev/sdk
 
 # error 
 # Deploy Consul
@@ -38,7 +38,6 @@ Registry: ghcr.io
 Repository: seagate/kafka
 Tag: 3.0.0-debian-10-r7
 Error: INSTALLATION FAILED: timed out waiting for the condition
-
 
 
 
