@@ -1,4 +1,20 @@
 # How to Deploy CORTX
+failure log
+```
+######################################################
+# Deploy Kafka                                        
+######################################################
+
+Registry: ghcr.io
+Repository: seagate/kafka
+Tag: 3.0.0-debian-10-r7
+Error: INSTALLATION FAILED: timed out waiting for the condition
+
+
+
+Wait for CORTX 3rd party to be ready...............................................
+
+```
 ### Remove RAID on a disk
 ```
 # remove logical volumn
@@ -15,12 +31,7 @@ cat /proc/mdstat
 
 # remove parition
 fdisk /dev/sdc
-print
-d
-w
-
-# 
-
+print, d, w 
 
 ```
 ### Creating a deployment
@@ -28,12 +39,14 @@ Install Kubernetes
 ```
 source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
 git clone https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.yaml
-./prereq-deploy-cortx-cloud.sh /dev/sdg1
+./prereq-deploy-cortx-cloud.sh /dev/sdb1
 ./deploy-cortx-cloud.sh solution.yaml
 
 # meta: shh, cgv1: sdi; disk sdg1
+# node only worker-node-1, tired stuck on Kalfka
+# device try partition, sdb, sdc, sdd, sde, all one parition, 
 
-fdisk /dev/sdg
+fdisk /dev/sd
 n
 - primary / extended
 - partition number 1
