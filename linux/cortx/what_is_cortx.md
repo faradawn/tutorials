@@ -1,4 +1,28 @@
 # How to Deploy CORTX
+### Remove RAID on a disk
+```
+# remove logical volumn
+lvdisplay, and copy VG Name
+lvremove ceph-88106951-0b32-490f-bc7e-2049d23f1df2
+vgremove ceph-88106951-0b32-490f-bc7e-2049d23f1df2
+
+# remove RAID
+cat /proc/mdstat
+mdadm --stop /dev/md127
+mdadm --remove /dev/md127 (if "no such file", continue next step)
+mdadm --zero-superblock /dev/sdg /dev/sdo (okay if none)
+cat /proc/mdstat 
+
+# remove parition
+fdisk /dev/sdc
+print
+d
+w
+
+# 
+
+
+```
 ### Creating a deployment
 Install Kubernetes
 ```
