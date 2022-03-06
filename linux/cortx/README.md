@@ -1,5 +1,9 @@
 # CORTX and Kubernetes
 
+## What is Kubernetes?
+- kubectl client vs. server 
+
+
 ## How to install Kubernets on Centos 7.8?
 using script:
 ```
