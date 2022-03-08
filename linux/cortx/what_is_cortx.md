@@ -15,6 +15,30 @@ Error: INSTALLATION FAILED: timed out waiting for the condition
 Wait for CORTX 3rd party to be ready...............................................
 
 ```
+### Creating logical volume
+[Introduction to LVM](https://www.digitalocean.com/community/tutorials/an-introduction-to-lvm-concepts-terminology-and-operations)
+```
+# create physical volume
+pvcreate /dev/sda /dev/sdb
+pvs
+
+# create volume group
+vgcreate vg1 /dev/sda /dev/sdb
+vgs
+
+# create logical volume
+lvcreate -L 10G -n folder1 vg1
+lvcreate -l 100%FREE -n folder2 vg1
+
+mkfs.ext4 /dev/vg1/folder1
+mkdir -p /mnt/folder1
+mount /dev/vg1/folder1 /mnt
+
+vi /etc/fstab
+/dev/vg1/folder1 /mnt/folder2 ext4 defaults,nofail 0 0
+
+
+```
 ### Remove RAID on a disk
 ```
 # remove logical volumn
