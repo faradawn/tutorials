@@ -77,16 +77,16 @@ then
   sudo firewall-cmd --permanent --add-port=10251/tcp
   sudo firewall-cmd --permanent --add-port=10252/tcp
   sudo firewall-cmd --permanent --add-port=10255/tcp
-  sudo firewall-cmd --permanent --add-port=8000-60000/tcp
-  sudo firewall-cmd --permanent --add-port=8000-60000/udp
+  sudo firewall-cmd --permanent --add-port=53-60000/tcp
+  sudo firewall-cmd --permanent --add-port=53-60000/udp
   sudo firewall-cmd --reload
 else
   sudo firewall-cmd --permanent --add-port=6783/tcp
   sudo firewall-cmd --permanent --add-port=10250/tcp
   sudo firewall-cmd --permanent --add-port=10255/tcp
   sudo firewall-cmd --permanent --add-port=30000-32767/tcp
-  sudo firewall-cmd --permanent --add-port=8000-60000/tcp
-  sudo firewall-cmd --permanent --add-port=8000-60000/udp
+  sudo firewall-cmd --permanent --add-port=53-60000/tcp
+  sudo firewall-cmd --permanent --add-port=53-60000/udp
   sudo firewall-cmd  --reload
 fi
 
