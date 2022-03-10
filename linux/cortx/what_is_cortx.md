@@ -1,6 +1,6 @@
 # How to Deploy CORTX
 
-### Debugging Consul and Kafka
+### Debugging Consul and how open ports
 ```
 consul-server-1 
 kubectl log consul-server-1 
@@ -10,6 +10,8 @@ kubectl log consul-server-1
 8000-9000
 
 firewall-cmd --permanent --add-port=8000-60000/tcp
+
+does disabling firewall allows all ports? 
 ```
 ### Creating logical volume
 [Introduction to LVM](https://www.digitalocean.com/community/tutorials/an-introduction-to-lvm-concepts-terminology-and-operations)
