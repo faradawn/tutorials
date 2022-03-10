@@ -62,9 +62,9 @@ systemctl enable kubelet && systemctl start kubelet
 echo -e '\n === Part2: configure firewall === \n'
 
 cat <<EOF>> /etc/hosts
-129.114.109.64 master-node
-129.114.108.45 worker-node-1
-129.114.109.76 worker-node-2
+10.52.0.60 master-node
+10.52.0.242 worker-node-1
+10.52.3.14 worker-node-2
 EOF
 
 systemctl start firewalld
