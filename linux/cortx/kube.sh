@@ -64,7 +64,7 @@ echo -e '\n === Part2: configure firewall === \n'
 cat <<EOF>> /etc/hosts
 129.114.109.64 master-node
 129.114.108.45 worker-node-1
-129.114.108.102 worker-node-2
+129.114.109.76 worker-node-2
 EOF
 
 systemctl start firewalld
@@ -77,12 +77,16 @@ then
   sudo firewall-cmd --permanent --add-port=10251/tcp
   sudo firewall-cmd --permanent --add-port=10252/tcp
   sudo firewall-cmd --permanent --add-port=10255/tcp
+  sudo firewall-cmd --permanent --add-port=8000-60000/tcp
+  sudo firewall-cmd --permanent --add-port=8000-60000/udp
   sudo firewall-cmd --reload
 else
   sudo firewall-cmd --permanent --add-port=6783/tcp
   sudo firewall-cmd --permanent --add-port=10250/tcp
   sudo firewall-cmd --permanent --add-port=10255/tcp
   sudo firewall-cmd --permanent --add-port=30000-32767/tcp
+  sudo firewall-cmd --permanent --add-port=8000-60000/tcp
+  sudo firewall-cmd --permanent --add-port=8000-60000/udp
   sudo firewall-cmd  --reload
 fi
 
