@@ -62,12 +62,43 @@ kubectl describe services/kubernetes-bootcamp
 export NODE_PORT=$(kubectl get services/kubernetes-bootcamp -o go-template='{{(index .spec.ports 0).nodePort}}')
 curl 
 
-
-
 ```
-clear up
+final - clear up
 ```
 kubectl delete service hello-node
 kubectl delete deployment hello-node
 minikube stop
 ```
+
+## Install Kubernetes again
+bash complete
+```
+yum install bash-completion
+source /usr/share/bash-completion/bash_completion
+kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
+
+echo 'alias k=kubectl' >>/etc/bashrc
+echo 'complete -F __start_kubectl k' >>/etc/bashrc
+```
+
+install kube
+```
+cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+
+sudo yum -y update && sudo yum -y install epel-release vim git curl wget kubelet kubeadm kubectl --disableexcludes=kubernetes
+```
+
+
+
+
+
+
+
