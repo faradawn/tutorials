@@ -25,15 +25,15 @@ kubectl exec -it cortx-data-node-1-6949c7c88b-8lwlw -c cortx-hax -- /bin/bash
 
 
 ## How to install Kubernets on Centos 7.8?
-using script:
-```
-source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
-```
-guides:
-- [Computing for Geeks](https://computingforgeeks.com/install-kubernetes-cluster-on-centos-with-kubeadm/)
+installation guides:
+- [install-kubernetes-cluster-on-centos-with-kubeadm](https://computingforgeeks.com/install-kubernetes-cluster-on-centos-with-kubeadm/)
+- [atlassian-CORTX-Kubernetes-N-Pod-Deployment](https://seagate-systems.atlassian.net/wiki/spaces/PUB/pages/754155622/CORTX+Kubernetes+N-Pod+Deployment+and+Upgrade+Document+using+Services+Framework#5.-Understanding-Management-and-S3-Endpoints-and-configuring-External-Load-balancer-service(Optional))
+- [cortx-k8s-readme](https://github.com/Seagate/cortx-k8s/tree/main)
+- source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
+
 ### 1 - Install Dependencies
 ```
-launch an image: CC-CentOS7-2003
+launch an image: CC-CentOS7-2003 (7.8)
 check version: cat /etc/centos-release
 
 # install kubernetes 
