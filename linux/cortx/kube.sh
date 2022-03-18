@@ -42,82 +42,87 @@ done
 
 echo -e '\n === Part1: install kubernetes and docker === \n'
 sleep 1
-
-cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
 baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
 enabled=1
+gpgcheck=1
+repo_gpgcheck=0
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
 
-yum check-update
-echo y | yum install -y yum-utils device-mapper-persistent-data lvm2 firewalld docker kubelet kubeadm kubectl
+sudo yum -y update && sudo yum -y install epel-release vim git curl wget kubelet kubeadm kubectl --disableexcludes=kubernetes yum-utils device-mapper-persistent-data lvm2
 
-systemctl enable docker && systemctl start docker
-systemctl enable kubelet && systemctl start kubelet
+# install docker
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum -y install docker-ce docker-ce-cli containerd.io
 
-echo -e '\n === Part2: configure firewall === \n'
+sudo mkdir /etc/docker && sudo mkdir -p /etc/systemd/system/docker.service.d
 
-cat <<EOF>> /etc/hosts
-10.52.0.60 master-node
-10.52.0.242 worker-node-1
-10.52.3.14 worker-node-2
+sudo tee /etc/docker/daemon.json <<EOF
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2",
+  "storage-opts": [
+    "overlay2.override_kernel_check=true"
+  ]
+}
 EOF
 
-systemctl start firewalld
-
-if [[ $ME -eq "master" ]]
-then
-  sudo firewall-cmd --permanent --add-port=6443/tcp
-  sudo firewall-cmd --permanent --add-port=2379-2380/tcp
-  sudo firewall-cmd --permanent --add-port=10250/tcp
-  sudo firewall-cmd --permanent --add-port=10251/tcp
-  sudo firewall-cmd --permanent --add-port=10252/tcp
-  sudo firewall-cmd --permanent --add-port=10255/tcp
-  sudo firewall-cmd --permanent --add-port=53-60000/tcp
-  sudo firewall-cmd --permanent --add-port=53-60000/udp
-  sudo firewall-cmd --reload
-else
-  sudo firewall-cmd --permanent --add-port=6783/tcp
-  sudo firewall-cmd --permanent --add-port=10250/tcp
-  sudo firewall-cmd --permanent --add-port=10255/tcp
-  sudo firewall-cmd --permanent --add-port=30000-32767/tcp
-  sudo firewall-cmd --permanent --add-port=53-60000/tcp
-  sudo firewall-cmd --permanent --add-port=53-60000/udp
-  sudo firewall-cmd  --reload
-fi
+sudo systemctl daemon-reload && sudo systemctl restart docker && sudo systemctl enable docker
+sudo systemctl enable kubelet
 
 
-# update IP table
-cat <<EOF > /etc/sysctl.d/k8s.conf
+
+echo -e '\n === Part2: configure DNS and disable SElinux === \n'
+cat <<EOF>> /etc/hosts
+10.52.0.242 worker-node-1
+10.52.0.181 worker-node-2
+EOF
+
+# disable SElinx
+sudo setenforce 0
+sudo sed -i 's/^SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
+
+sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+sudo swapoff -a
+
+sudo modprobe overlay
+sudo modprobe br_netfilter
+
+sudo tee /etc/sysctl.d/kubernetes.conf<<EOF
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
+net.ipv4.ip_forward = 1
 EOF
 
-sysctl --system
+sudo sysctl --system
 
-# SElinx permissive mode
-setenforce 0
-sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
-
-sed -i '/swap/d' /etc/fstab
-swapoff -a
+ufw disable
 
 
 
 echo -e '\n === Part3: Kuber Init ===\n'
-
 if [[ $ME -eq "master" ]]
 then
-  echo "kubeadm init"
-  kubeadm init
-  sleep 1
-  mkdir -p $HOME/.kube && cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && chown $(id -u):$(id -g) $HOME/.kube/config
-  export kubever=$(kubectl version | base64 | tr -d '\n')
-  kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$kubever"
-  sleep 3
-  kubectl get nodes
+    sudo kubeadm config images pull
+    sudo kubeadm init \
+      --pod-network-cidr=192.168.0.0/16 \
+      --upload-certs \
+      --control-plane-endpoint=10.52.0.242
+
+    mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+    kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml 
+    kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
+
+    kubectl get pods --all-namespaces
+    kubectl get nodes -o wide
 fi
 
 echo -e '\n === done, congrats! === \n'
