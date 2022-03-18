@@ -56,15 +56,6 @@ print, d, w
 ### Creating a deployment
 Install Kubernetes
 ```
-source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
-git clone https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.yaml
-./prereq-deploy-cortx-cloud.sh /dev/sdb
-./deploy-cortx-cloud.sh solution.yaml
-
-# meta: shh, cgv1: sdi; disk sdg1
-# node only worker-node-1, tired stuck on Kalfka
-# device try partition, sdb, sdc, sdd, sde, all one parition, 
-
 fdisk /dev/sd
 n
 - primary / extended
