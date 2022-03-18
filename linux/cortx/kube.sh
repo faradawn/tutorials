@@ -9,22 +9,22 @@ select opt in "${options[@]}"
 do
     case $opt in
         "master")
-            echo "set-hostname master-node"
-            hostnamectl set-hostname master-node
+            echo "set-hostname master"
+            hostnamectl set-hostname master
             ME="master"
             sleep 1
             break
             ;;
         "worker-1")
-            echo "set-hostname worker-node-1"
-            hostnamectl set-hostname worker-node-1
+            echo "set-hostname node-1"
+            hostnamectl set-hostname node-1
             ME="worker-1"
             sleep 1
             break
             ;;
         "worker-2")
-            echo "set-hostname worker-node-2"
-            hostnamectl set-hostname worker-node-2
+            echo "set-hostname node-2"
+            hostnamectl set-hostname node-2
             ME="worker-2"
             sleep 1
             break
@@ -81,8 +81,8 @@ sudo systemctl enable kubelet
 
 echo -e '\n === Part2: configure DNS and disable SElinux === \n'
 cat <<EOF>> /etc/hosts
-10.52.0.242 worker-node-1
-10.52.0.181 worker-node-2
+10.52.3.157 master
+10.52.0.136 node-1
 EOF
 
 # disable SElinx
@@ -114,7 +114,7 @@ then
     sudo kubeadm init \
       --pod-network-cidr=192.168.0.0/16 \
       --upload-certs \
-      --control-plane-endpoint=10.52.0.242
+      --control-plane-endpoint=10.52.3.157
 
     mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
