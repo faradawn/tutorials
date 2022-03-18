@@ -1,6 +1,6 @@
 # source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
 
-echo 'Welcome! Make sure you are root!'
+echo 'Welcome V2! Make sure you are root!'
 
 ME="NULL"
 PS3='Please enter your choice: '
