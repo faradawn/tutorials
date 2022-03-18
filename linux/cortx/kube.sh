@@ -125,4 +125,8 @@ then
     kubectl get nodes -o wide
 fi
 
-echo -e '\n === done, congrats! === \n'
+echo -e '\n === done! Then copy the following two commands === \n'
+echo "using sdf, g, h"
+echo "./prereq-deploy-cortx-cloud.sh /dev/sdk"
+echo "./deploy-cortx-cloud.sh solution.yaml"
+git clone -b main https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.yaml
