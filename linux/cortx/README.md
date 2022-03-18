@@ -1,4 +1,4 @@
-# How to install Kubernetes
+# How to install Kubernetes and Deploy CORTX
 
 ## How to install Kubernets on Centos 7.8?
 using script:
@@ -101,4 +101,10 @@ kubectl get pods --all-namespaces
 kubectl get nodes -o wide
 ```
 
-
+## How Deploy CORTX?
+```
+source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
+git clone -b main https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.yaml
+./prereq-deploy-cortx-cloud.sh /dev/sda
+./deploy-cortx-cloud.sh solution.yaml
+```
