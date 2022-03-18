@@ -1,14 +1,14 @@
-# Learning K8s
+# How set up minikube on Centos
 
-## The Office Guide
-Create deployment
+## Some helpful commands
+create deployment
 ```
 kubectl create my-deployment image-url
 kubectl proxy
 export POD_NAME=$(kubectl get pods -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
 ```
 
-Viewing pods
+viewing pods
 ```
 kubectl get pods / deployment / nodes / services
 kubectl describe pods
@@ -23,8 +23,8 @@ expose service
 kubectl expose deployment/kubernetes-bootcamp --type="NodePort" --port 8080
 ```
 
-### Set up minikube
-install docker 
+## Following the Office Inerative Tutorial
+module 1 - install docker 
 ```
 sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 sudo yum install docker-ce docker-ce-cli containerd.io
@@ -63,7 +63,7 @@ export NODE_PORT=$(kubectl get services/kubernetes-bootcamp -o go-template='{{(i
 curl 
 
 ```
-final - clear up
+module X - clear up
 ```
 kubectl delete service hello-node
 kubectl delete deployment hello-node
