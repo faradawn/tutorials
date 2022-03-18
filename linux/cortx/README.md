@@ -5,6 +5,8 @@ using script:
 ```
 source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
 ```
+guides:
+- [Computing for Geeks](https://computingforgeeks.com/install-kubernetes-cluster-on-centos-with-kubeadm/)
 ### 1 - Install Dependencies
 ```
 launch an image: CC-CentOS7-2003
