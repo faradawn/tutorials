@@ -18,7 +18,10 @@ storage.cvg1:
   2: h
 disk prereq: sdk
 ```
-
+go into a pod
+```
+kubectl exec -it cortx-data-node-1-6949c7c88b-8lwlw -c cortx-hax -- /bin/bash
+```
 
 
 ## How to install Kubernets on Centos 7.8?
