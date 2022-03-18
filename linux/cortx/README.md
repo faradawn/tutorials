@@ -125,3 +125,5 @@ kubectl get pods --all-namespaces
 kubectl get nodes -o wide
 ```
 
+### 4 - Add bash completion [optional]
+
