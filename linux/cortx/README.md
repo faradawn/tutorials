@@ -126,4 +126,22 @@ kubectl get nodes -o wide
 ```
 
 ### 4 - Add bash completion [optional]
+```
+vi /etc/bashrc
+alias k="kubectl"
+```
+
+### 5 - Test writing data
+```
+
+
+```
+
+
+
+
+
+
+
+
 
