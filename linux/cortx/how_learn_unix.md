@@ -66,7 +66,7 @@
 
 <details>
   <summary>processes</summary>
-
+  processes
   ```
   &
   wait
@@ -89,6 +89,7 @@
   cd 
   export b # other program can use b
   ```
+  
 </details>
 
   
@@ -98,10 +99,4 @@
   ```
   bc -l # using math library, setting scale=20
   ```
-  </details>
-
-  
-
-
-
-
+</details>
