@@ -1,7 +1,7 @@
 # Learning UNIX
 
 ## Chapter 1
-terminal
+<details>
 ```
 set -o vi / emacs
 ctl-r # search back in time
@@ -16,6 +16,11 @@ history # show history
 !ping # search run lastest that matched :p
 !! # run previous
 ```
+</details>
+
+
+terminal
+
 ed editor
 ```
 $ ed
