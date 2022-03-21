@@ -15,6 +15,21 @@ history # show history
 !1 # run the specific history 
 !ping # search run lastest that matched :p
 !! # run previous
+```
+ed editor
+```
+$ ed
+a
+.
+w junk, q
 
+$ ed junk
+,p # print all content
+s/great/greatest
+w, q
+```
 
+list
+```
+ls -lt / ls -lrt
 ```
