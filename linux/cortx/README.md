@@ -133,9 +133,36 @@ alias k="kubectl"
 
 ### 5 - Test writing data
 ```
+ServerPod=`kubectl get pod --field-selector=status.phase=Running --selector cortx.io/service-type=cortx-server -o jsonpath={.items[0].metadata.name}`
+kubectl exec -i $DataPod -c cortx-hax -- systemctl status
+
+kubectl get pod $ServerPod -o jsonpath="{.spec.containers[*].name}"
+
+
+
+# first 
+DataPod=`kubectl get pod --field-selector=status.phase=Running --selector cortx.io/service-type=cortx-data -o jsonpath={.items[0].metadata.name}`
+kubectl exec -i $DataPod -c cortx-hax -- hctl status
+
+
+# get service of "Control Pod's loadbal": cluster IP
+export CSM_IP=`kubectl get svc cortx-control-loadbal-svc -ojsonpath='{.spec.clusterIP}'`
+
+# username: cortxadmin, password in solution.ymal: csm_mgmt_admin_secret
+curl -v -d '{"username": "cortxadmin", "password": "Cortxadmin@123"}' https://$CSM_IP:8081/api/v2/login --insecure
+
+# get a S3 account
+curl -H 'Authorization: Bearer bf7a24a8aac14a8387177f548b34781f' -d '{ "account_name": "gts3account", "account_email": "gt@seagate.com", "password": "Account1!", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/s3_accounts --insecure
+
+
 
 
 ```
+
+
+
+
+
 
 
 
