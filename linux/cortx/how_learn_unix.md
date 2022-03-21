@@ -66,7 +66,7 @@
 
 <details>
   <summary>processes</summary>
-  processes
+  
   ```
   &
   wait
@@ -91,7 +91,6 @@
   ```
   
 </details>
-
   
 <details>
   <summary>calculator bc</summary>
