@@ -29,6 +29,8 @@
   a
   .
   w junk, q
+  
+  r temp # read how many bypes
 
   $ ed junk
   ,p # print all content
@@ -42,7 +44,12 @@
   
   ls
   ```
-  ls -lt / ls -lrt
+  ls -lt
+  ls -lrt
+  ls -f # list in order of recent modifed 
+  
+  od -c # dump into character 
+  od -cb # character with binary 
 
   grep to tobe fleas, -v # lines without the pattern
   sort poem # sort line by first character
