@@ -140,7 +140,7 @@ kubectl get pod $ServerPod -o jsonpath="{.spec.containers[*].name}"
 
 
 
-# first 
+# check htcl status 
 DataPod=`kubectl get pod --field-selector=status.phase=Running --selector cortx.io/service-type=cortx-data -o jsonpath={.items[0].metadata.name}`
 kubectl exec -i $DataPod -c cortx-hax -- hctl status
 
@@ -148,14 +148,46 @@ kubectl exec -i $DataPod -c cortx-hax -- hctl status
 # get service of "Control Pod's loadbal": cluster IP
 export CSM_IP=`kubectl get svc cortx-control-loadbal-svc -ojsonpath='{.spec.clusterIP}'`
 
-# username: cortxadmin, password in solution.ymal: csm_mgmt_admin_secret
+# get token from CSM login
 curl -v -d '{"username": "cortxadmin", "password": "Cortxadmin@123"}' https://$CSM_IP:8081/api/v2/login --insecure
 
+curl -H 'Authorization: Bearer c6a4ee6375554c1c9fc16a91c7aecb29' -d '{ "account_name": "gts3account", "account_email": "gt@seagate.com", "password": "Account1!", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/s3/iam/users --insecure
+
+
+# method 2: v0.1.0
+vi cortx-k8s/k8_cortx_cloud/solution.yaml
+# username: auth_admin: "sgiamadmin"
+# password: s3_auth_admin_secret: ldapadmin
+curl -v -d '{"username": "sgiamadmin", "password": "ldapadmin"}' https://$CSM_IP:8081/api/v2/s3/iam/login --insecure
+
 # get a S3 account
-curl -H 'Authorization: Bearer bf7a24a8aac14a8387177f548b34781f' -d '{ "account_name": "gts3account", "account_email": "gt@seagate.com", "password": "Account1!", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/s3_accounts --insecure
+curl -H 'Authorization: Bearer c6a4ee6375554c1c9fc16a91c7aecb29' -d '{ "uid": "12345678", "display_name": "gts3account", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/s3/iam/users --insecure
 
 
+# install aws
+sudo yum install -y unzip
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
 
+export AWS_ACCESS_KEY_ID=gregoryaccesskey
+export AWS_SECRET_ACCESS_KEY=gregorysecretkey
+export AWS_DEFAULT_REGION=us-east-1
+export SERVER_IP=`kubectl get svc | grep cortx-server-clusterip-svc | head -1 | awk '{print $3}'`
+
+kubectl describe svc cortx-io-svc-0
+NODE_PORT_IP=10.97.118.40
+NODE_PORT=32262
+
+aws s3 mb s3://test-bucket --endpoint-url http://$NODE_PORT_IP:$NODE_PORT
+
+aws s3 mb s3://test-bucket --endpoint-url http://192.168.84.145:8443
+
+
+# testing get IAM user 
+curl -v -d '{"username": "cortxadmin", "password": "Cortxadmin@123"}' https://$CSM_IP:8081/api/v2/login --insecure
+curl -H 'Authorization: Bearer 9ce907b269fd405a80d0d1f1f8a5183b' https://$CSM_IP:8081/api/v2/s3/iam/users/12345678 --insecure
+curl -X PUT -H 'Authorization: Bearer 9ce907b269fd405a80d0d1f1f8a5183b' -d '{ “operation“: ”link”, “arguments”: {“uid“:”12345678”, “bucket“:”test-bucket”} }' https://$CSM_IP:8081/api/v2/s3/bucket --insecure
 
 ```
 
