@@ -44,10 +44,17 @@
   
   ls
   ```
-  ls -lt
+  ls -lt # last modification
   ls -lrt
   ls -f # list in order of recent modifed 
   
+  ls -lu # show time of usage 
+  ls -lc # show permission change time (inode change)
+  ls -lut # last modificaiton 
+  ls -i $ show inode number （ln and mv same inode) 
+  ```
+  od and diff
+  ```
   od -c # dump into character 
   od -cb # character with binary 
 
