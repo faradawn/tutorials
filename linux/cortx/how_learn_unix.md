@@ -4,7 +4,12 @@
 <details>
   <summary> terminal</summary>
   
+  emacs
   ```
+  ctl-a # go begining
+  ctl-k # kill to end
+  ctl-e # go to end
+  
   set -o vi / emacs
   ctl-r # search back in time
   ctl-o # enter 
