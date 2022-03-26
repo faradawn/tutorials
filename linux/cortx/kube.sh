@@ -2,7 +2,7 @@
 # private ip: ifconfig -a, public ip: curl ifconfig.me
 # change line 85 and 119
 
-echo 'Welcome V2! Make sure you are root!'
+echo 'Welcome V3! Make sure you are root!'
 
 ME="NULL"
 PS3='Please enter your choice: '
@@ -54,7 +54,7 @@ repo_gpgcheck=0
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
 
-sudo yum -y update && sudo yum -y install epel-release vim git curl wget kubelet kubeadm kubectl --disableexcludes=kubernetes yum-utils device-mapper-persistent-data lvm2
+sudo yum -y update && sudo yum -y install epel-release git wget kubelet kubeadm kubectl --disableexcludes=kubernetes yum-utils device-mapper-persistent-data lvm2
 
 # install docker
 sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
