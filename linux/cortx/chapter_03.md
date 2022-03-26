@@ -19,3 +19,28 @@ export -n # don't export named varibles and functions
 export -f name(){ echo "pa"; } # for function
 expoet echo a=10
 ```
+
+3.5 take arguments
+```
+chmod +x $*
+
+grep "$*" /home/cc/phone-book # can grep space "jone dow"
+grep -y # case insensistive 
+grep -l apple * # greps the files that contains apple
+
+echo time is `data` # back tick cause invoke program 
+```
+
+3.6 EOF
+```
+ls | tee save | grep mail
+
+tee save <<EOF
+br_netfilter
+EOF
+```
+
+3.8 Loop
+```
+for i in *; do echo $i; done | diff `pwd`/old `pwd`
+```
