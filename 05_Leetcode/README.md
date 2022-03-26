@@ -1,20 +1,64 @@
 # 💪 一切为了算法
 
-## Honors Algorithm Topics
-- [x] divide-and-conquer 
-- [x] dynamic programming  
-- [x] greedy algorithms   
-- [x] graph search （DFS, BFS)
-## Leetcode Topics
-- [x] sort: 4 types
-- [x] graphs: BFS, DFS
-- [x] union-find: check cycle
-- [ ] tree: red-black, segment, trie
-- [ ] math: dp, combination, mult and exp
-- [ ] string: balanced parathesis
+## 🔥 Leetcode Topics
+第一部分
+- [ ] Hash
+- [ ] 树
+- [ ] 排序
+- [ ] 深度搜索
+
+第二部分
+- [ ] 二分查找
+- [ ] 动态规划
+
+第三部分
+- [ ] 图
+- [ ] 查并集
+
+第四部分
+- [ ] 字典树 trie
+- [ ] 单调栈 monotonic heap
+- [ ] 线段树
+- [ ] 随机化
+- [ ] 欧拉回路 + 强连通
+
+输入数组长度
+- 10^3 可dp knapsack O(n^2)
+    - codeforces 5000
+    - leetcode 3000 以内  
+- 10^4 需要 O(n) 或者 O(nlogn)
 
 
 ## 💧 C++ 如何上手
+### 打印vector
+```c++
+void printArr(vector<int> &vec){
+  for(int i : vec) cout<<i<<" "; 
+  cout<<endl;
+}
+
+void printArr(vector<vector<int>> &vec){
+  for(auto &it : vec){
+    for(auto &i : it) cout<<i<<" ";
+    cout<<endl;
+  }
+}
+
+vector<vector<int>>myvec(3, vector<int>(5,10));
+```
+
+### 如何遍历map
+```c++
+#include <bits/stdc++.h>
+unordered_map<int, int>mymap;
+
+for(auto &i : mymap){
+    cout<<i.first<<" "<<i.second<<endl;
+}
+
+# 避坑 if(mymap[1]==1) 会赋值！
+```
+
 ### vim
 ```
 /search, n N
