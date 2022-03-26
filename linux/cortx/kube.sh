@@ -1,4 +1,6 @@
 # source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
+# private ip: ifconfig -a, public ip: curl ifconfig.me
+# change line 85 and 119
 
 echo 'Welcome V2! Make sure you are root!'
 
@@ -129,4 +131,4 @@ echo -e '\n === done! Then copy the following two commands === \n'
 echo "using sdf, g, h"
 echo "./prereq-deploy-cortx-cloud.sh /dev/sdk"
 echo "./deploy-cortx-cloud.sh solution.yaml"
-git clone -b main https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.yaml
+git clone https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.yaml
