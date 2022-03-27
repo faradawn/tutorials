@@ -266,4 +266,37 @@ public:
 };
 
 ```
+### Operator compare max heap of tuples
+the-k-weakest-rows-in-a-matrix
+```c++
+struct CompareHeapElements {
+    bool operator()(pair<int,int> const& p1, pair<int,int> const& p2)
+    {
+        if(p1.first<p2.first){
+            return true;
+        }
+        else if(p1.first==p2.first && p1.second<p2.second){
+            return true;
+        }
+        return false;
+    }
+};
+    
+priority_queue<pair<int,int>, vector<pair<int,int>>,CompareHeapElements> max_heap;
 
+// then push {soldier_count,row_index} to the min_heap
+for(int i=0;i<mat.size();++i){
+    max_heap.push({calculateSoldierCount(mat[i]),i});
+    if(max_heap.size()>k){
+        max_heap.pop();
+    }
+}
+
+vector<int>ans;
+while(max_heap.size()){ 
+    ans.push_back(max_heap.top().second);
+    max_heap.pop();
+}
+		
+reverse(ans.begin(), ans.end());
+```
