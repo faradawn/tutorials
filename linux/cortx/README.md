@@ -145,21 +145,25 @@ alias k="kubectl"
 
 ### 5 - Test writing data
 ```
-# get container names within ServerPod: cortx-rgw, cortx-hax
+# [optional] get container names within ServerPod: cortx-rgw, cortx-hax
 ServerPod=`kubectl get pod --field-selector=status.phase=Running --selector cortx.io/service-type=cortx-server -o jsonpath={.items[0].metadata.name}`
 kubectl get pod $ServerPod -o jsonpath="{.spec.containers[*].name}"
 
 
-# IAM create and get user
+# export IP
 export CSM_IP=`kubectl get svc cortx-control-loadbal-svc -ojsonpath='{.spec.clusterIP}'`
 
-curl -v -d '{"username": "cortxadmin", "password": "Cortxadmin@123"}' https://$CSM_IP:8081/api/v2/login --insecure
+# login
+curl -d '{"username": "cortxadmin", "password": "Cortxadmin@123"}' https://$CSM_IP:8081/api/v2/login -k -i
+tok=
 
-curl -X POST -H 'Authorization: Bearer 7d74f909ac3149d6bc2e97ae340a2517' -d '{ "uid": "12345678", "display_name": "gts3account", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/s3/iam/users --insecure
+# create user
+curl -X POST -H "Authorization: $tok" -d '{ "uid": "12345678", "display_name": "gts3account", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/s3/iam/users -k
 
-curl -X GET -H 'Authorization: Bearer 7d74f909ac3149d6bc2e97ae340a2517' https://$CSM_IP:8081/api/v2/s3/iam/users/12345678 --insecure
+# check user
+curl -H "Authorization: $tok" https://$CSM_IP:8081/api/v2/s3/iam/users/12345678 -k -i
 
-# IAM link bucket
+# 2 - IAM link bucket
 curl -X PUT -H 'Authorization: Bearer 7d74f909ac3149d6bc2e97ae340a2517' -d '{ “operation“: ”link”, “arguments”: {"bucket": "testbucket", "uid": "12345678"} }' https://$CSM_IP:8081/api/v2/s3/bucket --insecure
 
 # IAM login (GitHub issue)
