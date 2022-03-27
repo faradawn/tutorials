@@ -21,6 +21,21 @@ source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux
 ```
 
 ## Bash Tricks
+bashrc vs bash_profile
+```
+.bashrc is for interactive non-login shell (when type bash)
+.bash_profile only called once when login -> call .bashrc
+
+alias p="echo hello"
+echo "$(p world)"
+
+# `...` run in sub-shell, but can inherit env? (without export) 
+# (...) also inherit env?
+
+echo -e "Hi,\n\nI am leaving early.\n\nBest,\nFaradawn" | mail -s "A Request to Leave" faradawn@uchicago.edu
+```
+
+
 loop and function
 ```sh
 #!/bin/bash
@@ -50,9 +65,14 @@ done < <(run $1 $2)
 
 ## Vim Trick
 ```
+:set tabstop=4
+:set expandtab # turn tab into space
+
+:!echo $VIM # tried /usr/shared/vimrc and /etc/vimrc or .vimrc -- no use
+vi ~/.vimrc
+
 %d to delete all
 ```
-
 
 ## How format USB on Mac?
 Apple forum: https://discussions.apple.com/thread/8132218
