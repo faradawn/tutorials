@@ -1,5 +1,21 @@
-# Chapter 3: Using the Shell
+# Chapter 3 and 4
 
+### Chapter 4
+grep
+```
+grep -E 'aa|cc' file
+fgrep -f common file
+```
+
+tr
+```
+echo "bash" | tr -c 'b' 'a' # change completement of b to a
+tr -s [:space:] '\n' <mails # -s compress multiple occurrances into one
+
+
+```
+
+### Chapter 3
 echo
 ```
 echo .* # print .bashrc
