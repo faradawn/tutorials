@@ -3,10 +3,20 @@
 ## How Deploy CORTX?
 ```
 source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
-git clone -b main https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.yaml
-./prereq-deploy-cortx-cloud.sh /dev/sdk
+
+# git clone -b main https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.yaml
+git clone https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.yaml
+
+./prereq-deploy-cortx-cloud.sh -d /dev/sdb
+
+tmux new -s k8
+
 ./deploy-cortx-cloud.sh solution.yaml
+
+ctl b d
+tmux a -t k8
 ```
+
 solution.yaml
 ```
 csm secret end with !
@@ -20,7 +30,9 @@ disk prereq: sdk
 ```
 go into a pod
 ```
-kubectl exec -it cortx-data-node-1-6949c7c88b-8lwlw -c cortx-hax -- /bin/bash
+kubectl exec -it cortx-data-node-1-546b689d8c-t8qfn -c cortx-hax -- /bin/bash
+hctl status
+
 ```
 
 
@@ -133,35 +145,29 @@ alias k="kubectl"
 
 ### 5 - Test writing data
 ```
+# get container names within ServerPod: cortx-rgw, cortx-hax
 ServerPod=`kubectl get pod --field-selector=status.phase=Running --selector cortx.io/service-type=cortx-server -o jsonpath={.items[0].metadata.name}`
-kubectl exec -i $DataPod -c cortx-hax -- systemctl status
-
 kubectl get pod $ServerPod -o jsonpath="{.spec.containers[*].name}"
 
 
-
-# check htcl status 
-DataPod=`kubectl get pod --field-selector=status.phase=Running --selector cortx.io/service-type=cortx-data -o jsonpath={.items[0].metadata.name}`
-kubectl exec -i $DataPod -c cortx-hax -- hctl status
-
-
-# get service of "Control Pod's loadbal": cluster IP
+# IAM create and get user
 export CSM_IP=`kubectl get svc cortx-control-loadbal-svc -ojsonpath='{.spec.clusterIP}'`
 
-# get token from CSM login
 curl -v -d '{"username": "cortxadmin", "password": "Cortxadmin@123"}' https://$CSM_IP:8081/api/v2/login --insecure
 
-curl -H 'Authorization: Bearer c6a4ee6375554c1c9fc16a91c7aecb29' -d '{ "account_name": "gts3account", "account_email": "gt@seagate.com", "password": "Account1!", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/s3/iam/users --insecure
+curl -X POST -H 'Authorization: Bearer 7d74f909ac3149d6bc2e97ae340a2517' -d '{ "uid": "12345678", "display_name": "gts3account", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/s3/iam/users --insecure
 
+curl -X GET -H 'Authorization: Bearer 7d74f909ac3149d6bc2e97ae340a2517' https://$CSM_IP:8081/api/v2/s3/iam/users/12345678 --insecure
 
-# method 2: v0.1.0
+# IAM link bucket
+curl -X PUT -H 'Authorization: Bearer 7d74f909ac3149d6bc2e97ae340a2517' -d '{ “operation“: ”link”, “arguments”: {"bucket": "testbucket", "uid": "12345678"} }' https://$CSM_IP:8081/api/v2/s3/bucket --insecure
+
+# IAM login (GitHub issue)
 vi cortx-k8s/k8_cortx_cloud/solution.yaml
 # username: auth_admin: "sgiamadmin"
 # password: s3_auth_admin_secret: ldapadmin
 curl -v -d '{"username": "sgiamadmin", "password": "ldapadmin"}' https://$CSM_IP:8081/api/v2/s3/iam/login --insecure
 
-# get a S3 account
-curl -H 'Authorization: Bearer c6a4ee6375554c1c9fc16a91c7aecb29' -d '{ "uid": "12345678", "display_name": "gts3account", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/s3/iam/users --insecure
 
 
 # install aws
