@@ -5,15 +5,30 @@ grep
 ```
 grep -E 'aa|cc' file
 fgrep -f common file
+
+grep -P 'q(?=a)' # lookahead, grep q without selecting a
+grep -P '(?<=FOO=).*$' # select after FOO=, lookbehind
 ```
 
 tr
 ```
 echo "bash" | tr -c 'b' 'a' # change completement of b to a
 tr -s [:space:] '\n' <mails # -s compress multiple occurrances into one
-
-
 ```
+
+cut
+```
+cut -d' ' -f 2-3 # Alice and Bob
+cut -c 1-3,3-5 # first 5 characters
+cut -b # bytes
+```
+
+ask
+```
+awk -F: '$NF ~ /\/bin/  { print $1, "has", $NF }' /etc/passwd  # usage: '/express/ { }' file
+```
+
+
 
 ### Chapter 3
 echo
