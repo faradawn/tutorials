@@ -154,11 +154,13 @@ kubectl get pod $ServerPod -o jsonpath="{.spec.containers[*].name}"
 export CSM_IP=`kubectl get svc cortx-control-loadbal-svc -ojsonpath='{.spec.clusterIP}'`
 
 # login
-curl -d '{"username": "cortxadmin", "password": "Cortxadmin@123"}' https://$CSM_IP:8081/api/v2/login -k -i
-tok=
+# curl -d '{"username": "cortxadmin", "password": "Cortxadmin@123"}' https://$CSM_IP:8081/api/v2/login -k -i
+# grep -Po '(?<=Authorization: )\w* \w*'
+tok=$(curl -d '{"username": "cortxadmin", "password": "Cortxadmin@123"}' https://$CSM_IP:8081/api/v2/login -k -i | grep -Po '(?<=Authorization: )\w* \w*')
 
 # create user
-curl -X POST -H "Authorization: $tok" -d '{ "uid": "12345678", "display_name": "gts3account", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/s3/iam/users -k
+uid=12345678
+curl -X POST -H "$tok" -d '{ "uid": "12345678", "display_name": "gts3account", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/s3/iam/users -k
 
 # check user
 curl -H "Authorization: $tok" https://$CSM_IP:8081/api/v2/s3/iam/users/12345678 -k -i
@@ -184,20 +186,25 @@ export AWS_ACCESS_KEY_ID=gregoryaccesskey
 export AWS_SECRET_ACCESS_KEY=gregorysecretkey
 export AWS_DEFAULT_REGION=us-east-1
 export SERVER_IP=`kubectl get svc | grep cortx-server-clusterip-svc | head -1 | awk '{print $3}'`
+#  aws configure set aws_access_key_id gregoryaccesskey
+#  aws configure set aws_secret_access_key gregorysecretkey
 
 kubectl describe svc cortx-io-svc-0
-NODE_PORT_IP=10.97.118.40
-NODE_PORT=32262
+Calico_IP=ifconfig -> calico inet 192.168.219.64
+PORT=http NodePort -> 30056/TCP
 
-aws s3 mb s3://test-bucket --endpoint-url http://$NODE_PORT_IP:$NODE_PORT
+aws s3 mb s3://test-bucket --endpoint-url http://$Calico_IP:$PORT
+aws s3 ls --endpoint-url http://$Calico_IP:$PORT
 
-aws s3 mb s3://test-bucket --endpoint-url http://192.168.84.145:8443
+touch foo.txt
+aws s3 cp foo.txt s3://test-bucket/object1 --endpoint-url http://$Calico_IP:$PORT
+aws s3 ls s3://test-bucket --endpoint-url http://$Calico_IP:$PORT
+aws s3 rb s3://test-bucket --endpoint-url http://$Calico_IP:$PORT
+aws s3 ls --endpoint-url http://$Calico_IP:$PORT
 
+url=http://$Calico_IP:$PORT
+curl -H "Authorization: $tok" $url
 
-# testing get IAM user 
-curl -v -d '{"username": "cortxadmin", "password": "Cortxadmin@123"}' https://$CSM_IP:8081/api/v2/login --insecure
-curl -H 'Authorization: Bearer 9ce907b269fd405a80d0d1f1f8a5183b' https://$CSM_IP:8081/api/v2/s3/iam/users/12345678 --insecure
-curl -X PUT -H 'Authorization: Bearer 9ce907b269fd405a80d0d1f1f8a5183b' -d '{ “operation“: ”link”, “arguments”: {“uid“:”12345678”, “bucket“:”test-bucket”} }' https://$CSM_IP:8081/api/v2/s3/bucket --insecure
 
 ```
 
