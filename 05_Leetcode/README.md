@@ -104,6 +104,13 @@ vector<int> nums={1,2,3};
 func(nums);
 func(vector<int> &nums); // passing by reference -> not null
 
+// swap
+void swap(int *a, int *b){
+	int temp=*a;
+	*a=*b;
+	*b=temp;
+}
+
 // 子向量
 vector<int> v1(&vec[i+1], &vec[vec.size()]);
 
