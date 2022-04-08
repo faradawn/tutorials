@@ -145,67 +145,58 @@ alias k="kubectl"
 
 ### 5 - Test writing data
 ```
-# [optional] get container names within ServerPod: cortx-rgw, cortx-hax
-ServerPod=`kubectl get pod --field-selector=status.phase=Running --selector cortx.io/service-type=cortx-server -o jsonpath={.items[0].metadata.name}`
-kubectl get pod $ServerPod -o jsonpath="{.spec.containers[*].name}"
-
-
-# export IP
+# login to CSM to get the Bearer token 
 export CSM_IP=`kubectl get svc cortx-control-loadbal-svc -ojsonpath='{.spec.clusterIP}'`
-
-# login
-# curl -d '{"username": "cortxadmin", "password": "Cortxadmin@123"}' https://$CSM_IP:8081/api/v2/login -k -i
-# grep -Po '(?<=Authorization: )\w* \w*'
 tok=$(curl -d '{"username": "cortxadmin", "password": "Cortxadmin@123"}' https://$CSM_IP:8081/api/v2/login -k -i | grep -Po '(?<=Authorization: )\w* \w*')
 
-# create user
-uid=12345678
+# create and check IAM user
 curl -X POST -H "$tok" -d '{ "uid": "12345678", "display_name": "gts3account", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/s3/iam/users -k
-
-# check user
 curl -H "Authorization: $tok" https://$CSM_IP:8081/api/v2/s3/iam/users/12345678 -k -i
 
-# 2 - IAM link bucket
-curl -X PUT -H 'Authorization: Bearer 7d74f909ac3149d6bc2e97ae340a2517' -d '{ “operation“: ”link”, “arguments”: {"bucket": "testbucket", "uid": "12345678"} }' https://$CSM_IP:8081/api/v2/s3/bucket --insecure
-
-# IAM login (GitHub issue)
+# IAM login (GitHub issue) [Not Necessary]
 vi cortx-k8s/k8_cortx_cloud/solution.yaml
 # username: auth_admin: "sgiamadmin"
 # password: s3_auth_admin_secret: ldapadmin
 curl -v -d '{"username": "sgiamadmin", "password": "ldapadmin"}' https://$CSM_IP:8081/api/v2/s3/iam/login --insecure
 
-
-
 # install aws
-sudo yum install -y unzip
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-sudo ./aws/install
+pip3 install awscli awscli-plugin-endpoint
+aws configure set plugins.endpoint awscli_plugin_endpoint
+aws configure set default.region us-east-1
+aws configure set aws_access_key_id gregoryaccesskey
+aws configure set aws_secret_access_key gregorysecretkey
 
-export AWS_ACCESS_KEY_ID=gregoryaccesskey
-export AWS_SECRET_ACCESS_KEY=gregorysecretkey
-export AWS_DEFAULT_REGION=us-east-1
-export SERVER_IP=`kubectl get svc | grep cortx-server-clusterip-svc | head -1 | awk '{print $3}'`
-#  aws configure set aws_access_key_id gregoryaccesskey
-#  aws configure set aws_secret_access_key gregorysecretkey
-
+# find IP and PORT
 kubectl describe svc cortx-io-svc-0
-Calico_IP=ifconfig -> calico inet 192.168.219.64
-PORT=http NodePort -> 30056/TCP
+IP= ifconfig - calico inet 192.168.219.64 (IP=192.168.219.64)
+PORT= NodePort - cortx-rgw-htt - 30056/TCP (PORT=30056)
 
-aws s3 mb s3://test-bucket --endpoint-url http://$Calico_IP:$PORT
-aws s3 ls --endpoint-url http://$Calico_IP:$PORT
-
+# test IO
+aws s3 mb s3://test-bucket --endpoint-url http://$IP:$PORT
+aws s3 ls --endpoint-url http://$IP:$PORT
 touch foo.txt
-aws s3 cp foo.txt s3://test-bucket/object1 --endpoint-url http://$Calico_IP:$PORT
-aws s3 ls s3://test-bucket --endpoint-url http://$Calico_IP:$PORT
-aws s3 rb s3://test-bucket --endpoint-url http://$Calico_IP:$PORT
-aws s3 ls --endpoint-url http://$Calico_IP:$PORT
+aws s3 cp foo.txt s3://test-bucket/object1 --endpoint-url http://$IP:$PORT
+aws s3 ls s3://test-bucket --endpoint-url http://$IP:$PORT
+aws s3 rb s3://test-bucket --endpoint-url http://$IP:$PORT
+aws s3 ls --endpoint-url http://$IP:$PORT
+```
 
-url=http://$Calico_IP:$PORT
-curl -H "Authorization: $tok" $url
+### Benchmarking
+[CORTX Deployment with RGW Guide](https://seagate-systems.atlassian.net/wiki/spaces/PUB/pages/919765278/CORTX+Deployment+with+RGW+Community+version#S3-Bench)
 
+```
+yum install -y go
+wget https://github.com/Seagate/s3bench/releases/download/v2020-04-09/s3bench.2020-04-09
 
+IP=192.168.219.64; PORT=30056
+
+./s3bench.2020-04-09 -accessKey sgiamadmin -accessSecret ldapadmin -bucket test-bucket1 -endpoint http://$IP:$PORT -numClients 5 -numSamples 20000 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/b1.log -region us-east-1 &
+
+./s3bench.2020-04-09 -accessKey sgiamadmin -accessSecret ldapadmin -bucket test-bucket2 -endpoint http://$IP:$PORT -numClients 5 -numSamples 10000 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/b2.log -region us-east-1 &
+
+./s3bench.2020-04-09 -accessKey sgiamadmin -accessSecret ldapadmin -bucket test-bucket3 -endpoint http://$IP:$PORT -numClients 5 -numSamples 5000 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/b3.log -region us-east-1 &
+
+./s3bench.2020-04-09 -accessKey sgiamadmin -accessSecret ldapadmin -bucket test-bucket4 -endpoint http://$IP:$PORT -numClients 5 -numSamples 500 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/b4.log -region us-east-1 &
 ```
 
 
