@@ -190,18 +190,14 @@ wget https://github.com/Seagate/s3bench/releases/download/v2020-04-09/s3bench.20
 
 IP=192.168.219.64; PORT=30056
 
-./s3bench.2020-04-09 -accessKey sgiamadmin -accessSecret ldapadmin -bucket test-bucket1 -endpoint http://$IP:$PORT -numClients 5 -numSamples 20000 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/b1.log -region us-east-1 &
+./s3bench.2020-04-09 -accessKey sgiamadmin -accessSecret ldapadmin -bucket test-bucket1 -endpoint http://$IP:$PORT -numClients 20 -numSamples 20000 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/d1.log -region us-east-1 &
 
-./s3bench.2020-04-09 -accessKey sgiamadmin -accessSecret ldapadmin -bucket test-bucket2 -endpoint http://$IP:$PORT -numClients 5 -numSamples 10000 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/b2.log -region us-east-1 &
+./s3bench.2020-04-09 -accessKey sgiamadmin -accessSecret ldapadmin -bucket test-bucket2 -endpoint http://$IP:$PORT -numClients 20 -numSamples 10000 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/d2.log -region us-east-1 &
 
-./s3bench.2020-04-09 -accessKey sgiamadmin -accessSecret ldapadmin -bucket test-bucket3 -endpoint http://$IP:$PORT -numClients 5 -numSamples 5000 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/b3.log -region us-east-1 &
+./s3bench.2020-04-09 -accessKey sgiamadmin -accessSecret ldapadmin -bucket test-bucket3 -endpoint http://$IP:$PORT -numClients 20 -numSamples 5000 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/d3.log -region us-east-1 &
 
-./s3bench.2020-04-09 -accessKey sgiamadmin -accessSecret ldapadmin -bucket test-bucket4 -endpoint http://$IP:$PORT -numClients 5 -numSamples 500 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/b4.log -region us-east-1 &
+./s3bench.2020-04-09 -accessKey sgiamadmin -accessSecret ldapadmin -bucket test-bucket4 -endpoint http://$IP:$PORT -numClients 20 -numSamples 500 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/d4.log -region us-east-1 &
 ```
-
-
-
-
 
 
 
