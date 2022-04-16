@@ -1,4 +1,30 @@
-# How to Create LVM and Remove RAID
+# How to Create Disk Paritions, LVM, and Remove RAID
+
+### Creating a deployment
+Install Kubernetes
+```
+# using parted 
+parted -l
+parted /dev/sda
+
+mkpart primary ext4 0 50GB 
+
+20971518 - 10G
+
+
+
+
+fdisk /dev/sd
+n
+- primary / extended
+- partition number 1
+- first sector
+- last sector: 2507029167
+w
+
+mkpart primary ext4 10.0GB 17.24GB
+
+```
 
 ### Creating logical volume
 [Introduction to LVM](https://www.digitalocean.com/community/tutorials/an-introduction-to-lvm-concepts-terminology-and-operations)
@@ -39,26 +65,14 @@ cat /proc/mdstat
 # remove parition
 fdisk /dev/sdc
 print, d, w 
-```
-
-### Creating a deployment
-Install Kubernetes
-```
-fdisk /dev/sd
-n
-- primary / extended
-- partition number 1
-- first sector
-- last sector: 2507029167
-w
-
-# kernel still uses old table, reboot or run partprobe(8) or kpartx(8)
 
 
-# remove storage (sdk)
+# [extra] remove storage (sdk)
 dmsetup remove /dev/mapper/ceph--4071e4ca--48bb--43d2--a7c6--4a47a46ff329-osd--block--4d5b0bc9--4d50--4e5c--b0ff--ab69ff890e21
 fdisk /dev/sdk
 ```
+
+
 
 ### Some YAML commands
 ```
