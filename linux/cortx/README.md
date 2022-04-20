@@ -205,7 +205,28 @@ IP=192.168.219.64; PORT=30056
 ```
 
 
+### Four node deployment 
+```
+The S3 data service is accessible through the cortx-io-svc-0 service.
+   Default IAM access key: sgiamadmin
+   Default IAM secret key is accessible via:
+       kubectl get secrets/cortx-secret --namespace default \
+                  --template={{.data.s3_auth_admin_secret}} | base64 -d
 
+The CORTX control service is accessible through the cortx-control-loadbal-svc service.
+   Default control username: cortxadmin
+   Default control password is accessible via:
+       kubectl get secrets/cortx-secret --namespace default \
+                  --template={{.data.csm_mgmt_admin_secret}} | base64 -d
+
+
+control_password=$(kubectl get secrets/cortx-secret --namespace default --template={{.data.csm_mgmt_admin_secret}} | base64 -d)
+export CSM_IP=`kubectl get svc cortx-control-loadbal-svc -ojsonpath='{.spec.clusterIP}'`
+tok=$(curl -d '{"username": "cortxadmin", "password": "$control_password"}' https://$CSM_IP:8081/api/v2/login -k -i | grep -Po '(?<=Authorization: )\w* \w*')
+
+iam_accesskey=sgiamadmin
+iam_secretkey=kubectl get secrets/cortx-secret --namespace default --template={{.data.s3_auth_admin_secret}} | base64 -d
+```
 
 
 
