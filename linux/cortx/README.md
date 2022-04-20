@@ -2,37 +2,42 @@
 
 ## How Deploy CORTX?
 ```
+# install Kubernetes
 source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
 
-# git clone -b main https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.yaml
-git clone https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.yaml
+# clone cortx repository
+git clone https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.example.yaml
 
-./prereq-deploy-cortx-cloud.sh -d /dev/sdb
+# run prereq
+remove logical volume
+./prereq-deploy-cortx-cloud.sh -d /dev/sdb -s solution.example.yaml
 
+# node-1 with sdq as /, so mount on sda
+
+# copy solution
+passwd cc 1234
+cat /etc/hosts
+scp solution.example.yaml root@10.52.3.92:/home/cc/cortx-k8s/k8_cortx_cloud
+
+# untaint master
+kubectl taint node master node-role.kubernetes.io/master:NoSchedule-
+
+
+# start deploy
 tmux new -s k8
-
-./deploy-cortx-cloud.sh solution.yaml
+./deploy-cortx-cloud.sh solution.example.yaml
 
 ctl b d
 tmux a -t k8
+
+
+
 ```
 
-solution.yaml
-```
-csm secret end with !
-size: small
-nodes.node1.name: node-1
-storage.cvg1: 
-  meta: f
-  1: g
-  2: h
-disk prereq: sdk
-```
 go into a pod
 ```
 kubectl exec -it cortx-data-node-1-546b689d8c-t8qfn -c cortx-hax -- /bin/bash
 hctl status
-
 ```
 
 
