@@ -2,11 +2,11 @@
 # private ip: ifconfig -a, public ip: curl ifconfig.me
 # change line 85 and 119
 
-echo 'Welcome V3! Make sure you are root!'
+echo 'Welcome V4! Make sure you are root!'
 
 ME="NULL"
 PS3='Please enter your choice: '
-options=("master" "worker-1" "worker-2" "quit")
+options=("master" "node-1" "node-2" "node-3" "quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -17,17 +17,24 @@ do
             sleep 1
             break
             ;;
-        "worker-1")
+        "node-1")
             echo "set-hostname node-1"
             hostnamectl set-hostname node-1
             ME="worker-1"
             sleep 1
             break
             ;;
-        "worker-2")
+        "node-2")
             echo "set-hostname node-2"
             hostnamectl set-hostname node-2
             ME="worker-2"
+            sleep 1
+            break
+            ;;
+        "node-3")
+            echo "set-hostname node-3"
+            hostnamectl set-hostname node-3
+            ME="worker-3"
             sleep 1
             break
             ;;
@@ -83,8 +90,12 @@ sudo systemctl enable kubelet
 
 echo -e '\n === Part2: configure DNS and disable SElinux === \n'
 cat <<EOF>> /etc/hosts
-10.52.3.157 master
-10.52.0.136 node-1
+10.52.2.235 master
+10.52.3.92 node-1
+10.52.2.250 node-2
+10.52.3.162 node-3
+
+
 EOF
 
 # disable SElinx
@@ -116,7 +127,7 @@ then
     sudo kubeadm init \
       --pod-network-cidr=192.168.0.0/16 \
       --upload-certs \
-      --control-plane-endpoint=10.52.3.157
+      --control-plane-endpoint=10.52.2.235
 
     mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
