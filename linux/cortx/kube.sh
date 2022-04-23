@@ -61,7 +61,7 @@ repo_gpgcheck=0
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
 
-sudo yum -y update && sudo yum -y install epel-release git wget kubelet kubeadm kubectl --disableexcludes=kubernetes yum-utils device-mapper-persistent-data lvm2
+sudo yum -y update && sudo yum -y install kubelet kubeadm kubectl
 
 # install docker
 sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -138,8 +138,5 @@ then
     kubectl get nodes -o wide
 fi
 
-echo -e '\n === done! Then copy the following two commands === \n'
-echo "using sdf, g, h"
-echo "./prereq-deploy-cortx-cloud.sh /dev/sdk"
-echo "./deploy-cortx-cloud.sh solution.yaml"
+echo -e '\n === done! git clone cortx now === \n'
 git clone https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.yaml
