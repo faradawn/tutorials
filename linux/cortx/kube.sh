@@ -6,7 +6,7 @@ echo 'Welcome V4! Make sure you are root!'
 
 ME="NULL"
 PS3='Please enter your choice: '
-options=("master" "node-1" "node-2" "node-3" "quit")
+options=("node-1" "node-2" "node-3" "master" "quit")
 select opt in "${options[@]}"
 do
     case $opt in
