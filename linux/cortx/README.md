@@ -184,10 +184,11 @@ aws s3 ls --endpoint-url http://$IP:$PORT
 yum install -y go wget
 wget https://github.com/Seagate/s3bench/releases/download/v2020-04-09/s3bench.2020-04-09
 
-IP=192.168.219.64; PORT=30056
+export PORT=31833
+export IP=192.168.219.64
 
-./s3bench.2020-04-09 -accessKey gregoryaccesskey -accessSecret gregorysecretkey -bucket test-bucket4 -endpoint http://$IP:$PORT -numClients 20 -numSamples 500 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/d4.log -region us-east-1 &```
+./s3bench.2020-04-09 -accessKey gregoryaccesskey -accessSecret gregorysecretkey -bucket test-bucket4 -endpoint http://$IP:$PORT -numClients 20 -numSamples 500 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/d4.log -region us-east-1 &
 
-`` `
+```
 
 
