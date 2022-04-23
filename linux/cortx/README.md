@@ -2,25 +2,19 @@
 
 ## How Deploy CORTX?
 ```
-# install Kubernetes
+# install Kubernetes and join workers
 source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
-
-# clone cortx repository
-git clone https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.example.yaml
-
-# run prereq
-remove logical volume
-./prereq-deploy-cortx-cloud.sh -d /dev/sdb -s solution.example.yaml
-
-# node-1 with sdq as /, so mount on sda
-
-# copy solution
-passwd cc 1234
-cat /etc/hosts
-scp solution.example.yaml root@10.52.3.92:/home/cc/cortx-k8s/k8_cortx_cloud
 
 # untaint master
 kubectl taint node master node-role.kubernetes.io/master:NoSchedule-
+
+# copy solution
+passwd 1234
+scp solution.example.yaml root@129.114.108.233:/home/cc/cortx-k8s/k8_cortx_cloud
+
+
+# run prereq
+./prereq-deploy-cortx-cloud.sh -d /dev/sda -s solution.example.yaml
 
 
 # start deploy
@@ -152,17 +146,14 @@ alias k="kubectl"
 ```
 # login to CSM to get the Bearer token 
 export CSM_IP=`kubectl get svc cortx-control-loadbal-svc -ojsonpath='{.spec.clusterIP}'`
-tok=$(curl -d '{"username": "cortxadmin", "password": "Cortxadmin@123"}' https://$CSM_IP:8081/api/v2/login -k -i | grep -Po '(?<=Authorization: )\w* \w*')
+
+kubectl get secrets/cortx-secret --namespace default --template={{.data.csm_mgmt_admin_secret}} | base64 -d
+
+tok=$(curl -d '{"username": "cortxadmin", "password": "Pg4A^glYk$G2F6Pb"}' https://$CSM_IP:8081/api/v2/login -k -i | grep -Po '(?<=Authorization: )\w* \w*')
 
 # create and check IAM user
-curl -X POST -H "$tok" -d '{ "uid": "12345678", "display_name": "gts3account", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/s3/iam/users -k
+curl -X POST -H "Authorization: $tok" -d '{ "uid": "12345678", "display_name": "gts3account", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/s3/iam/users -k
 curl -H "Authorization: $tok" https://$CSM_IP:8081/api/v2/s3/iam/users/12345678 -k -i
-
-# IAM login (GitHub issue) [Not Necessary]
-vi cortx-k8s/k8_cortx_cloud/solution.yaml
-# username: auth_admin: "sgiamadmin"
-# password: s3_auth_admin_secret: ldapadmin
-curl -v -d '{"username": "sgiamadmin", "password": "ldapadmin"}' https://$CSM_IP:8081/api/v2/s3/iam/login --insecure
 
 # install aws
 pip3 install awscli awscli-plugin-endpoint
@@ -174,7 +165,7 @@ aws configure set aws_secret_access_key gregorysecretkey
 # find IP and PORT
 kubectl describe svc cortx-io-svc-0
 IP= ifconfig - calico inet 192.168.219.64 (IP=192.168.219.64)
-PORT= NodePort - cortx-rgw-htt - 30056/TCP (PORT=30056)
+PORT= NodePort - cortx-rgw-http - 30056/TCP (PORT=30056)
 
 # test IO
 aws s3 mb s3://test-bucket --endpoint-url http://$IP:$PORT
@@ -190,47 +181,13 @@ aws s3 ls --endpoint-url http://$IP:$PORT
 [CORTX Deployment with RGW Guide](https://seagate-systems.atlassian.net/wiki/spaces/PUB/pages/919765278/CORTX+Deployment+with+RGW+Community+version#S3-Bench)
 
 ```
-yum install -y go
+yum install -y go wget
 wget https://github.com/Seagate/s3bench/releases/download/v2020-04-09/s3bench.2020-04-09
 
 IP=192.168.219.64; PORT=30056
 
-./s3bench.2020-04-09 -accessKey sgiamadmin -accessSecret ldapadmin -bucket test-bucket1 -endpoint http://$IP:$PORT -numClients 20 -numSamples 20000 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/d1.log -region us-east-1 &
+./s3bench.2020-04-09 -accessKey gregoryaccesskey -accessSecret gregorysecretkey -bucket test-bucket4 -endpoint http://$IP:$PORT -numClients 20 -numSamples 500 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/d4.log -region us-east-1 &```
 
-./s3bench.2020-04-09 -accessKey sgiamadmin -accessSecret ldapadmin -bucket test-bucket2 -endpoint http://$IP:$PORT -numClients 20 -numSamples 10000 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/d2.log -region us-east-1 &
-
-./s3bench.2020-04-09 -accessKey sgiamadmin -accessSecret ldapadmin -bucket test-bucket3 -endpoint http://$IP:$PORT -numClients 20 -numSamples 5000 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/d3.log -region us-east-1 &
-
-./s3bench.2020-04-09 -accessKey sgiamadmin -accessSecret ldapadmin -bucket test-bucket4 -endpoint http://$IP:$PORT -numClients 20 -numSamples 500 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/d4.log -region us-east-1 &
-```
-
-
-### Four node deployment 
-```
-The S3 data service is accessible through the cortx-io-svc-0 service.
-   Default IAM access key: sgiamadmin
-   Default IAM secret key is accessible via:
-       kubectl get secrets/cortx-secret --namespace default \
-                  --template={{.data.s3_auth_admin_secret}} | base64 -d
-
-The CORTX control service is accessible through the cortx-control-loadbal-svc service.
-   Default control username: cortxadmin
-   Default control password is accessible via:
-       kubectl get secrets/cortx-secret --namespace default \
-                  --template={{.data.csm_mgmt_admin_secret}} | base64 -d
-
-
-control_password=$(kubectl get secrets/cortx-secret --namespace default --template={{.data.csm_mgmt_admin_secret}} | base64 -d)
-export CSM_IP=`kubectl get svc cortx-control-loadbal-svc -ojsonpath='{.spec.clusterIP}'`
-tok=$(curl -d '{"username": "cortxadmin", "password": "$control_password"}' https://$CSM_IP:8081/api/v2/login -k -i | grep -Po '(?<=Authorization: )\w* \w*')
-
-iam_accesskey=sgiamadmin
-iam_secretkey=kubectl get secrets/cortx-secret --namespace default --template={{.data.s3_auth_admin_secret}} | base64 -d
-```
-
-
-
-
-
+`` `
 
 
