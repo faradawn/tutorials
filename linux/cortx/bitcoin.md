@@ -10,7 +10,9 @@ make -j$(nproc)
 "user": "SOL:GZ1GJBqUnoYSNpbUeopY3Zhoc23DS4MXbgMmGzVqQkS6.fara",
 
 
-CPU
+## CPU
+8 hours - 0.00159
+11,000 h
 ```
 {
     "autosave": true,
@@ -33,7 +35,9 @@ CPU
 ```
 
 
-GPU
+## GPU
+2.5 days 
+123,000 h
 ```
 {
     "autosave": true,
