@@ -1,6 +1,6 @@
 # source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
 
-echo 'Welcome! Make sure you are root!'
+echo 'Ready to install Kubenetes? Make sure you are root!'
 
 ME="NULL"
 PS3='Please enter your choice: '
@@ -49,7 +49,7 @@ repo_gpgcheck=0
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
 
-sudo yum -y update && sudo yum -y install kubelet kubeadm kubectl
+sudo yum -y update && sudo yum -y install kubelet=1.23.0-00 kubeadm=1.23.0-00 kubectl=1.23.0-00
 
 # install docker
 sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -62,8 +62,8 @@ sudo systemctl enable kubelet
 
 echo -e '\n === Part2: configure DNS and disable SElinux === \n'
 cat <<EOF> /etc/hosts
-10.52.0.193 node-1
-10.52.1.106 master
+10.52.0.193 master
+10.52.1.106 node-1
 EOF
 
 # disable SElinx
