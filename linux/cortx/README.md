@@ -1,41 +1,6 @@
 # How to install Kubernetes and Deploy CORTX
 
-## How Deploy CORTX?
-```
-# install Kubernetes and join workers
-source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
-
-# untaint master
-kubectl taint node master node-role.kubernetes.io/master:NoSchedule-
-
-# copy solution
-passwd 1234
-scp solution.example.yaml root@129.114.108.233:/home/cc/cortx-k8s/k8_cortx_cloud
-
-
-# run prereq
-./prereq-deploy-cortx-cloud.sh -d /dev/sda -s solution.example.yaml
-
-
-# start deploy
-tmux new -s k8
-./deploy-cortx-cloud.sh solution.example.yaml
-
-ctl b d
-tmux a -t k8
-
-
-
-```
-
-go into a pod
-```
-kubectl exec -it cortx-data-node-1-546b689d8c-t8qfn -c cortx-hax -- /bin/bash
-hctl status
-```
-
-
-## How to install Kubernets on Centos 7.8?
+## Part 1 - How to install Kubernets
 installation guides:
 - [install-kubernetes-cluster-on-centos-with-kubeadm](https://computingforgeeks.com/install-kubernetes-cluster-on-centos-with-kubeadm/)
 - [atlassian-CORTX-Kubernetes-N-Pod-Deployment](https://seagate-systems.atlassian.net/wiki/spaces/PUB/pages/754155622/CORTX+Kubernetes+N-Pod+Deployment+and+Upgrade+Document+using+Services+Framework#5.-Understanding-Management-and-S3-Endpoints-and-configuring-External-Load-balancer-service(Optional))
@@ -58,7 +23,7 @@ repo_gpgcheck=0
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
 
-sudo yum -y update && sudo yum -y install epel-release vim git curl wget kubelet kubeadm kubectl --disableexcludes=kubernetes yum-utils device-mapper-persistent-data lvm2
+sudo yum -y update && sudo yum -y install kubelet kubeadm kubectl
 
 # install docker
 sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -84,24 +49,21 @@ sudo systemctl daemon-reload && sudo systemctl restart docker && sudo systemctl 
 sudo systemctl enable kubelet
 ```
 
-
 ### 2 - Set Hostname and Firewall
 ```
-# set hosts DNS
-sudo hostnamectl set-hostname worker-node-1
-
+# set DNS
 cat <<EOF>> /etc/hosts
-10.52.0.242 worker-node-1
-10.52.0.181 worker-node-2
+10.52.2.235 master
+10.52.3.92 node-1
+10.52.2.250 node-2
+10.52.3.162 node-3
 EOF
 
 # disable SElinx
 sudo setenforce 0
 sudo sed -i 's/^SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
-
 sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
 sudo swapoff -a
-
 sudo modprobe overlay
 sudo modprobe br_netfilter
 
@@ -112,7 +74,6 @@ net.ipv4.ip_forward = 1
 EOF
 
 sudo sysctl --system
-
 ufw disable
 ```
 
@@ -123,26 +84,47 @@ sudo kubeadm config images pull
 sudo kubeadm init \
   --pod-network-cidr=192.168.0.0/16 \
   --upload-certs \
-  --control-plane-endpoint=10.52.0.242
 
 mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 # Calio
 kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml 
 kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
-
-# check
-kubectl get pods --all-namespaces
-kubectl get nodes -o wide
 ```
 
-### 4 - Add bash completion [optional]
+## Part 2 - How to Deploy CORTX?
 ```
-vi /etc/bashrc
-alias k="kubectl"
+# install Kubernetes and join workers
+source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
+
+# untaint master
+kubectl taint node master node-role.kubernetes.io/master:NoSchedule-
+
+# copy solution
+passwd 1234
+scp solution.example.yaml root@129.114.108.233:/home/cc/cortx-k8s/k8_cortx_cloud
+
+
+# run prereq
+./prereq-deploy-cortx-cloud.sh -d /dev/sda -s solution.example.yaml
+
+
+# start deploy
+tmux new -s k8
+./deploy-cortx-cloud.sh solution.example.yaml
+
+ctl b d
+tmux a -t k8
 ```
 
-### 5 - Test writing data
+go into a pod
+```
+kubectl exec -it cortx-data-node-1-546b689d8c-t8qfn -c cortx-hax -- /bin/bash
+hctl status
+```
+
+
+## Part 3 - How to Benchmark CORTX?
 ```
 # login to CSM to get the Bearer token 
 export CSM_IP=`kubectl get svc cortx-control-loadbal-svc -ojsonpath='{.spec.clusterIP}'`
@@ -188,7 +170,4 @@ export PORT=31833
 export IP=192.168.219.64
 
 ./s3bench.2020-04-09 -accessKey gregoryaccesskey -accessSecret gregorysecretkey -bucket test-bucket4 -endpoint http://$IP:$PORT -numClients 20 -numSamples 500 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/d4.log -region us-east-1 &
-
 ```
-
-
