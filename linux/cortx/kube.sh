@@ -49,7 +49,7 @@ repo_gpgcheck=0
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
 
-sudo yum -y update && sudo yum -y install kubelet=1.23.0-00 kubeadm=1.23.0-00 kubectl=1.23.0-00
+sudo yum -y update && sudo yum -y install kubelet-1.23.6 kubeadm-1.23.6 kubectl-1.23.6
 
 # install docker
 sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -90,18 +90,10 @@ ufw disable
 echo -e '\n === Part3: Kuber Init ===\n'
 if [[ $ME -eq "master" ]]
 then
-    sudo kubeadm config images pull
-    sudo kubeadm init \
-      --pod-network-cidr=192.168.0.0/16 \
-      --upload-certs \
-
+    sudo kubeadm init
     mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
     kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml 
     kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
-
-    kubectl get pods --all-namespaces
-    kubectl get nodes -o wide
 fi
 
 echo -e '\n === done! git clone cortx now === \n'
