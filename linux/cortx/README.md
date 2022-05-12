@@ -23,29 +23,23 @@ repo_gpgcheck=0
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
 
-sudo yum -y update && sudo yum -y install kubelet kubeadm kubectl
+sudo yum -y update && sudo yum -y install kubelet-1.23.6 kubeadm-1.23.6 kubectl-1.23.6
 
-# install docker
+# install cri-o [preferred]
+VERSION=1.23
+OS=CentOS_7
+curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/devel:kubic:libcontainers:stable.repo
+curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$VERSION/$OS/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo
+yum -y install cri-o
+
+sudo systemctl enable --now crio
+sudo systemctl enable kubelet
+
+
+# install docker [deprecated]
 sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-sudo yum -y install docker-ce docker-ce-cli containerd.io
-
-sudo mkdir /etc/docker && sudo mkdir -p /etc/systemd/system/docker.service.d
-
-sudo tee /etc/docker/daemon.json <<EOF
-{
-  "exec-opts": ["native.cgroupdriver=systemd"],
-  "log-driver": "json-file",
-  "log-opts": {
-    "max-size": "100m"
-  },
-  "storage-driver": "overlay2",
-  "storage-opts": [
-    "overlay2.override_kernel_check=true"
-  ]
-}
-EOF
-
-sudo systemctl daemon-reload && sudo systemctl restart docker && sudo systemctl enable docker
+sudo yum -y install docker-ce
+sudo systemctl start docker && sudo systemctl enable docker
 sudo systemctl enable kubelet
 ```
 
@@ -53,10 +47,8 @@ sudo systemctl enable kubelet
 ```
 # set DNS
 cat <<EOF>> /etc/hosts
-10.52.2.235 master
-10.52.3.92 node-1
-10.52.2.250 node-2
-10.52.3.162 node-3
+10.52.2.127 node-1
+10.52.3.73 node-2
 EOF
 
 # disable SElinx
