@@ -11,6 +11,7 @@ installation guides:
 ```
 launch an image: CC-CentOS7-2003 (7.8)
 check version: cat /etc/centos-release
+hostnamectl set-hostname node-1
 
 # install kubernetes 
 cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
