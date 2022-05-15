@@ -2,14 +2,10 @@
 
 ## Part 1 - How to install Kubernets
 installation guides:
-- [cri-o centos guide](https://arabitnetwork.com/2021/02/20/install-kubernetes-with-cri-o-on-centos-7-step-by-step/)
-- [install-kubernetes-cluster-on-centos-with-kubeadm](https://computingforgeeks.com/install-kubernetes-cluster-on-centos-with-kubeadm/)
-- [atlassian-CORTX-Kubernetes-N-Pod-Deployment](https://seagate-systems.atlassian.net/wiki/spaces/PUB/pages/754155622/CORTX+Kubernetes+N-Pod+Deployment+and+Upgrade+Document+using+Services+Framework#5.-Understanding-Management-and-S3-Endpoints-and-configuring-External-Load-balancer-service(Optional))
-- [cortx-k8s-readme](https://github.com/Seagate/cortx-k8s/tree/main)
+- [Arab IT: Install cri-o and kubernetes on centos7](https://arabitnetwork.com/2021/02/20/install-kubernetes-with-cri-o-on-centos-7-step-by-step/)
 - source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
 
-
-### New CRI-O setup guide
+### Part 1 - CRI-O on Centos7 Setup
 ```
 cat <<EOF>> /etc/hosts
 10.52.2.127 node-1
@@ -78,99 +74,21 @@ sudo yum install cri-o -y
 # Install Kubernetes, specify Version as CRI-O
 yum install -y kubelet-1.23.0-0 kubeadm-1.23.0-0 kubectl-1.23.0-0 --disableexcludes=kubernetes
 
-
 # edit adm
 vi /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
 
-Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd"
-$KUBELET_CGROUP_ARGS
+before Environment file: Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd"
+append to the last command: $KUBELET_CGROUP_ARGS
 
 systemctl daemon-reload && systemctl enable crio --now && systemctl enable kubelet --now
 
-# init 
+# init (Change to node-1 IP!!!)
 kubeadm init --pod-network-cidr=10.52.2.127/16
 export KUBECONFIG=/etc/kubernetes/admin.conf
 curl https://docs.projectcalico.org/manifests/calico.yaml -O
 kubectl apply -f calico.yaml
 ```
 
-### 1 - Install Dependencies
-```
-launch an image: CC-CentOS7-2003 (7.8)
-check version: cat /etc/centos-release
-hostnamectl set-hostname node-1
-
-# install kubernetes 
-cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
-[kubernetes]
-name=Kubernetes
-baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
-enabled=1
-gpgcheck=1
-repo_gpgcheck=0
-gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-EOF
-
-sudo yum -y update && sudo yum -y install kubelet-1.23.6 kubeadm-1.23.6 kubectl-1.23.6
-
-# install cri-o [preferred]
-VERSION=1.23
-OS=CentOS_7
-curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/devel:kubic:libcontainers:stable.repo
-curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$VERSION/$OS/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo
-yum -y install cri-o
-
-sudo systemctl enable --now crio
-sudo systemctl enable kubelet
-
-
-# install docker [deprecated]
-sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-sudo yum -y install docker-ce
-sudo systemctl start docker && sudo systemctl enable docker
-sudo systemctl enable kubelet
-```
-
-### 2 - Set Hostname and Firewall
-```
-# set DNS
-cat <<EOF>> /etc/hosts
-10.52.2.127 node-1
-10.52.3.73 node-2
-EOF
-
-# disable SElinx
-sudo setenforce 0
-sudo sed -i 's/^SELINUX=.*/SELINUX=permissive/g' /etc/selinux/config
-sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
-sudo swapoff -a
-sudo modprobe overlay
-sudo modprobe br_netfilter
-
-sudo tee /etc/sysctl.d/kubernetes.conf<<EOF
-net.bridge.bridge-nf-call-ip6tables = 1
-net.bridge.bridge-nf-call-iptables = 1
-net.ipv4.ip_forward = 1
-EOF
-
-sudo sysctl --system
-ufw disable
-```
-
-### 3 - Init Cluster
-```
-sudo kubeadm config images pull
-
-sudo kubeadm init \
-  --pod-network-cidr=192.168.0.0/16 \
-  --upload-certs \
-
-mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-# Calio
-kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml 
-kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
-```
 
 ## Part 2 - How to Deploy CORTX?
 ```
