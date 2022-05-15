@@ -2,10 +2,97 @@
 
 ## Part 1 - How to install Kubernets
 installation guides:
+- [cri-o centos guide](https://arabitnetwork.com/2021/02/20/install-kubernetes-with-cri-o-on-centos-7-step-by-step/)
 - [install-kubernetes-cluster-on-centos-with-kubeadm](https://computingforgeeks.com/install-kubernetes-cluster-on-centos-with-kubeadm/)
 - [atlassian-CORTX-Kubernetes-N-Pod-Deployment](https://seagate-systems.atlassian.net/wiki/spaces/PUB/pages/754155622/CORTX+Kubernetes+N-Pod+Deployment+and+Upgrade+Document+using+Services+Framework#5.-Understanding-Management-and-S3-Endpoints-and-configuring-External-Load-balancer-service(Optional))
 - [cortx-k8s-readme](https://github.com/Seagate/cortx-k8s/tree/main)
 - source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
+
+
+### New CRI-O setup guide
+```
+cat <<EOF>> /etc/hosts
+10.52.2.127 node-1
+10.52.3.73 node-2
+EOF
+
+hostnamectl set-hostname node-2
+
+ufw disable
+
+# let ipTable see bridged networks
+cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+
+# system parameters 
+cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+EOF
+
+# crio
+cat <<EOF | sudo tee /etc/modules-load.d/crio.conf
+overlay
+br_netfilter
+EOF
+
+# kubernetes-cri
+cat <<EOF | sudo tee /etc/sysctl.d/99-kubernetes-cri.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.ipv4.ip_forward                 = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+EOF
+
+sudo modprobe overlay && sudo modprobe br_netfilter && sudo sysctl --system
+
+# selinux
+sudo setenforce 0
+sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+swapoff -a
+sed -i '/swap/d' /etc/fstab
+yum repolist -y
+
+# install kube
+cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
+enabled=1
+gpgcheck=1
+repo_gpgcheck=0
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+exclude=kubelet kubeadm kubectl
+EOF
+
+# install cri-o
+yum update -y && yum install -y yum-utils nfs-utils
+OS=CentOS_7
+VERSION=1.23
+sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/devel:kubic:libcontainers:stable.repo
+sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$VERSION/$OS/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo
+sudo yum install cri-o -y
+ 
+# Install Kubernetes, specify Version as CRI-O
+yum install -y kubelet-1.23.0-0 kubeadm-1.23.0-0 kubectl-1.23.0-0 --disableexcludes=kubernetes
+
+
+# edit adm
+vi /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
+
+Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd"
+$KUBELET_CGROUP_ARGS
+
+systemctl daemon-reload && systemctl enable crio --now && systemctl enable kubelet --now
+
+# init 
+kubeadm init --pod-network-cidr=10.52.2.127/16
+export KUBECONFIG=/etc/kubernetes/admin.conf
+curl https://docs.projectcalico.org/manifests/calico.yaml -O
+kubectl apply -f calico.yaml
+```
 
 ### 1 - Install Dependencies
 ```
