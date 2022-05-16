@@ -64,7 +64,7 @@ exclude=kubelet kubeadm kubectl
 EOF
 
 # install cri-o
-yum update -y && yum install -y yum-utils nfs-utils
+yum update -y && yum install -y yum-utils nfs-utils tmux
 OS=CentOS_7
 VERSION=1.23
 sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/devel:kubic:libcontainers:stable.repo
@@ -87,25 +87,35 @@ kubeadm init --pod-network-cidr=10.52.2.127/16
 export KUBECONFIG=/etc/kubernetes/admin.conf
 curl https://docs.projectcalico.org/manifests/calico.yaml -O
 kubectl apply -f calico.yaml
+
+# if localhost 8080 connect refused, try
+export KUBECONFIG=/etc/kubernetes/admin.conf
+mv /etc/kubernetes/kubelet.conf /etc/kubernetes/admin.conf
 ```
 
 
 ## Part 2 - How to Deploy CORTX?
 ```
-# install Kubernetes and join workers
-source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
+# git clone with cc
+git clone https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud
+vi solution.example.yaml # change node, svg storage 
+
+passwd cc 1234
+scp solution.example.yaml cc@129.114.108.105:/home/cc/cortx-k8s/k8_cortx_cloud
+
+lsblk, vgdisplay, vgremove
 
 # untaint master
-kubectl taint node master node-role.kubernetes.io/master:NoSchedule-
-
-# copy solution
-passwd 1234
-scp solution.example.yaml root@129.114.108.233:/home/cc/cortx-k8s/k8_cortx_cloud
-
+kubectl taint node node-1 node-role.kubernetes.io/master:NoSchedule-
 
 # run prereq
 ./prereq-deploy-cortx-cloud.sh -d /dev/sda -s solution.example.yaml
 
+# download yq 
+VERSION=v4.2.0
+BINARY=yq_linux_amd64
+wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY}.tar.gz -O - | tar xz && mv ${BINARY} /usr/bin/yq
+https://github.com/mikefarah/yq/releases/download/4.25.1
 
 # start deploy
 tmux new -s k8
