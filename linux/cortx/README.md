@@ -7,12 +7,14 @@ installation guides:
 
 ### Part 1 - CRI-O on Centos7 Setup
 ```
-cat <<EOF>> /etc/hosts
-10.52.2.127 node-1
-10.52.3.73 node-2
-EOF
+hostnamectl set-hostname node-1
 
-hostnamectl set-hostname node-2
+cat <<EOF>> /etc/hosts
+10.52.2.136 node-1
+10.52.3.7 node-2
+10.52.3.108 node-3
+10.52.2.97 node-4
+EOF
 
 ufw disable
 
@@ -83,7 +85,7 @@ append to the last command: $KUBELET_CGROUP_ARGS
 systemctl daemon-reload && systemctl enable crio --now && systemctl enable kubelet --now
 
 # init (Change to node-1 IP!!!)
-kubeadm init --pod-network-cidr=10.52.2.127/16
+kubeadm init --pod-network-cidr=10.52.2.136/16
 export KUBECONFIG=/etc/kubernetes/admin.conf
 curl https://docs.projectcalico.org/manifests/calico.yaml -O
 kubectl apply -f calico.yaml
@@ -112,10 +114,10 @@ kubectl taint node node-1 node-role.kubernetes.io/master:NoSchedule-
 ./prereq-deploy-cortx-cloud.sh -d /dev/sda -s solution.example.yaml
 
 # download yq 
-VERSION=v4.2.0
+VERSION=v4.25.1
 BINARY=yq_linux_amd64
-wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY}.tar.gz -O - | tar xz && mv ${BINARY} /usr/bin/yq
-https://github.com/mikefarah/yq/releases/download/4.25.1
+wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY}.tar.gz -O - |\
+  tar xz && mv ${BINARY} /usr/bin/yq
 
 # start deploy
 tmux new -s k8
