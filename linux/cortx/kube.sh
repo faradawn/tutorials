@@ -10,13 +10,13 @@ do
     case $opt in
         "node-1")
             echo "set-hostname node-1"
-            hostnamectl set-hostname node-1
+            hostnamectl set-hostname node-3
             sleep 1
             break
             ;;
         "node-2")
             echo "hostnamectl set-hostname node-2"
-            hostnamectl set-hostname node-2
+            hostnamectl set-hostname node-4
             sleep 1
             break
             ;;
@@ -49,7 +49,7 @@ repo_gpgcheck=0
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
 
-sudo yum -y update && sudo yum -y install kubelet-1.23.6 kubeadm-1.23.6 kubectl-1.23.6
+sudo yum -y update && sudo yum -y install kubelet-1.23.0 kubeadm-1.23.0 kubectl-1.23.0
 
 # install docker
 sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -62,8 +62,8 @@ sudo systemctl enable kubelet
 
 echo -e '\n === Part2: configure DNS and disable SElinux === \n'
 cat <<EOF> /etc/hosts
-10.52.0.193 master
-10.52.1.106 node-1
+10.52.3.108 node-3
+10.52.2.97 node-4
 EOF
 
 # disable SElinx
