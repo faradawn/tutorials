@@ -10,10 +10,8 @@ installation guides:
 hostnamectl set-hostname node-1
 
 cat <<EOF>> /etc/hosts
-10.52.2.136 node-1
-10.52.3.7 node-2
-10.52.3.108 node-3
-10.52.2.97 node-4
+10.52.2.178 node-1
+10.52.0.201 node-2
 EOF
 
 ufw disable
@@ -66,7 +64,7 @@ exclude=kubelet kubeadm kubectl
 EOF
 
 # install cri-o
-yum update -y && yum install -y yum-utils nfs-utils tmux
+yum update -y && yum install -y yum-utils nfs-utils tmux # done this 
 OS=CentOS_7
 VERSION=1.23
 sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/devel:kubic:libcontainers:stable.repo
@@ -85,7 +83,7 @@ append to the last command: $KUBELET_CGROUP_ARGS
 systemctl daemon-reload && systemctl enable crio --now && systemctl enable kubelet --now
 
 # init (Change to node-1 IP!!!)
-kubeadm init --pod-network-cidr=10.52.2.136/16
+kubeadm init --pod-network-cidr=10.52.2.178/16
 export KUBECONFIG=/etc/kubernetes/admin.conf
 curl https://docs.projectcalico.org/manifests/calico.yaml -O
 kubectl apply -f calico.yaml
