@@ -2,11 +2,11 @@
 
 ## Part 1: Install Docker and Kubernetes
 ```
-hostnamectl set-hostname node-3
+hostnamectl set-hostname node-5
 
 cat <<EOF>> /etc/hosts
-10.52.3.108 node-3
-10.52.2.97 node-4
+10.52.3.233 node-5
+10.52.2.81 node-6
 EOF
 
 # let ipTable see bridged networks
