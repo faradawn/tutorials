@@ -92,17 +92,8 @@ sudo yum install cri-o -y
 # Install Kubernetes, specify Version as CRI-O
 yum install -y kubelet-1.23.0-0 kubeadm-1.23.0-0 kubectl-1.23.0-0 --disableexcludes=kubernetes
 
-# edit adm 
-cat <<EOF> /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
-[Service]
-Environment="KUBELET_KUBECONFIG_ARGS=--bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf"
-Environment="KUBELET_CONFIG_ARGS=--config=/var/lib/kubelet/config.yaml"
-EnvironmentFile=-/var/lib/kubelet/kubeadm-flags.env
-Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd"
-EnvironmentFile=-/etc/sysconfig/kubelet
-ExecStart=
-ExecStart=/usr/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_CONFIG_ARGS $KUBELET_KUBEADM_ARGS $KUBELET_EXTRA_ARGS $KUBELET_CGROUP_ARGS
-EOF
+# download adm file
+curl -o /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/10-kubeadm.conf
 
 systemctl daemon-reload && systemctl enable crio --now && systemctl enable kubelet --now
 
