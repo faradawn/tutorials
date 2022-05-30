@@ -93,7 +93,8 @@ sudo yum install cri-o -y
 yum install -y kubelet-1.23.0-0 kubeadm-1.23.0-0 kubectl-1.23.0-0 --disableexcludes=kubernetes
 
 # download adm file
-curl -o /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/10-kubeadm.conf
+curl -O https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/10-kubeadm.conf
+mv 10-kubeadm.conf /usr/lib/systemd/system/kubelet.service.d
 
 systemctl daemon-reload && systemctl enable crio --now && systemctl enable kubelet --now
 
