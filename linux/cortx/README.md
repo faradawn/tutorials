@@ -139,7 +139,7 @@ export CSM_IP=`kubectl get svc cortx-control-loadbal-svc -ojsonpath='{.spec.clus
 
 kubectl get secrets/cortx-secret --namespace default --template={{.data.csm_mgmt_admin_secret}} | base64 -d
 
-tok=$(curl -d '{"username": "cortxadmin", "password": "Pg4A^glYk$G2F6Pb"}' https://$CSM_IP:8081/api/v2/login -k -i | grep -Po '(?<=Authorization: )\w* \w*')
+tok=$(curl -d '{"username": "cortxadmin", "password": "GdqDazT!1@6VYScF"}' https://$CSM_IP:8081/api/v2/login -k -i | grep -Po '(?<=Authorization: )\w* \w*')
 
 # create and check IAM user
 curl -X POST -H "Authorization: $tok" -d '{ "uid": "12345678", "display_name": "gts3account", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/s3/iam/users -k
@@ -154,7 +154,7 @@ aws configure set aws_secret_access_key gregorysecretkey
 
 # find IP and PORT
 kubectl describe svc cortx-io-svc-0
-IP= ifconfig - calico inet 192.168.219.64 (IP=192.168.219.64)
+IP= ifconfig - calico inet 192.168.219.64 (or tunl0)
 PORT= NodePort - cortx-rgw-http - 30056/TCP (PORT=30056)
 
 # test IO
@@ -174,8 +174,10 @@ aws s3 ls --endpoint-url http://$IP:$PORT
 yum install -y go wget
 wget https://github.com/Seagate/s3bench/releases/download/v2020-04-09/s3bench.2020-04-09
 
-export PORT=31833
-export IP=192.168.219.64
+wget https://github.com/Seagate/s3bench/releases/download/v2022-03-14/s3bench.2022-03-14
 
-./s3bench.2020-04-09 -accessKey gregoryaccesskey -accessSecret gregorysecretkey -bucket test-bucket4 -endpoint http://$IP:$PORT -numClients 20 -numSamples 500 -objectNamePrefix=s3workload -objectSize 1Mb > /home/cc/d4.log -region us-east-1 &
+export PORT=31714
+export IP=192.168.84.128
+
+./s3bench.2022-03-14 -accessKey gregoryaccesskey -accessSecret gregorysecretkey -bucket loadgen -endpoint http://$IP:$PORT -numClients 5 -numSamples 100 -objectNamePrefix=loadgen -objectSize 1Mb -region us-east-1 -o /home/cc/benchlogs/test.log
 ```
