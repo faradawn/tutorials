@@ -97,7 +97,7 @@ mv /etc/kubernetes/kubelet.conf /etc/kubernetes/admin.conf
 ## Part 2 - How to Deploy CORTX?
 ```
 # git clone with cc
-git clone https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud
+git clone -b main https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud
 vi solution.example.yaml # change node, svg storage 
 
 passwd cc 1234
