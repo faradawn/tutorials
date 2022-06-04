@@ -6,6 +6,7 @@ select opt in "${options[@]}"
 do
     case $opt in
         "master") ME="master"; break;;
+        "no") echo "worker"; break;;
         *) ;;
     esac
 done
