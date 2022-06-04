@@ -22,14 +22,14 @@ done
 echo "===Deploy Kubernetes==="
 
 cat <<EOF>> /etc/hosts
-10.52.2.178 node-1
-10.52.0.201 node-2
-10.52.1.64 node-3
-10.52.3.48 node-4
-10.52.3.233 node-5
-10.52.2.81 node-6
-10.52.3.5 node-7
-10.52.2.152 node-8
+10.52.3.226 node-1
+10.52.2.98 node-2
+10.52.3.71 node-3
+10.52.2.217 node-4
+10.52.3.120 node-5
+10.52.3.25 node-6
+10.52.0.72 node-7
+10.52.2.200 node-8
 EOF
 
 ufw disable
