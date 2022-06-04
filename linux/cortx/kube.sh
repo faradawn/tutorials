@@ -1,19 +1,12 @@
 ME=NULL
 PS3='Please enter your choice: '
-options=($(seq 1 1 8))
+options=("master" "no")
 
-select opt in "${options[@]/#/node-}"
+select opt in "${options[@]}"
 do
     case $opt in
-        "node-1") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; ME="master"; sleep 1; break;;
-        "node-2") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
-        "node-3") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
-        "node-4") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
-        "node-5") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
-        "node-6") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
-        "node-7") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
-        "node-8") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
-        *) echo "invalid option $REPLY";;
+        "master") ME="master"; break;;
+        *) ;;
     esac
 done
 
@@ -30,6 +23,8 @@ cat <<EOF>> /etc/hosts
 10.52.3.25 node-6
 10.52.0.72 node-7
 10.52.2.200 node-8
+10.52.2.145 n1
+10.52.3.80 n2
 EOF
 
 ufw disable
