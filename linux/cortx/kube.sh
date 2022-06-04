@@ -90,7 +90,7 @@ yum install -y kubelet-1.23.0-0 kubeadm-1.23.0-0 kubectl-1.23.0-0 --disableexclu
 
 # download adm file
 curl -O https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/10-kubeadm.conf
-mv 10-kubeadm.conf /usr/lib/systemd/system/kubelet.service.d
+mv -f 10-kubeadm.conf /usr/lib/systemd/system/kubelet.service.d
 
 systemctl daemon-reload && systemctl enable crio --now && systemctl enable kubelet --now
 
