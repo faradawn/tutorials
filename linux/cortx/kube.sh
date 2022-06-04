@@ -1,16 +1,22 @@
-ME=NULL
 PS3='Please enter your choice: '
-options=("master" "no")
+options=($(seq 1 1 8))
 
-select opt in "${options[@]}"
+select opt in "${options[@]/#/node-}"
 do
     case $opt in
+        "node-1") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; ME="master"; sleep 1; break;;
+        "node-2") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
+        "node-3") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
+        "node-4") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
+        "node-5") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
+        "node-6") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
+        "node-7") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
+        "node-8") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
+        *) echo "invalid option $REPLY";;
         "master") ME="master"; break;;
-        "no") echo "worker"; break;;
         *) ;;
     esac
 done
-
 
 
 echo "===Deploy Kubernetes==="
@@ -95,8 +101,7 @@ mv -f 10-kubeadm.conf /usr/lib/systemd/system/kubelet.service.d
 systemctl daemon-reload && systemctl enable crio --now && systemctl enable kubelet --now
 
 
-if [[ $ME -eq "master" ]]
-then
+if [[ $ME == "master" ]]; then
     kubeadm init --pod-network-cidr=192.168.0.0/16
     mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
     kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml 
