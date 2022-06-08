@@ -2,16 +2,23 @@
 
 ## Part 1 - How to install Kubernets
 installation guides:
-- [Arab IT: Install cri-o and kubernetes on centos7](https://arabitnetwork.com/2021/02/20/install-kubernetes-with-cri-o-on-centos-7-step-by-step/)
-- source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
+- [Install cri-o and kubernetes on centos7](https://arabitnetwork.com/2021/02/20/install-kubernetes-with-cri-o-on-centos-7-step-by-step/)
+- `source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)`
+- `vgdisplay | grep "VG Name" | awk '{print $3}' | xargs vgremove -y`
 
 ### Part 1 - CRI-O on Centos7 Setup
 ```
-hostnamectl set-hostname node-1
+hostnamectl set-hostname node-7
 
 cat <<EOF>> /etc/hosts
-10.52.2.178 node-1
-10.52.0.201 node-2
+10.52.3.226 node-1
+10.52.2.98 node-2
+10.52.3.71 node-3
+10.52.2.217 node-4
+10.52.3.120 node-5
+10.52.3.25 node-6
+10.52.0.72 node-7
+10.52.2.200 node-8
 EOF
 
 ufw disable
@@ -64,7 +71,7 @@ exclude=kubelet kubeadm kubectl
 EOF
 
 # install cri-o
-yum update -y && yum install -y yum-utils nfs-utils tmux # done this 
+yum update -y && yum install -y yum-utils nfs-utils tmux
 OS=CentOS_7
 VERSION=1.23
 sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/devel:kubic:libcontainers:stable.repo
@@ -77,42 +84,32 @@ yum install -y kubelet-1.23.0-0 kubeadm-1.23.0-0 kubectl-1.23.0-0 --disableexclu
 # edit adm
 vi /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
 
-before Environment file: Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd"
-append to the last command: $KUBELET_CGROUP_ARGS
+add line before EnvironmentFile: Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd"
+append to the last line: $KUBELET_CGROUP_ARGS
 
 systemctl daemon-reload && systemctl enable crio --now && systemctl enable kubelet --now
 
-# init (Change to node-1 IP!!!)
-kubeadm init --pod-network-cidr=10.52.2.178/16
-export KUBECONFIG=/etc/kubernetes/admin.conf
-curl https://docs.projectcalico.org/manifests/calico.yaml -O
-kubectl apply -f calico.yaml
-
-# if localhost 8080 connect refused, try
-export KUBECONFIG=/etc/kubernetes/admin.conf
-mv /etc/kubernetes/kubelet.conf /etc/kubernetes/admin.conf
+# init
+kubeadm init --pod-network-cidr=192.168.0.0/16
+echo -e "export KUBECONFIG=/etc/kubernetes/admin.conf \nalias kc=kubectl \nalias all="kubectl get pods -A -o wide" >> /etc/bashrc && source /etc/bashrc
+kubectl create -f https://projectcalico.docs.tigera.io/manifests/tigera-operator.yaml
+kubectl create -f https://gist.githubusercontent.com/faradawn/2288618db8ad0059968f48b6647732f9/raw/133f7f5113b4bc76f06dd5240ae7775c2fb74307/custom-resource.yaml
 ```
 
 
 ## Part 2 - How to Deploy CORTX?
 ```
-# git clone with cc
-git clone -b main https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud
-vi solution.example.yaml # change node, svg storage 
-
-passwd cc 1234
-scp solution.example.yaml cc@129.114.108.105:/home/cc/cortx-k8s/k8_cortx_cloud
-
-lsblk, vgdisplay, vgremove
+# clone k8s repo
+git clone -b main https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.example.yaml
 
 # untaint master
-kubectl taint node node-1 node-role.kubernetes.io/master:NoSchedule-
+kubectl taint node node-7 node-role.kubernetes.io/master:NoSchedule-
 
 # run prereq
 ./prereq-deploy-cortx-cloud.sh -d /dev/sda -s solution.example.yaml
 
 # download yq 
-VERSION=v4.25.1
+VERSION=v4.25.2
 BINARY=yq_linux_amd64
 wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY}.tar.gz -O - |\
   tar xz && mv ${BINARY} /usr/bin/yq
@@ -123,12 +120,6 @@ tmux new -s k8
 
 ctl b d
 tmux a -t k8
-```
-
-go into a pod
-```
-kubectl exec -it cortx-data-node-1-546b689d8c-t8qfn -c cortx-hax -- /bin/bash
-hctl status
 ```
 
 
