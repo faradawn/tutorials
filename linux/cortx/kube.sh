@@ -1,4 +1,4 @@
-PS3='Please enter your choice: '
+PS3='v8: Please enter your choice: '
 options=($(seq 1 1 8))
 
 select opt in "${options[@]/#/node-}"
@@ -30,8 +30,6 @@ cat <<EOF>> /etc/hosts
 10.52.3.25 node-6
 10.52.0.72 node-7
 10.52.2.200 node-8
-10.52.2.145 n1
-10.52.3.80 n2
 EOF
 
 ufw disable
@@ -100,7 +98,9 @@ mv -f 10-kubeadm.conf /usr/lib/systemd/system/kubelet.service.d
 
 systemctl daemon-reload && systemctl enable crio --now && systemctl enable kubelet --now
 
+exit 
 
+# need manuelly config custom-resources.yaml's encapsulation to be IPIP
 if [[ $ME == "master" ]]; then
     kubeadm init --pod-network-cidr=192.168.0.0/16
     mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
