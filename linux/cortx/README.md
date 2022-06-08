@@ -91,7 +91,7 @@ systemctl daemon-reload && systemctl enable crio --now && systemctl enable kubel
 
 # init
 kubeadm init --pod-network-cidr=192.168.0.0/16
-echo -e "export KUBECONFIG=/etc/kubernetes/admin.conf \nalias kc=kubectl \nalias all="kubectl get pods -A -o wide" >> /etc/bashrc && source /etc/bashrc
+echo -e "export KUBECONFIG=/etc/kubernetes/admin.conf \nalias kc=kubectl \nalias all=\"kubectl get pods -A -o wide\"" >> /etc/bashrc && source /etc/bashrc
 kubectl create -f https://projectcalico.docs.tigera.io/manifests/tigera-operator.yaml
 kubectl create -f https://gist.githubusercontent.com/faradawn/2288618db8ad0059968f48b6647732f9/raw/133f7f5113b4bc76f06dd5240ae7775c2fb74307/custom-resource.yaml
 ```
@@ -103,7 +103,7 @@ kubectl create -f https://gist.githubusercontent.com/faradawn/2288618db8ad005996
 git clone -b main https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.example.yaml
 
 # untaint master
-kubectl taint node node-7 node-role.kubernetes.io/master:NoSchedule-
+kubectl taint node node-5 node-role.kubernetes.io/master:NoSchedule-
 
 # run prereq
 ./prereq-deploy-cortx-cloud.sh -d /dev/sda -s solution.example.yaml
@@ -111,11 +111,10 @@ kubectl taint node node-7 node-role.kubernetes.io/master:NoSchedule-
 # download yq 
 VERSION=v4.25.2
 BINARY=yq_linux_amd64
-wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY}.tar.gz -O - |\
-  tar xz && mv ${BINARY} /usr/bin/yq
+wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY}.tar.gz -O - | tar xz && mv ${BINARY} /usr/bin/yq
 
 # start deploy
-tmux new -s k8
+kubectl rollout restart -n kube-system deployment/coredns
 ./deploy-cortx-cloud.sh solution.example.yaml
 
 ctl b d
@@ -124,17 +123,18 @@ tmux a -t k8
 
 
 ## Part 3 - How to Benchmark CORTX?
+- [IAM API](https://seagate-systems.atlassian.net/wiki/spaces/PUB/pages/931922025/IAM+User+Management)
 ```
 # login to CSM to get the Bearer token 
 export CSM_IP=`kubectl get svc cortx-control-loadbal-svc -ojsonpath='{.spec.clusterIP}'`
 
 kubectl get secrets/cortx-secret --namespace default --template={{.data.csm_mgmt_admin_secret}} | base64 -d
 
-tok=$(curl -d '{"username": "cortxadmin", "password": "GdqDazT!1@6VYScF"}' https://$CSM_IP:8081/api/v2/login -k -i | grep -Po '(?<=Authorization: )\w* \w*')
+tok=$(curl -d '{"username": "cortxadmin", "password": "2bonADb!#qGO8t!I"}' https://$CSM_IP:8081/api/v2/login -k -i | grep -Po '(?<=Authorization: )\w* \w*') && echo $tok
 
 # create and check IAM user
-curl -X POST -H "Authorization: $tok" -d '{ "uid": "12345678", "display_name": "gts3account", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/s3/iam/users -k
-curl -H "Authorization: $tok" https://$CSM_IP:8081/api/v2/s3/iam/users/12345678 -k -i
+curl -X POST -H "Authorization: $tok" -d '{ "uid": "12345678", "display_name": "gts3account", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/iam/users -k
+curl -H "Authorization: $tok" https://$CSM_IP:8081/api/v2/iam/users/12345678 -k -i
 
 # install aws
 pip3 install awscli awscli-plugin-endpoint
@@ -145,8 +145,8 @@ aws configure set aws_secret_access_key gregorysecretkey
 
 # find IP and PORT
 kubectl describe svc cortx-io-svc-0
-IP= ifconfig - calico inet 192.168.219.64 (or tunl0)
-PORT= NodePort - cortx-rgw-http - 30056/TCP (PORT=30056)
+export IP=192.168.150.64 (ifconfig, tunl0, IPIP tunnel)
+export PORT=32625 (NodePort - cortx-rgw-http - 30056/TCP (PORT=30056))
 
 # test IO
 aws s3 mb s3://test-bucket --endpoint-url http://$IP:$PORT
@@ -159,16 +159,14 @@ aws s3 ls --endpoint-url http://$IP:$PORT
 ```
 
 ### Benchmarking
-[CORTX Deployment with RGW Guide](https://seagate-systems.atlassian.net/wiki/spaces/PUB/pages/919765278/CORTX+Deployment+with+RGW+Community+version#S3-Bench)
+[CORTX RGW Benchmarking](https://seagate-systems.atlassian.net/wiki/spaces/PUB/pages/919765278/CORTX+Deployment+with+RGW+Community+version#S3-Bench)
 
 ```
 yum install -y go wget
-wget https://github.com/Seagate/s3bench/releases/download/v2020-04-09/s3bench.2020-04-09
-
 wget https://github.com/Seagate/s3bench/releases/download/v2022-03-14/s3bench.2022-03-14
 
 export PORT=31714
 export IP=192.168.84.128
 
-./s3bench.2022-03-14 -accessKey gregoryaccesskey -accessSecret gregorysecretkey -bucket loadgen -endpoint http://$IP:$PORT -numClients 5 -numSamples 100 -objectNamePrefix=loadgen -objectSize 1Mb -region us-east-1 -o /home/cc/benchlogs/test.log
+./s3bench.2022-03-14 -accessKey gregoryaccesskey -accessSecret gregorysecretkey -bucket loadgen -endpoint http://$IP:$PORT -numClients 5 -numSamples 100 -objectNamePrefix=loadgen -objectSize 1Mb -region us-east-1 -o /home/cc/benchlogs/test1.log
 ```
