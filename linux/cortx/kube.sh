@@ -1,4 +1,4 @@
-PS3='v8: Please enter your choice: '
+PS3='Kubernetes v1.24: Please enter your choice: '
 options=($(seq 1 1 8))
 
 select opt in "${options[@]/#/node-}"
@@ -84,13 +84,16 @@ EOF
 # install cri-o
 yum update -y && yum install -y yum-utils nfs-utils tmux
 OS=CentOS_7
-VERSION=1.23
+VERSION=1.24
 sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/devel:kubic:libcontainers:stable.repo
 sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$VERSION/$OS/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo
 sudo yum install cri-o -y
  
-# Install Kubernetes, specify Version as CRI-O
-yum install -y kubelet-1.23.0-0 kubeadm-1.23.0-0 kubectl-1.23.0-0 --disableexcludes=kubernetes
+# install Kubernetes, specify Version as CRI-O
+yum install -y kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes
+
+# install yq 
+wget https://github.com/mikefarah/yq/releases/download/v4.25.2/yq_linux_amd64.tar.gz -O - | tar xz && mv ${BINARY} /usr/bin/yq
 
 # download adm file
 curl -O https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/10-kubeadm.conf
@@ -98,12 +101,11 @@ mv -f 10-kubeadm.conf /usr/lib/systemd/system/kubelet.service.d
 
 systemctl daemon-reload && systemctl enable crio --now && systemctl enable kubelet --now
 
-exit 
-
-# need manuelly config custom-resources.yaml's encapsulation to be IPIP
+# init with Calico
 if [[ $ME == "master" ]]; then
     kubeadm init --pod-network-cidr=192.168.0.0/16
     mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
-    kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml 
-    kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
+    echo -e "export KUBECONFIG=/etc/kubernetes/admin.conf \nalias kc=kubectl \nalias all=\"kubectl get pods -A -o wide\"" >> /etc/bashrc && source /etc/bashrc
+    kubectl create -f https://projectcalico.docs.tigera.io/manifests/tigera-operator.yaml
+    kubectl create -f https://gist.githubusercontent.com/faradawn/2288618db8ad0059968f48b6647732f9/raw/133f7f5113b4bc76f06dd5240ae7775c2fb74307/custom-resource.yaml
 fi
