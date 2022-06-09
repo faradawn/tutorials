@@ -93,7 +93,7 @@ sudo yum install cri-o -y
 yum install -y kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes
 
 # install yq 
-wget https://github.com/mikefarah/yq/releases/download/v4.25.2/yq_linux_amd64.tar.gz -O - | tar xz && mv ${BINARY} /usr/bin/yq
+wget https://github.com/mikefarah/yq/releases/download/v4.25.2/yq_linux_amd64.tar.gz -O - | tar xz && mv yq_linux_amd64 /usr/bin/yq
 
 # download adm file
 curl -O https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/10-kubeadm.conf
