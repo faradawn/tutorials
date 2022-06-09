@@ -4,7 +4,7 @@ Can run the following script for automatic deployment
 - `source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)`
 
 
-## Part 1 - How to deploy Kubernetes?
+## Part 1 - How to install Kubernetes?
 ```
 hostnamectl set-hostname node-1
 
@@ -155,9 +155,24 @@ aws s3 ls --endpoint-url http://$IP:$PORT
 
 ## Part 4 - How to benchmark CORTX
 - [CORTX RGW Benchmarking](https://seagate-systems.atlassian.net/wiki/spaces/PUB/pages/919765278/CORTX+Deployment+with+RGW+Community+version#S3-Bench)
-```
+```bash
 yum install -y go
 wget https://github.com/Seagate/s3bench/releases/download/v2022-03-14/s3bench.2022-03-14 && chmod +x s3bench.2022-03-14
 
 ./s3bench.2022-03-14 -accessKey gregoryaccesskey -accessSecret gregorysecretkey -bucket loadgen -endpoint http://$IP:$PORT -numClients 5 -numSamples 100 -objectNamePrefix=loadgen -objectSize 1Mb -region us-east-1 -o test1.log
+```
+
+A benchmarking script
+```shell
+start=$(date +%s)
+
+for i in 1 5 10 20; do
+    for j in 5000; do
+        ./s3bench -accessKey gregoryaccesskey -accessSecret gregorysecretkey -bucket loadgen -endpoint http://$IP:$PORT -numClients $i -numSamples $j -objectNamePrefix=loadgen -objectSize 1Mb -region us-east-1 -o "test_${i}_${j}"
+    done
+done
+
+end=$(date +%s)
+runtime=$(( (end-start)/60 ))
+echo "runtime is $runtime minutes"
 ```
