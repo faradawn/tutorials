@@ -6,7 +6,7 @@ Can run the following script for automatic deployment
 
 ## Part 1 - How to install Kubernetes?
 ```
-hostnamectl set-hostname node-2
+hostnamectl set-hostname node-1
 
 cat <<EOF>> /etc/hosts
 10.52.2.175 node-1
@@ -101,11 +101,11 @@ kubectl create -f https://gist.githubusercontent.com/faradawn/2288618db8ad005996
 ## Part 2 - How to deploy CORTX?
 ```
 # clone k8s repo and download solution.example.yaml
-git clone -b main https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; curl -O https://gist.githubusercontent.com/faradawn/a918e7e1a0fbcb67f24414007ed03ff1/raw/5fc67c5e489b36f068801b4aa15ce69375ae0da5/solution.example.yaml; ./prereq-deploy-cortx-cloud.sh -d /dev/sda -s solution.example.yaml
+git clone -b main https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.example.yaml
+./prereq-deploy-cortx-cloud.sh -d /dev/sda -s solution.example.yaml
 
-# untaint master and restart coredns pods
+# untaint master 
 kubectl taint node node-1 node-role.kubernetes.io/control-plane:NoSchedule-
-kubectl rollout restart -n kube-system deployment/coredns
 
 # start deploy
 tmux new -t k8s
