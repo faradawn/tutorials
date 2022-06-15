@@ -6,17 +6,17 @@ Can run the following script for automatic deployment
 
 ## Part 1 - How to install Kubernetes?
 ```
-hostnamectl set-hostname node-1
+hostnamectl set-hostname node-2
 
 cat <<EOF>> /etc/hosts
-10.52.3.226 node-1
-10.52.2.98 node-2
-10.52.3.71 node-3
-10.52.2.217 node-4
-10.52.3.120 node-5
-10.52.3.25 node-6
-10.52.0.72 node-7
-10.52.2.200 node-8
+10.52.2.175 node-1
+10.52.0.109 node-2
+10.52.0.107 node-3
+10.52.3.192 node-4
+10.52.3.1 node-5
+10.52.2.147 node-6
+10.52.2.204 node-7
+10.52.0.222 node-8
 EOF
 
 ufw disable
@@ -88,7 +88,7 @@ vi /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
 add line before EnvironmentFile: Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd"
 append to the last line: $KUBELET_CGROUP_ARGS
 
-systemctl daemon-reload && systemctl enable crio --now && systemctl enable kubelet --now
+ systemctl daemon-reload && systemctl enable crio --now && systemctl enable kubelet --now
 
 # init cluster (only on master node)
 kubeadm init --pod-network-cidr=192.168.0.0/16
@@ -124,7 +124,7 @@ export CSM_IP=`kubectl get svc cortx-control-loadbal-svc -ojsonpath='{.spec.clus
 
 kubectl get secrets/cortx-secret --namespace default --template={{.data.csm_mgmt_admin_secret}} | base64 -d
 
-tok=$(curl -d '{"username": "cortxadmin", "password": "qXxWoTjsmI@erE39"}' https://$CSM_IP:8081/api/v2/login -k -i | grep -Po '(?<=Authorization: )\w* \w*') && echo $tok
+tok=$(curl -d '{"username": "cortxadmin", "password": "Cortx123!"}' https://$CSM_IP:8081/api/v2/login -k -i | grep -Po '(?<=Authorization: )\w* \w*') && echo $tok
 
 # create and check IAM user
 curl -X POST -H "Authorization: $tok" -d '{ "uid": "12345678", "display_name": "gts3account", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/iam/users -k
@@ -139,7 +139,7 @@ aws configure set aws_access_key_id gregoryaccesskey
 aws configure set aws_secret_access_key gregorysecretkey
 
 # find IP and PORT
-kubectl describe svc cortx-io-svc-0
+kubectl describe svc cortx-io-svc-0 | grep -Po 'NodePort.*rgw-http *[0-9]*'
 export IP=192.168.84.128 (ifconfig, tunl0, IPIP tunnel)
 export PORT=30773 (NodePort - cortx-rgw-http - 30056/TCP (PORT=30056))
 
@@ -157,9 +157,9 @@ aws s3 ls --endpoint-url http://$IP:$PORT
 - [CORTX RGW Benchmarking](https://seagate-systems.atlassian.net/wiki/spaces/PUB/pages/919765278/CORTX+Deployment+with+RGW+Community+version#S3-Bench)
 ```bash
 yum install -y go
-wget https://github.com/Seagate/s3bench/releases/download/v2022-03-14/s3bench.2022-03-14 && chmod +x s3bench.2022-03-14
+wget https://github.com/Seagate/s3bench/releases/download/v2022-03-14/s3bench.2022-03-14 && chmod +x s3bench.2022-03-14 && mv s3bench.2022-03-14 s3bench
 
-./s3bench.2022-03-14 -accessKey gregoryaccesskey -accessSecret gregorysecretkey -bucket loadgen -endpoint http://$IP:$PORT -numClients 5 -numSamples 100 -objectNamePrefix=loadgen -objectSize 1Mb -region us-east-1 -o test1.log
+./s3bench -accessKey gregoryaccesskey -accessSecret gregorysecretkey -bucket loadgen -endpoint http://$IP:$PORT -numClients 5 -numSamples 100 -objectNamePrefix=loadgen -objectSize 1Mb -region us-east-1 -o test1.log
 ```
 
 A benchmarking script
