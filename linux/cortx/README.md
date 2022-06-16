@@ -105,7 +105,10 @@ git clone -b main https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cl
 ./prereq-deploy-cortx-cloud.sh -d /dev/sda -s solution.example.yaml
 
 # untaint master 
-kubectl taint node node-1 node-role.kubernetes.io/control-plane:NoSchedule-
+kubectl taint node node-1 node-role.kubernetes.io/master:NoSchedule-
+
+# restart core-dns pods
+kubectl rollout restart -n kube-system deployment/coredns
 
 # start deploy
 tmux new -t k8s
