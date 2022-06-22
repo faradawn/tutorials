@@ -141,17 +141,17 @@ aws configure set default.region us-east-1
 aws configure set aws_access_key_id gregoryaccesskey
 aws configure set aws_secret_access_key gregorysecretkey
 
-# find IP and PORT
+# find PORT and IP
 kubectl describe svc cortx-io-svc-0 | grep -Po 'NodePort.*rgw-http *[0-9]*'
-export IP=192.168.84.128 (ifconfig, tunl0, IPIP tunnel)
 export PORT=30773 (NodePort - cortx-rgw-http - 30056/TCP (PORT=30056))
+export IP=192.168.84.128 (ifconfig, tunl0, IPIP tunnel)
 
 # test upload bucket
 aws s3 mb s3://test-bucket --endpoint-url http://$IP:$PORT
-aws s3 ls --endpoint-url http://$IP:$PORT
-touch foo.txt
-aws s3 cp foo.txt s3://test-bucket/object1 --endpoint-url http://$IP:$PORT
+echo "hello world" >> foo.txt
+aws s3 cp foo.txt s3://test-bucket --endpoint-url http://$IP:$PORT
 aws s3 ls s3://test-bucket --endpoint-url http://$IP:$PORT
+aws s3 rm s3://test-bucket/foo.txt --endpoint-url http://$IP:$PORT
 aws s3 rb s3://test-bucket --endpoint-url http://$IP:$PORT
 aws s3 ls --endpoint-url http://$IP:$PORT
 ```
