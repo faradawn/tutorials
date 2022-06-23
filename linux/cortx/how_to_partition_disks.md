@@ -1,7 +1,32 @@
 # How to Create Disk Paritions, LVM, and Remove RAID
 
-### Creating a deployment
-Install Kubernetes
+### Remove RAID on a disk
+```
+# remove loop
+losetup -d /dev/loop0
+
+# remove RAID
+cat /proc/mdstat
+mdadm --stop /dev/md127
+mdadm --remove /dev/md127 (if "no such file", continue next step)
+mdadm --zero-superblock /dev/sdg /dev/sdo (okay if none)
+cat /proc/mdstat 
+
+# remove parition
+fdisk /dev/sdc
+print, d, w 
+
+# remove logical volumn
+lvdisplay, and copy VG Name
+lvremove ceph-88106951-0b32-490f-bc7e-2049d23f1df2
+vgremove ceph-88106951-0b32-490f-bc7e-2049d23f1df2
+
+# [extra] remove storage (sdk)
+dmsetup remove /dev/mapper/ceph--4071e4ca--48bb--43d2--a7c6--4a47a46ff329-osd--block--4d5b0bc9--4d50--4e5c--b0ff--ab69ff890e21
+fdisk /dev/sdk
+```
+
+### Creating a partition
 ```
 # using parted 
 parted -l
@@ -11,9 +36,7 @@ mkpart primary ext4 0 50GB
 
 20971518 - 10G
 
-
-
-
+# using fdisk
 fdisk /dev/sd
 n
 - primary / extended
@@ -23,7 +46,6 @@ n
 w
 
 mkpart primary ext4 10.0GB 17.24GB
-
 ```
 
 ### Creating logical volume
@@ -48,31 +70,6 @@ mount /dev/vg1/folder1 /mnt
 vi /etc/fstab
 /dev/vg1/folder1 /mnt/folder2 ext4 defaults,nofail 0 0
 ```
-### Remove RAID on a disk
-```
-# remove logical volumn
-lvdisplay, and copy VG Name
-lvremove ceph-88106951-0b32-490f-bc7e-2049d23f1df2
-vgremove ceph-88106951-0b32-490f-bc7e-2049d23f1df2
-
-# remove RAID
-cat /proc/mdstat
-mdadm --stop /dev/md127
-mdadm --remove /dev/md127 (if "no such file", continue next step)
-mdadm --zero-superblock /dev/sdg /dev/sdo (okay if none)
-cat /proc/mdstat 
-
-# remove parition
-fdisk /dev/sdc
-print, d, w 
-
-
-# [extra] remove storage (sdk)
-dmsetup remove /dev/mapper/ceph--4071e4ca--48bb--43d2--a7c6--4a47a46ff329-osd--block--4d5b0bc9--4d50--4e5c--b0ff--ab69ff890e21
-fdisk /dev/sdk
-```
-
-
 
 ### Some YAML commands
 ```
