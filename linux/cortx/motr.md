@@ -1,45 +1,56 @@
 # How to deploy motr
 
-## Part 1 - How to build motr
+### 1 - Build motr
 - Skylake, centos7 (7.9)
-```
-  NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
-sda      8:0    0 223.6G  0 disk 
-├─sda1   8:1    0   550M  0 part /boot/efi
-├─sda2   8:2    0     8M  0 part 
-└─sda3   8:3    0   223G  0 part /
-```
-
-
 - [Motr Quickstart Guide](https://github.com/Seagate/cortx-motr/blob/main/doc/Quick-Start-Guide.rst#running-tests)
 ```
+# clone repository
+git clone --recursive https://github.com/Seagate/cortx-motr.git
+
 # install pip and python
-sudo yum group install -y "Development Tools"
-curl -O https://bootstrap.pypa.io/pip/2.7/get-pip.py
-python get-pip.py pip==19.3.1 && sudo pip install --target=/usr/lib64/python2.7/site-packages ipaddress
+yum group install -y "Development Tools"
+yum install -y python-devel ansible tmux
+curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py
+python get-pip.py pip==19.3.1            
+sudo pip install --target=/usr/lib64/python2.7/site-packages ipaddress
 
-# build motr
-git clone --recursive https://github.com/Seagate/cortx-motr.git && cd cortx-motr
-time sudo ./scripts/install-build-deps # 9 min  ok=79   changed=49   unreachable=0    failed=0    skipped=12   rescued=0    ignored=1
-time sudo ./autogen.sh && time sudo ./configure && time sudo make -j48 # 1 min
+# force ansible to use python2
+sudo su
+echo "all:" >> /etc/ansible/hosts
+echo "  ansible_python_interpreter: \"/usr/bin/python2\"" >> /etc/ansible/hosts
 
-# 1 - unit tests: unstable 
+# run build dependencies (9 min)
+cd cortx-motr
+time sudo ./scripts/install-build-deps
 
-# 2 - system tests:
-- sanity check passed, 52 min
+# configure Luster (use eth0 which is UP)
+sudo sed -i 's|tcp(eth1)|tcp(eth0)|g' /etc/modprobe.d/lnet.conf
+cat /etc/modprobe.d/lnet.conf
+sudo modprobe lnet
 
-# 3 - unit benchmark: stuck on varr-ub
+# configure libfabric 
+wget https://github.com/Seagate/cortx/releases/download/build-dependencies/libfabric-1.11.2-1.el7.x86_64.rpm
+wget https://github.com/Seagate/cortx/releases/download/build-dependencies/libfabric-devel-1.11.2-1.el7.x86_64.rpm
+sudo rpm -i libfabric-1.11.2-1.el7.x86_64.rpm
+sudo rpm -i libfabric-devel-1.11.2-1.el7.x86_64.rpm
+sudo sed -i 's|tcp(eth1)|tcp(eth0)|g' /etc/libfab.conf
 
-# make doc
-sudo yum install -y doxygen texlive-pdftex texlive-latex-bin texlive-texconfig* texlive-latex* texlive-metafont* texlive-cmap* texlive-ec texlive-fncychap* texlive-pdftex-def texlive-fancyhdr* texlive-titlesec* texlive-multirow texlive-framed* texlive-wrapfig* texlive-parskip* texlive-caption texlive-ifluatex* texlive-collection-fontsrecommended texlive-collection-latexrecommended ghostscript
+# build motr (7 min)
+time sudo ./autogen.sh && time sudo ./configure && time sudo make
 ```
 
-- [Hare Quickstart Guide](https://github.com/Seagate/cortx-hare/blob/main/README.md)
+### 2 - Compile Python Util
 ```
-# follow steps
+...
+use python3 for Cipher example
+```
+
+### 3 - Build Hare
+```
+# clone repo
 git clone https://github.com/Seagate/cortx-hare.git && cd cortx-hare
 
-# install python and fecter
+# install fecter
 sudo yum -y install python3 python3-devel yum-utils
 sudo yum localinstall -y https://yum.puppetlabs.com/puppet/el/7/x86_64/puppet-agent-7.0.0-1.el7.x86_64.rpm
 sudo ln -sf /opt/puppetlabs/bin/facter /usr/bin/facter
@@ -49,47 +60,91 @@ sudo yum -y install yum-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
 sudo yum -y install consul-1.9.1
 
-# install py-util
-# https://github.com/Seagate/cortx-utils/blob/main/py-utils/README.md
-sudo yum install -y gcc rpm-build python36 python36-pip python36-devel python36-setuptools openssl-devel libffi-devel python36-dbus
-git clone --recursive https://github.com/Seagate/cortx-utils -b main
-cd cortx-utils && ./jenkins/build.sh -v 2.0.0 -b 817
-
-# Todo: Kafka
-
-sudo pip3 install -r https://raw.githubusercontent.com/Seagate/cortx-utils/main/py-utils/python_requirements.txt
-sudo pip3 install -r https://raw.githubusercontent.com/Seagate/cortx-utils/main/py-utils/python_requirements.ext.txt
-cd py-utils/dist && sudo yum install -y cortx-py-utils-*.noarch.rpm
-
-# build and install motr
-cd cortx-motr && sudo ./scripts/install-motr-service --link
+# build and install motr [here
+cd cortx-motr && time sudo ./scripts/install-motr-service --link
 export M0_SRC_DIR=$PWD
 cd -
 
-# build hare
+# build hare (2 min, 55 passed, 3 skipped, 36 warnings; 0.5min)
 cd cortx-hare
-make -j48 # 29 seconds
-sudo make install -j48
+sudo make 
+sudo make install
 
 # create hare group
 sudo groupadd --force hare
 sudo usermod --append --groups hare $USER
-logout and login 
+su cc
+sudo su
 
 # add path
 PATH=/opt/seagate/cortx/hare/bin:$PATH
-
-# create cdf file
-cp /opt/seagate/cortx/hare/share/cfgen/examples/singlenode.yaml ~/CDF.yaml
-vi ~/CDF.yaml
-
-
-
-
-
-
-
 ```
+
+### 4 - Start a hare cluster
+```
+# create cdf file
+hostnamectl set-hostname localhost
+cp /opt/seagate/cortx/hare/share/cfgen/examples/singlenode.yaml CDF.yaml
+vi CDF.yaml
+- hostname: localhost
+- eth0
+- libfab (default)
+- /dev/sda, /dev/sdb
+- ref /dev/sda, /dev/sdb
+- dataunits: 1 (default)
+
+# bootstrap (0.5 min)
+time hctl bootstrap --mkfs CDF.yaml
+
+# check status
+hctl status
+```
+output
+```
+Bytecount:
+    critical : 0
+    damaged : 0
+    degraded : 0
+    healthy : 0
+Data pool:
+    # fid name
+    0x6f00000000000001:0x0 'the pool'
+Profile:
+    # fid name: pool(s)
+    0x7000000000000001:0x0 'default': 'the pool' None None # PROFILE_FID
+Services:
+    localhost  (RC)
+    [started]  hax                 0x7200000000000001:0x0          inet:tcp:10.52.3.159@22001 # HA_ADDR
+    [started]  confd               0x7200000000000001:0x1          inet:tcp:10.52.3.159@21002
+    [started]  ioservice           0x7200000000000001:0x2          inet:tcp:10.52.3.159@21003 
+    [unknown]  m0_client_other     0x7200000000000001:0x3          inet:tcp:10.52.3.159@22501 # PROCESS_FID, LOCAL_ADDR
+    [unknown]  m0_client_other     0x7200000000000001:0x4          inet:tcp:10.52.3.159@22502
+
+HA_ADDR=inet:tcp:10.52.3.159@22001
+LOCAL_ADDR=inet:tcp:10.52.3.159@22501
+PROFILE_FID=0x7000000000000001:0x0
+PROCESS_FID=0x7200000000000001:0x3
+obj_id=12345670 # random number
+```
+
+### 5 - Running example1.c
+```
+cd /home/cc/cortx-motr/motr/examples
+gcc -I/home/cc/cortx-motr -DM0_EXTERN=extern -DM0_INTERNAL= -Wno-attributes -L/home/cc/cortx-motr/motr/.libs -lmotr example1.c -o example1
+
+# HA_ADDR, LOCAL_ADDR, Profile_fid, Process_fid, obj_id
+export LD_LIBRARY_PATH=/home/cc/cortx-motr/motr/.libs/
+./example1 inet:tcp:10.52.3.159@22001 inet:tcp:10.52.3.159@22501 "<0x7000000000000001:0x0>" "<0x7200000000000001:0x3>" 12345670
+```
+output
+```
+AAAAAAAAAAAAAAAAAAAAAAAA
+Object read: 0
+Object (id=12345670) open result: 0
+Object deletion: 0
+app completed: 0
+```
+
 
 ### Terminologies
 - LNet: communication protocal
