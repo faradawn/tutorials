@@ -1,4 +1,5 @@
 #!/bin/bash
+# source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
 
 echo "=== Part 1: Building Motr ==="
 # clone repository
