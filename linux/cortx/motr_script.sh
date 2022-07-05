@@ -1,5 +1,5 @@
 #!/bin/bash
-source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/motr_script.sh)
+# source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/motr_script.sh)
 
 echo "=== Part 1: Building Motr ==="
 # clone repository
@@ -13,7 +13,6 @@ python get-pip.py pip==19.3.1
 sudo pip install --target=/usr/lib64/python2.7/site-packages ipaddress
 
 # force ansible to use python2
-sudo su
 echo "all:" >> /etc/ansible/hosts
 echo "  ansible_python_interpreter: \"/usr/bin/python2\"" >> /etc/ansible/hosts
 
@@ -77,8 +76,8 @@ sudo make install
 # create hare group
 sudo groupadd --force hare
 sudo usermod --append --groups hare $USER
-su cc
-sudo su
+# su cc
+# sudo su
 
 # add path
 PATH=/opt/seagate/cortx/hare/bin:$PATH
@@ -102,8 +101,6 @@ echo "$HA_ADDR $LOCAL_ADDR $PROFILE_FID $PROCESS_FID $obj_id"
 export LD_LIBRARY_PATH=/home/cc/cortx-motr/motr/.libs/
 gcc -I/home/cc/cortx-motr -DM0_EXTERN=extern -DM0_INTERNAL= -Wno-attributes -L/home/cc/cortx-motr/motr/.libs -lmotr example1.c -o example1
 echo -e "\nPlease run the following:\n\n./example1 $HA_ADDR $LOCAL_ADDR $PROFILE_FID $PROCESS_FID $obj_id"
-
-
 
 
 
