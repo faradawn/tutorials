@@ -1,3 +1,6 @@
+#!/bin/bash
+# source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
+
 PS3='Kubernetes v1.24: Please enter your choice: '
 options=($(seq 1 1 8))
 
