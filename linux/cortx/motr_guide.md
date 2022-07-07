@@ -1,7 +1,7 @@
 # How to deploy motr
 
-### 1 - Build motr
-- Skylake, centos7 (7.9)
+### Part 1 - Building Motr
+- Image: centos7 (7.9)
 - [Motr Quickstart Guide](https://github.com/Seagate/cortx-motr/blob/main/doc/Quick-Start-Guide.rst#running-tests)
 ```
 # clone repository
@@ -36,17 +36,25 @@ sudo rpm -i libfabric-devel-1.11.2-1.el7.x86_64.rpm
 sudo sed -i 's|tcp(eth1)|tcp(eth0)|g' /etc/libfab.conf
 
 # build motr (7 min)
-time sudo ./autogen.sh && time sudo ./configure && time sudo make
+sudo ./autogen.sh && sudo ./configure && time sudo make -j48
 ```
 
-### 2 - Compile Python Util
+### Part 2 - Compiling Python Util
 ```
-...
-use python3 for Cipher example
+cd /home/cc
+sudo yum install -y gcc rpm-build python36 python36-pip python36-devel python36-setuptools openssl-devel libffi-devel python36-dbus
+git clone --recursive https://github.com/Seagate/cortx-utils -b main
+cd cortx-utils
+./jenkins/build.sh -v 2.0.0 -b 2
+sudo pip3 install -r https://raw.githubusercontent.com/Seagate/cortx-utils/main/py-utils/python_requirements.txt
+sudo pip3 install -r https://raw.githubusercontent.com/Seagate/cortx-utils/main/py-utils/python_requirements.ext.txt
+cd py-utils/dist
+sudo yum install -y cortx-py-utils-*.noarch.rpm
 ```
 
-### 3 - Build Hare
+### Part 3 - Building Hare
 ```
+cd /home/cc
 # clone repo
 git clone https://github.com/Seagate/cortx-hare.git && cd cortx-hare
 
@@ -67,7 +75,7 @@ cd -
 
 # build hare (2 min, 55 passed, 3 skipped, 36 warnings; 0.5min)
 cd cortx-hare
-sudo make 
+sudo make
 sudo make install
 
 # create hare group
@@ -80,17 +88,17 @@ sudo su
 PATH=/opt/seagate/cortx/hare/bin:$PATH
 ```
 
-### 4 - Start a hare cluster
+### Part 4 - Start a Hare cluster
 ```
 # create cdf file
-hostnamectl set-hostname localhost
+hostnamectl set-hostname node-1
 cp /opt/seagate/cortx/hare/share/cfgen/examples/singlenode.yaml CDF.yaml
 vi CDF.yaml
-- hostname: localhost
+- hostname: node-1
 - eth0
 - libfab (default)
 - /dev/sda, /dev/sdb
-- ref /dev/sda, /dev/sdb
+- ref /dev/sda, node-1; /dev/sdb, node-1
 - dataunits: 1 (default)
 
 # bootstrap (0.5 min)
@@ -127,22 +135,38 @@ PROCESS_FID=0x7200000000000001:0x3
 obj_id=12345670 # random number
 ```
 
-### 5 - Running example1.c
+### Part 5 - Running example1.c
 ```
 cd /home/cc/cortx-motr/motr/examples
-gcc -I/home/cc/cortx-motr -DM0_EXTERN=extern -DM0_INTERNAL= -Wno-attributes -L/home/cc/cortx-motr/motr/.libs -lmotr example1.c -o example1
-
-# HA_ADDR, LOCAL_ADDR, Profile_fid, Process_fid, obj_id
 export LD_LIBRARY_PATH=/home/cc/cortx-motr/motr/.libs/
+gcc -I/home/cc/cortx-motr -DM0_EXTERN=extern -DM0_INTERNAL= -Wno-attributes -L/home/cc/cortx-motr/motr/.libs -lmotr example1.c -o example1
 ./example1 inet:tcp:10.52.3.159@22001 inet:tcp:10.52.3.159@22501 "<0x7000000000000001:0x0>" "<0x7200000000000001:0x3>" 12345670
 ```
-output
+successful output
 ```
 AAAAAAAAAAAAAAAAAAAAAAAA
 Object read: 0
 Object (id=12345670) open result: 0
 Object deletion: 0
 app completed: 0
+```
+
+### Part 6 - Install Min IO
+```
+wget https://dl.min.io/server/minio/release/linux-amd64/minio
+chmod +x minio
+mount 
+./minio server /data
+
+
+wget https://dl.min.io/client/mc/release/linux-amd64/mc
+chmod +x mc
+./mc --help
+
+
+# warp
+wget https://github.com/minio/warp/releases/download/v0.6.0/warp_0.6.0_Linux_x86_64.tar.gz
+tar -xf warp_0.6.0_Linux_x86_64.tar.gz
 ```
 
 
