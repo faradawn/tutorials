@@ -1,8 +1,12 @@
 # How to deploy motr
 
 ### Part 1 - Building Motr
-- Image: centos7 (7.9)
-- [Motr Quickstart Guide](https://github.com/Seagate/cortx-motr/blob/main/doc/Quick-Start-Guide.rst#running-tests)
+- Chameleon storage node; image: CENTOS7 (7.9)
+- [Motr Official Quickstart Guide](https://github.com/Seagate/cortx-motr/blob/main/doc/Quick-Start-Guide.rst#running-tests)
+- Auto deployment script:
+  - `sudo su`
+  - `source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/motr_script.sh)`
+
 ```
 # clone repository
 git clone --recursive https://github.com/Seagate/cortx-motr.git
@@ -89,6 +93,7 @@ PATH=/opt/seagate/cortx/hare/bin:$PATH
 ```
 
 ### Part 4 - Start a Hare cluster
+- [singlenode CDF](https://gist.github.com/faradawn/c6cb4209d578608aa550865990b83352)
 ```
 # create cdf file
 hostnamectl set-hostname node-1
@@ -107,7 +112,7 @@ time hctl bootstrap --mkfs CDF.yaml
 # check status
 hctl status
 ```
-output
+successful output
 ```
 Bytecount:
     critical : 0
