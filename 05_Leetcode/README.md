@@ -29,14 +29,21 @@
 - 10^4 需要 O(n) 或者 O(nlogn)
 
 
-## 💧 C++ 如何上手
-### 打印vector
-```c++
-void printArr(vector<int> &vec){
-  for(int i : vec) cout<<i<<" "; 
-  cout<<endl;
-}
+## 💧 C++ 模版
+### 面试模版
+- 注意除0，数组长度为0
+```
+// #include <bits/stdc++.h>
+#include <vector>
+#include <iostream>
 
+vector<int> vec = {1,2,3,4};
+vector<int> vec2 = (4, -1);
+vector<int> aa = solution(vec, 2);
+vector<int> solution(vector<int> &A, int K) {}
+```
+### 打印 vector
+```c++
 void printArr(vector<vector<int>> &vec){
   for(auto &it : vec){
     for(auto &i : it) cout<<i<<" ";
@@ -44,12 +51,12 @@ void printArr(vector<vector<int>> &vec){
   }
 }
 
-vector<vector<int>>myvec(3, vector<int>(5,10));
+vector<vector<int>>dp(n+1, vector<int>(W+1, 0));
 ```
 
-### 如何遍历map
+### 遍历 map
 ```c++
-#include <bits/stdc++.h>
+#include <unordered_map>
 unordered_map<int, int>mymap;
 
 for(auto &i : mymap){
@@ -59,14 +66,14 @@ for(auto &i : mymap){
 # 避坑 if(mymap[1]==1) 会赋值！
 ```
 
-### vim
+### 查找 set
 ```
-/search, n N
-list of edits: g; g, 
-[[ go last function
-`. go last edit (marker) 
-cntl E, cntl Y scroll
+if(myset.find(10) != myset.send){
+	found
+}
 ```
+
+
 ### 如何使用 array
 ```c++
 int arr[] = {0};
@@ -99,11 +106,6 @@ for(auto &i : ls){
 
 ### 如何使用 vector
 ```c++
-#include <vector>
-vector<int> nums={1,2,3};
-func(nums);
-func(vector<int> &nums); // passing by reference -> not null
-
 // swap
 void swap(int *a, int *b){
 	int temp=*a;
@@ -168,7 +170,14 @@ void printMap(unordered_map<int, int> &map){
 // list 可参考 hash/hashList.cpp
 
 ```
-
+### vim
+```
+/search, n N
+list of edits: g; g, 
+[[ go last function
+`. go last edit (marker) 
+cntl E, cntl Y scroll
+```
 
 ### 如何读取 input
 ```c++
