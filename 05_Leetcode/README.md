@@ -42,6 +42,15 @@ vector<int> vec2 = (4, -1);
 vector<int> aa = solution(vec, 2);
 vector<int> solution(vector<int> &A, int K) {}
 ```
+### sort tuple
+```
+vector<tuple<int,int>>lines(10);
+lines[i] = make_tuple(3,6);
+sort(lines.start(), lines.end(), 
+	[](auto const &t1, auto const &t2) {
+        return get<1>(t1) < get<1>(t2) || (get<1>(t1)==get<1>(t2) && get<0>(t1)>get<0>(t2))
+	})
+```
 ### 打印 vector
 ```c++
 void printArr(vector<vector<int>> &vec){
@@ -71,6 +80,11 @@ for(auto &i : mymap){
 if(myset.find(10) != myset.send){
 	found
 }
+```
+### 数学
+```
+// a % pow(2, n)
+res = a & ((1<<n) -1)
 ```
 
 
