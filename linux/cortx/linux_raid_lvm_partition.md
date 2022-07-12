@@ -1,11 +1,24 @@
-# How to Create Disk Paritions, LVM, and Remove RAID
+# How to Create Disk Paritions, Remove RAID, and Remove LVM
 
 ### Remove RAID on a disk
 ```
-# remove loop
-losetup -d /dev/loop0
+# check disk types
+for i in {a..q}; do blkid /dev/sd${i}; done
 
-# remove RAID
+# remove disk RAID 
+cat /proc/mdstat
+
+Personalities : 
+md127 : inactive sdj[9](S)
+      1953382488 blocks super 1.2
+       
+mdadm --stop /dev/md127
+mdadm --zero-superblock /dev/sdj
+blkid /dev/sdj # outputs luster, ext4 
+
+mdadm /dev/md127 --remove /dev/sdj # do this directly?
+
+# remove partition RAID
 cat /proc/mdstat
 mdadm --stop /dev/md127
 mdadm --remove /dev/md127 (if "no such file", continue next step)
@@ -24,6 +37,11 @@ vgremove ceph-88106951-0b32-490f-bc7e-2049d23f1df2
 # [extra] remove storage (sdk)
 dmsetup remove /dev/mapper/ceph--4071e4ca--48bb--43d2--a7c6--4a47a46ff329-osd--block--4d5b0bc9--4d50--4e5c--b0ff--ab69ff890e21
 fdisk /dev/sdk
+```
+
+### Remove loop devices
+```
+losetup -d /dev/loop0
 ```
 
 ### Creating a partition
