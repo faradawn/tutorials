@@ -1,13 +1,16 @@
 # How to deploy CORTX on Kubernetes
-Can run the following script for automatic deployment
+- reserve storage nodes with CENTOS7-2003 (CENTOS 7.8)
 - `vgdisplay | grep "VG Name" | awk '{print $3}' | xargs vgremove -y`
-- `source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)`
+- `wget https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh && chmod +x kube.sh`
+- edit the IP's of the hosts and deploy
+- Kubernetes deployment takes 5 min; Cortx 5 min
 
 
 ## Part 1 - How to install Kubernetes?
 ```
 hostnamectl set-hostname node-1
 
+# edit the hosts' IP
 cat <<EOF>> /etc/hosts
 10.52.2.175 node-1
 10.52.0.109 node-2
@@ -88,7 +91,7 @@ vi /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
 add line before EnvironmentFile: Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd"
 append to the last line: $KUBELET_CGROUP_ARGS
 
- systemctl daemon-reload && systemctl enable crio --now && systemctl enable kubelet --now
+systemctl daemon-reload && systemctl enable crio --now && systemctl enable kubelet --now
 
 # init cluster (only on master node)
 kubeadm init --pod-network-cidr=192.168.0.0/16
@@ -102,17 +105,22 @@ kubectl create -f https://gist.githubusercontent.com/faradawn/2288618db8ad005996
 ```
 # clone k8s repo and download solution.example.yaml
 git clone -b main https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.example.yaml
-./prereq-deploy-cortx-cloud.sh -d /dev/sda -s solution.example.yaml
+- change csm_mgmt_admin_secret: Cortx123!
+- nodes, node-3
+- datapods, sdc, sdd (512G)
+mv solution.example.yaml solution.yaml
+./prereq-deploy-cortx-cloud.sh -d /dev/sdb -s solution.example.yaml
 
 # untaint master 
 kubectl taint node node-1 node-role.kubernetes.io/master:NoSchedule-
+kubectl taint node node-1 node-role.kubernetes.io/control-plane:NoSchedule-
 
 # restart core-dns pods
 kubectl rollout restart -n kube-system deployment/coredns
 
 # start deploy
 tmux new -t k8s
-./deploy-cortx-cloud.sh solution.example.yaml
+time ./deploy-cortx-cloud.sh solution.example.yaml
 
 ctl b d
 tmux a -t k8s
@@ -134,7 +142,7 @@ curl -X POST -H "Authorization: $tok" -d '{ "uid": "12345678", "display_name": "
 
 curl -H "Authorization: $tok" https://$CSM_IP:8081/api/v2/iam/users/12345678 -k -i
 
-# install aws
+# install aws [optional]
 pip3 install awscli awscli-plugin-endpoint
 aws configure set plugins.endpoint awscli_plugin_endpoint
 aws configure set default.region us-east-1
