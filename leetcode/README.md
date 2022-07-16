@@ -81,6 +81,12 @@ if(myset.find(10) != myset.send){
 	found
 }
 ```
+### Stack and Queue
+```
+stack<int>st;
+queue<int>q;
+```
+
 ### 数学
 ```
 // a % pow(2, n)
