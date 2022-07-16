@@ -6,6 +6,7 @@
 - Auto deployment script:
   - `sudo su`
   - `source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/motr_script.sh)`
+  - total time: 15 min
 
 ```
 # clone repository
@@ -107,7 +108,7 @@ vi CDF.yaml
 - dataunits: 1 (default)
 
 # bootstrap (0.5 min)
-time hctl bootstrap --mkfs CDF.yaml
+time hctl bootstrap --mkfs /home/cc/cortx-hare/CDF.yaml
 
 # check status
 hctl status
@@ -158,20 +159,24 @@ app completed: 0
 
 ### Part 6 - Install Min IO
 ```
+# download MinIo
 wget https://dl.min.io/server/minio/release/linux-amd64/minio
 chmod +x minio
-mount 
-./minio server /data
+mkdir -P /mnt/data
+./minio server /mnt/data
 
-
+# download minio-cli
 wget https://dl.min.io/client/mc/release/linux-amd64/mc
 chmod +x mc
 ./mc --help
 
+# create file
+gcc -o create_file create_file.c
+./create_file 16 1 -h
 
-# warp
-wget https://github.com/minio/warp/releases/download/v0.6.0/warp_0.6.0_Linux_x86_64.tar.gz
-tar -xf warp_0.6.0_Linux_x86_64.tar.gz
+# upload and download a file
+./mc cp 16KB myminio/bucket1/
+./mc cp myminio/bucket1/16KB .
 ```
 
 
@@ -180,8 +185,6 @@ tar -xf warp_0.6.0_Linux_x86_64.tar.gz
 - fabric: export the user-space API of OFI (OpenFabric interface)
 - RDMA (remote direct memory access)
 - InfiniBand (API)
-
-
 
 
 
