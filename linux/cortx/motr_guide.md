@@ -5,7 +5,8 @@
 - [Motr Official Quickstart Guide](https://github.com/Seagate/cortx-motr/blob/main/doc/Quick-Start-Guide.rst#running-tests)
 - Auto deployment script:
   - `sudo su`
-  - `source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/motr_script.sh)`
+  - `wget https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/motr_script.sh && chmod +x motr_script.sh`
+  - `./motr_script.sh`
   - total time: 15 min
 
 ```
