@@ -2,11 +2,11 @@
 - reserve storage nodes with CENTOS7-2003 (CENTOS 7.8)
 - `vgdisplay | grep "VG Name" | awk '{print $3}' | xargs vgremove -y`
 - `wget https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh && chmod +x kube.sh`
-- edit the IP's of the hosts and deploy
-- Kubernetes deployment takes 5 min; Cortx 5 min
+- `vi kube.sh` (edit the IP's of the hosts)
+- `time ./kube.sh` (Kubernetes deployment takes 5 min; Cortx 10 min)
 
 
-## Part 1 - How to install Kubernetes?
+## Part 1 - How to install Kubernetes
 ```
 hostnamectl set-hostname node-1
 
@@ -95,13 +95,14 @@ systemctl daemon-reload && systemctl enable crio --now && systemctl enable kubel
 
 # init cluster (only on master node)
 kubeadm init --pod-network-cidr=192.168.0.0/16
+mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
 echo -e "export KUBECONFIG=/etc/kubernetes/admin.conf \nalias kc=kubectl \nalias all=\"kubectl get pods -A -o wide\"" >> /etc/bashrc && source /etc/bashrc
 kubectl create -f https://projectcalico.docs.tigera.io/manifests/tigera-operator.yaml
 kubectl create -f https://gist.githubusercontent.com/faradawn/2288618db8ad0059968f48b6647732f9/raw/133f7f5113b4bc76f06dd5240ae7775c2fb74307/custom-resource.yaml
 ```
 
 
-## Part 2 - How to deploy CORTX?
+## Part 2 - How to deploy CORTX
 ```
 # clone k8s repo and download solution.example.yaml
 git clone -b main https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; vi solution.example.yaml
@@ -109,7 +110,7 @@ git clone -b main https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cl
 - nodes, node-3
 - datapods, sdc, sdd (512G)
 mv solution.example.yaml solution.yaml
-./prereq-deploy-cortx-cloud.sh -d /dev/sdb -s solution.example.yaml
+./prereq-deploy-cortx-cloud.sh -d /dev/sdb -s solution.yaml
 
 # untaint master 
 kubectl taint node node-1 node-role.kubernetes.io/master:NoSchedule-
@@ -118,30 +119,39 @@ kubectl taint node node-1 node-role.kubernetes.io/control-plane:NoSchedule-
 # restart core-dns pods
 kubectl rollout restart -n kube-system deployment/coredns
 
-# start deploy
-tmux new -t k8s
-time ./deploy-cortx-cloud.sh solution.example.yaml
-
-ctl b d
-tmux a -t k8s
+# start deploy (single node takes 6-12 min)
+time ./deploy-cortx-cloud.sh solution.yaml
 ```
 
 
-## Part 3 - How to upload files to CORTX?
+## Part 3 - How to benchmark CORTX
 - [IAM API](https://seagate-systems.atlassian.net/wiki/spaces/PUB/pages/931922025/IAM+User+Management)
-```
-# login to CSM to get the Bearer token 
-export CSM_IP=`kubectl get svc cortx-control-loadbal-svc -ojsonpath='{.spec.clusterIP}'`
+- [CORTX RGW Benchmarking](https://seagate-systems.atlassian.net/wiki/spaces/PUB/pages/919765278/CORTX+Deployment+with+RGW+Community+version#S3-Bench)
 
-kubectl get secrets/cortx-secret --namespace default --template={{.data.csm_mgmt_admin_secret}} | base64 -d
+Create an s3 user
+```
+export CSM_IP=`kubectl get svc cortx-control-loadbal-svc -ojsonpath='{.spec.clusterIP}'`
 
 tok=$(curl -d '{"username": "cortxadmin", "password": "Cortx123!"}' https://$CSM_IP:8081/api/v2/login -k -i | grep -Po '(?<=Authorization: )\w* \w*') && echo $tok
 
-# create and check IAM user
 curl -X POST -H "Authorization: $tok" -d '{ "uid": "12345678", "display_name": "gts3account", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/iam/users -k
+```
 
-curl -H "Authorization: $tok" https://$CSM_IP:8081/api/v2/iam/users/12345678 -k -i
 
+Download s3 bench
+```
+yum install -y go
+wget https://github.com/Seagate/s3bench/releases/download/v2022-03-14/s3bench.2022-03-14 && chmod +x s3bench.2022-03-14 && mv s3bench.2022-03-14 s3bench
+
+kubectl describe svc cortx-io-svc-0 | grep -Po 'NodePort.*rgw-http *[0-9]*'
+export PORT=31300 
+export IP=192.168.84.128 # (ifconfig, tunl0, IPIP tunnel)
+
+./s3bench -accessKey gregoryaccesskey -accessSecret gregorysecretkey -bucket loadgen -endpoint http://$IP:$PORT -numClients 5 -numSamples 100 -objectNamePrefix=loadgen -objectSize 1Mb -region us-east-1 -o test1.log
+```
+
+## Part 4 - How to use CORTX
+```
 # install aws [optional]
 pip3 install awscli awscli-plugin-endpoint
 aws configure set plugins.endpoint awscli_plugin_endpoint
@@ -162,28 +172,4 @@ aws s3 ls s3://test-bucket --endpoint-url http://$IP:$PORT
 aws s3 rm s3://test-bucket/foo.txt --endpoint-url http://$IP:$PORT
 aws s3 rb s3://test-bucket --endpoint-url http://$IP:$PORT
 aws s3 ls --endpoint-url http://$IP:$PORT
-```
-
-## Part 4 - How to benchmark CORTX
-- [CORTX RGW Benchmarking](https://seagate-systems.atlassian.net/wiki/spaces/PUB/pages/919765278/CORTX+Deployment+with+RGW+Community+version#S3-Bench)
-```bash
-yum install -y go
-wget https://github.com/Seagate/s3bench/releases/download/v2022-03-14/s3bench.2022-03-14 && chmod +x s3bench.2022-03-14 && mv s3bench.2022-03-14 s3bench
-
-./s3bench -accessKey gregoryaccesskey -accessSecret gregorysecretkey -bucket loadgen -endpoint http://$IP:$PORT -numClients 5 -numSamples 100 -objectNamePrefix=loadgen -objectSize 1Mb -region us-east-1 -o test1.log
-```
-
-A benchmarking script
-```shell
-start=$(date +%s)
-
-for i in 1 5 10 20; do
-    for j in 5000; do
-        ./s3bench -accessKey gregoryaccesskey -accessSecret gregorysecretkey -bucket loadgen -endpoint http://$IP:$PORT -numClients $i -numSamples $j -objectNamePrefix=loadgen -objectSize 1Mb -region us-east-1 -o "test_${i}_${j}"
-    done
-done
-
-end=$(date +%s)
-runtime=$(( (end-start)/60 ))
-echo "runtime is $runtime minutes"
 ```
