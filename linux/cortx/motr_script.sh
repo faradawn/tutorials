@@ -82,6 +82,11 @@ sudo usermod --append --groups hare $USER
 # add path
 PATH=/opt/seagate/cortx/hare/bin:$PATH
 
+echo " "
+echo "===done install, next step, start hare==="
+echo "cp /opt/seagate/cortx/hare/share/cfgen/examples/singlenode.yaml CDF.yaml"
+echo " "
+exit
 
 echo -e "\n=== Part 4 - Start a Hare cluster ===\n"
 hostnamectl set-hostname node-1
