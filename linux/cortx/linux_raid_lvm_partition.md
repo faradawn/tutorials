@@ -7,46 +7,56 @@ for i in {a..q}; do blkid /dev/sd${i}; done
 
 # remove disk RAID 
 cat /proc/mdstat
-
-Personalities : 
-md127 : inactive sdj[9](S)
-      1953382488 blocks super 1.2
+      
+      # output
+      Personalities : 
+      md127 : inactive sdj[9](S)
+            1953382488 blocks super 1.2
        
 mdadm --stop /dev/md127
 mdadm --zero-superblock /dev/sdj
-blkid /dev/sdj # outputs luster, ext4 
+blkid /dev/sdj 
+      # outputs luster, ext4 
 
-mdadm /dev/md127 --remove /dev/sdj # do this directly?
+# [maybe works]
+mdadm /dev/md127 --remove /dev/sdj
 
-# remove partition RAID
+# remove partition RAID [old]
 cat /proc/mdstat
 mdadm --stop /dev/md127
 mdadm --remove /dev/md127 (if "no such file", continue next step)
 mdadm --zero-superblock /dev/sdg /dev/sdo (okay if none)
 cat /proc/mdstat 
 
-# remove parition
-fdisk /dev/sdc
-print, d, w 
-
-# remove logical volumn
-lvdisplay, and copy VG Name
-lvremove ceph-88106951-0b32-490f-bc7e-2049d23f1df2
-vgremove ceph-88106951-0b32-490f-bc7e-2049d23f1df2
-
 # [extra] remove storage (sdk)
 dmsetup remove /dev/mapper/ceph--4071e4ca--48bb--43d2--a7c6--4a47a46ff329-osd--block--4d5b0bc9--4d50--4e5c--b0ff--ab69ff890e21
 fdisk /dev/sdk
 ```
+
+### Remove logical volumes
+```
+# fast remove
+vgdisplay | grep "VG Name" | awk '{print $3}' | xargs vgremove -y
+
+# manual remove
+lvdisplay, and copy VG Name
+lvremove ceph-88106951-0b32-490f-bc7e-2049d23f1df2
+vgremove ceph-88106951-0b32-490f-bc7e-2049d23f1df2
+```
+
 
 ### Remove loop devices
 ```
 losetup -d /dev/loop0
 ```
 
-### Creating a partition
+### Remove and create partition
 ```
-# using parted 
+# remove parition
+fdisk /dev/sdc
+print, d, w 
+
+# option 1: create partition with parted 
 parted -l
 parted /dev/sda
 
@@ -54,7 +64,7 @@ mkpart primary ext4 0 50GB
 
 20971518 - 10G
 
-# using fdisk
+# option 2: using fdisk
 fdisk /dev/sd
 n
 - primary / extended
