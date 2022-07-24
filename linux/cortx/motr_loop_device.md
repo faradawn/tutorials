@@ -2,47 +2,33 @@
 - Skylake, CENTOS7
 ### Part 1 - Create loop devices
 ```
-# Create a file (25 GB each, 20s each, 2min total)
-sudo su
+# 1 - Create files (25 GB each, 20s * 5 = 2min)
+sudo chown -R cc /mnt
 mkdir -p /mnt/extra/loop-files/
 cd /mnt/extra/loop-files/
-dd if=/dev/zero of=loopbackfile1.img bs=100M count=250
-dd if=/dev/zero of=loopbackfile2.img bs=100M count=250
-dd if=/dev/zero of=loopbackfile3.img bs=100M count=250
-dd if=/dev/zero of=loopbackfile4.img bs=100M count=250
-dd if=/dev/zero of=loopbackfile5.img bs=100M count=250
+for i in {1..5}; do dd if=/dev/zero of=loopbackfile${i}.img bs=100M count=250; done
 
-# Create the loop device
-cd /mnt/extra/loop-files/
-sudo losetup -fP loopbackfile1.img
-sudo losetup -fP loopbackfile2.img
-sudo losetup -fP loopbackfile3.img
-sudo losetup -fP loopbackfile4.img
-sudo losetup -fP loopbackfile5.img
+# 2 - Setup loop devices
+for i in {1..5}; do sudo losetup -fP loopbackfile${i}.img; done
 
-# Format devices into filesystems 
-printf "y" | sudo mkfs.ext4 /mnt/extra/loop-files/loopbackfile1.img 
-printf "y" | sudo mkfs.ext4 /mnt/extra/loop-files/loopbackfile2.img 
-printf "y" | sudo mkfs.ext4 /mnt/extra/loop-files/loopbackfile3.img 
-printf "y" | sudo mkfs.ext4 /mnt/extra/loop-files/loopbackfile4.img 
-printf "y" | sudo mkfs.ext4 /mnt/extra/loop-files/loopbackfile5.img 
+# 3 - Format devices into filesystems 
+for i in {1..5}; do printf "y" | sudo mkfs.ext4 /mnt/extra/loop-files/loopbackfile${i}.img; done
 
-# mount loop devices
-mkdir -p /mnt/extra/loop-devs/loop0
-mkdir -p /mnt/extra/loop-devs/loop1
-mkdir -p /mnt/extra/loop-devs/loop2
-mkdir -p /mnt/extra/loop-devs/loop3
-mkdir -p /mnt/extra/loop-devs/loop4
+# 4 - Mount loop devices
+for i in {0..4}; do mkdir -p /mnt/extra/loop-devs/loop${i}; done
 cd /mnt/extra/loop-devs/
-sudo mount -o loop /dev/loop0 /mnt/extra/loop-devs/loop0
-sudo mount -o loop /dev/loop1 /mnt/extra/loop-devs/loop1
-sudo mount -o loop /dev/loop2 /mnt/extra/loop-devs/loop2
-sudo mount -o loop /dev/loop3 /mnt/extra/loop-devs/loop3
-sudo mount -o loop /dev/loop4 /mnt/extra/loop-devs/loop4
+for i in {0..4}; do sudo mount -o loop /dev/loop${i} /mnt/extra/loop-devs/loop${i}; done
 
-# check
+# [Optional] Remove
+rm -rf /mnt/extra/loop-files/*.img  
+for i in {0..4}; do sudo losetup -d /dev/loop${i}; done
+  
+# check disk usage
+du -sh .
+df -h
+
+# check filesystem
 lsblk -f
-df -h 
 ```
 
 ### Part 2 - Build Motr (15min) and prepare CDF
