@@ -1,10 +1,15 @@
 # Math and Array
 
-## Bits
+## Bits and pairs
+- [2354. Number of Excellent Pairs](https://leetcode.com/problems/number-of-excellent-pairs/)
+
 count number of set bits in a number
 ```
 int a = __builtin_popcount(10)
 ```
+
+
+
 
 ## C++ What is (const &arr)
 - stack overflow: https://stackoverflow.com/questions/26647152/are-vectors-passed-to-functions-by-value-or-by-reference-in-c
