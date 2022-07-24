@@ -1,4 +1,10 @@
-# C arrays and pointers
+# Math and Array
+
+## Bits
+count number of set bits in a number
+```
+int a = __builtin_popcount(10)
+```
 
 ## C++ What is (const &arr)
 - stack overflow: https://stackoverflow.com/questions/26647152/are-vectors-passed-to-functions-by-value-or-by-reference-in-c
