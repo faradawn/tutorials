@@ -1,5 +1,11 @@
 # Linux Guide
 
+## Bash basics
+for loop
+```
+for i in {0..4}; do sudo echo $i; done
+```
+
 ## GDB commands [2022-01-22]
 ```
 list -
