@@ -38,7 +38,7 @@ sudo modprobe overlay && sudo modprobe br_netfilter && sudo sysctl --system
 sudo setenforce 0
 sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
 swapoff -a
-sed -i '/swap/d' /etc/fstab
+sudo sed -i '/swap/d' /etc/fstab
 yum repolist -y
 
 # install kube
@@ -83,7 +83,7 @@ sudo systemctl enable kubelet --now
 
 echo "=== Done installing kubernetes! ==="
 
-read -p "Do you want to initialize the cluster? " -n 1 -r
+read -p "Do you want to initialize the cluster? [y/n] " -n 1 -r
 echo   
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -98,12 +98,12 @@ fi
 
 echo "=== Cluster initialized! ==="
 sleep 1
-echo "to untaint this node: "
+echo -e "to untaint this node: \n"
 sleep 1
 echo "kubectl taint node `hostname` node-role.kubernetes.io/master:NoSchedule-"
 echo "kubectl taint node `hostname` node-role.kubernetes.io/control-plane:NoSchedule-"
 sleep 1
-echo "=== All done! Wish you a great day! ==="
+echo -e "\n=== All done! Wish you a great day! ==="
 
 
 
