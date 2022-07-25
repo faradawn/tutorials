@@ -8,7 +8,6 @@
 
 3 - Use auto script [optional]
 - `wget https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh && chmod +x kube.sh`
-- `vi kube.sh` (edit the IP's of the hosts)
 - `time ./kube.sh` (Kubernetes deployment takes 5 min; Cortx 10 min)
 - initialize the cluster (at the end of Part 1)
 - skip to Part 2 - Install Cortx
@@ -53,7 +52,7 @@ sudo modprobe overlay && sudo modprobe br_netfilter && sudo sysctl --system
 sudo setenforce 0
 sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
 swapoff -a
-sed -i '/swap/d' /etc/fstab
+sudo sed -i '/swap/d' /etc/fstab
 yum repolist -y
 
 # install kube
