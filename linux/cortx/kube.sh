@@ -1,41 +1,10 @@
 #!/bin/bash
-# source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh)
 
-PS3='Kubernetes v1.24: Please enter your choice: '
-options=($(seq 1 1 8))
-
-select opt in "${options[@]/#/node-}"
-do
-    case $opt in
-        "node-1") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; ME="master"; sleep 1; break;;
-        "node-2") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
-        "node-3") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
-        "node-4") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
-        "node-5") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
-        "node-6") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
-        "node-7") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
-        "node-8") hostnamectl set-hostname node-$REPLY; echo "set-hostname ${opt}"; sleep 1; break;;
-        *) echo "invalid option $REPLY";;
-        "master") ME="master"; break;;
-        *) ;;
-    esac
-done
-
-
-echo "===Deploy Kubernetes==="
-
-cat <<EOF>> /etc/hosts
-10.52.2.175 node-1
-10.52.0.109 node-2
-10.52.0.107 node-3
-10.52.3.192 node-4
-10.52.3.1 node-5
-10.52.2.147 node-6
-10.52.2.204 node-7
-10.52.0.222 node-8
-EOF
-
-ufw disable
+echo "=== Part 1 - Install Kubernetes ==="
+# edit host IP
+ip=`ifconfig | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | head -1` && echo $ip
+sudo bash -c "echo ${ip} `hostname` >> /etc/hosts"
+sudo ufw disable
 
 # let ipTable see bridged networks
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
@@ -92,23 +61,34 @@ sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://d
 sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$VERSION/$OS/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo
 sudo yum install cri-o -y
  
-# install Kubernetes, specify Version as CRI-O
-yum install -y kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes
+# install Kubernetes, specify the version as CRI-O
+sudo yum install -y kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes
 
-# install yq 
-wget https://github.com/mikefarah/yq/releases/download/v4.25.2/yq_linux_amd64.tar.gz -O - | tar xz && mv yq_linux_amd64 /usr/bin/yq
+# download yq 
+wget https://github.com/mikefarah/yq/releases/download/v4.25.2/yq_linux_amd64.tar.gz -O - | tar xz && sudo mv yq_linux_amd64 /usr/bin/yq
 
-# download adm file
-curl -O https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/10-kubeadm.conf
-mv -f 10-kubeadm.conf /usr/lib/systemd/system/kubelet.service.d
+# edit kube admin
+# add line before EnvironmentFile: Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=systemd"
+# append to the last line: $KUBELET_CGROUP_ARGS
 
-systemctl daemon-reload && systemctl enable crio --now && systemctl enable kubelet --now
+cd /usr/lib/systemd/system/kubelet.service.d/
+sudo sed -i '/EnvironmentFile=-\/var\/lib\/kubelet\/kubeadm-flags.env/i Environment=\"KUBELET_CGROUP_ARGS=--cgroup-driver=systemd\"' 10-kubeadm.conf
+sudo sed -i '$s/$/ $KUBELET_CGROUP_ARGS/' 10-kubeadm.conf
+cat 10-kubeadm.conf | grep "KUBELET_CGROUP_ARGS"
 
-# init with Calico
-if [[ $ME == "master" ]]; then
-    kubeadm init --pod-network-cidr=192.168.0.0/16
-    mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
-    echo -e "export KUBECONFIG=/etc/kubernetes/admin.conf \nalias kc=kubectl \nalias all=\"kubectl get pods -A -o wide\"" >> /etc/bashrc && source /etc/bashrc
-    kubectl create -f https://projectcalico.docs.tigera.io/manifests/tigera-operator.yaml
-    kubectl create -f https://gist.githubusercontent.com/faradawn/2288618db8ad0059968f48b6647732f9/raw/133f7f5113b4bc76f06dd5240ae7775c2fb74307/custom-resource.yaml
-fi
+# enable crio and kubelet 
+sudo systemctl daemon-reload
+sudo systemctl enable crio --now
+sudo systemctl enable kubelet --now
+
+echo "=== Done installing kubernetes! ==="
+echo "next steps:"
+
+# initialize cluster
+echo 'sudo kubeadm init --pod-network-cidr=192.168.0.0/16'
+echo 'mkdir -p $HOME/.kube'
+echo 'sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config'
+echo 'sudo chown $(id -u):$(id -g) $HOME/.kube/config'
+echo 'sudo bash -c "echo 'alias kc=kubectl' >> /etc/bashrc"'
+echo 'source /etc/bashrc'
+
