@@ -1,7 +1,7 @@
 # How to deploy CORTX on Kubernetes
 1 - Reserve bare metals
 - Option 1: storage node with CENTOS7-2003 (7.8)
-- Option 2: skylake with CENTOS7 (7.9) and setup [loop devices]()
+- Option 2: skylake with CENTOS7 (7.9) and [setup loop devices](https://github.com/faradawn/tutorials/blob/main/linux/cortx/motr_loop_device.md)
 
 2 - Remove extra device mappers [optional]
 - [How to remove RAID and LVM](https://github.com/faradawn/tutorials/blob/main/linux/cortx/linux_raid_lvm_partition.md)
@@ -167,18 +167,16 @@ tok=$(curl -d '{"username": "cortxadmin", "password": "Cortx123!"}' https://$CSM
 curl -X POST -H "Authorization: $tok" -d '{ "uid": "12345678", "display_name": "gts3account", "access_key": "gregoryaccesskey", "secret_key": "gregorysecretkey" }' https://$CSM_IP:8081/api/v2/iam/users -k
 ```
 
-
 Download s3 bench
 ```
-yum install -y go
+# [optional] sudo yum install -y go 
 wget https://github.com/Seagate/s3bench/releases/download/v2022-03-14/s3bench.2022-03-14 && chmod +x s3bench.2022-03-14 && mv s3bench.2022-03-14 s3bench
 
-kubectl describe svc cortx-io-svc-0 | grep -Po 'NodePort.*rgw-http *[0-9]*'
-export PORT=31300 
-export IP=192.168.84.128 # (ifconfig, tunl0, IPIP tunnel)
+export IP_PORT=`kubectl describe svc cortx-io-svc-0 | grep -m 1 Endpoints | sed 's|Endpoints: *||'` && echo $IP_PORT
 
-./s3bench -accessKey gregoryaccesskey -accessSecret gregorysecretkey -bucket loadgen -endpoint http://$IP:$PORT -numClients 5 -numSamples 100 -objectNamePrefix=loadgen -objectSize 1Mb -region us-east-1 -o test1.log
+./s3bench -accessKey gregoryaccesskey -accessSecret gregorysecretkey -bucket loadgen -endpoint http://$IP_PORT -numClients 5 -numSamples 100 -objectNamePrefix=loadgen -objectSize 1Mb -region us-east-1 -o test1.log
 ```
+
 
 ## Part 4 - Use CORTX
 ```
