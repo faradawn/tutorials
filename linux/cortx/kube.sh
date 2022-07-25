@@ -82,13 +82,28 @@ sudo systemctl enable crio --now
 sudo systemctl enable kubelet --now
 
 echo "=== Done installing kubernetes! ==="
-echo "next steps:"
 
-# initialize cluster
-echo 'sudo kubeadm init --pod-network-cidr=192.168.0.0/16'
-echo 'mkdir -p $HOME/.kube'
-echo 'sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config'
-echo 'sudo chown $(id -u):$(id -g) $HOME/.kube/config'
-echo 'sudo bash -c "echo 'alias kc=kubectl' >> /etc/bashrc"'
-echo 'source /etc/bashrc'
+read -p "Do you want to initialize the cluster? " -n 1 -r
+echo   
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+ sudo kubeadm init --pod-network-cidr=192.168.0.0/16
+ mkdir -p $HOME/.kube
+ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+ sudo chown $(id -u):$(id -g) $HOME/.kube/config
+ sudo bash -c "echo 'alias kc=kubectl' >> /etc/bashrc"
+ source /etc/bashrc
+fi
+
+
+echo "=== Cluster initialized! ==="
+sleep 1
+echo "to untaint this node: "
+sleep 1
+echo "kubectl taint node `hostname` node-role.kubernetes.io/master:NoSchedule-"
+echo "kubectl taint node `hostname` node-role.kubernetes.io/control-plane:NoSchedule-"
+sleep 1
+echo "=== All done! Wish you a great day! ==="
+
+
 
