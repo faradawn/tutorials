@@ -3,20 +3,15 @@
 ### Remove RAID on a disk
 ```
 # check disk types
-for i in {a..q}; do blkid /dev/sd${i}; done
+lsblk -f
+# old method
+for i in {a..q}; do blkid /dev/sd${i}; done 
 
 # remove disk RAID 
 cat /proc/mdstat
-      
-      # output
-      Personalities : 
-      md127 : inactive sdj[9](S)
-            1953382488 blocks super 1.2
-       
-mdadm --stop /dev/md127
-mdadm --zero-superblock /dev/sdj
-blkid /dev/sdj 
-      # outputs luster, ext4 
+sudo mdadm --stop /dev/md127
+sudo mdadm --zero-superblock /dev/sdj
+blkid /dev/sdj
 
 # [maybe works]
 mdadm /dev/md127 --remove /dev/sdj
@@ -32,6 +27,23 @@ cat /proc/mdstat
 dmsetup remove /dev/mapper/ceph--4071e4ca--48bb--43d2--a7c6--4a47a46ff329-osd--block--4d5b0bc9--4d50--4e5c--b0ff--ab69ff890e21
 fdisk /dev/sdk
 ```
+
+### Wipe a filesystem
+```
+lsblk -f
+ wipefs -a /dev/sdo /dev/sdn
+```
+
+### Wipe a disk [takes a long time]
+```
+# better to wife the filesystem than the disk
+# option 1 - shred, slow and uninformative
+# option 2 - dd to fill with zeros - better
+# after format, use parted to create a filesystem table
+```
+
+
+
 
 ### Remove logical volumes
 ```
