@@ -2,11 +2,11 @@
 # https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/motr_script.sh
 
 PS3='Please enter your choice: '
-options=("Create 5 loop devices" "Build motr and hare"  "Bootstrap hare for loop devices" "Quit")
+options=("Create loop devices" "Build motr and hare"  "Bootstrap for loop devices" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
-        "Create 5 loop devices")
+        "Create loop devices")
 # 1 - Create files (25 GB each, 20s * 5 = 2min)
 sudo chown -R cc /mnt
 mkdir -p /mnt/extra/loop-files/
@@ -28,14 +28,14 @@ for i in {0..4}; do sudo mount -o loop /dev/loop${i} /mnt/extra/loop-devs/loop${
 rm -rf /mnt/extra/loop-files/*.img  
 for i in {0..4}; do sudo losetup -d /dev/loop${i}; done
 
-echo "done creating 5 loop devices"
+echo "=== done creating 5 loop devices: /dev/loop5, /dev/loop5, /dev/loop7, /dev/loop8, /dev/loop9 ==="
 
 exit
 ;;
 
 
 
-"Build motr and hare directly")
+"Build motr and hare")
 echo "you chose build motr and hare directly"
 sleep 1
 
@@ -51,7 +51,6 @@ python get-pip.py pip==19.3.1
 sudo pip install --target=/usr/lib64/python2.7/site-packages ipaddress
 
 # force ansible to use python2
-sudo su
 sudo bash -c "echo 'all:' >> /etc/ansible/hosts"
 sudo bash -c "echo '  ansible_python_interpreter: \"/usr/bin/python2\"' >> /etc/ansible/hosts"
 
@@ -127,7 +126,7 @@ exit
 
 
 # Option 3
-"Bootstrap hare for loop devices")
+"Bootstrap for loop devices")
 # create cdf file
 cd /home/cc/cortx-hare
 cp /opt/seagate/cortx/hare/share/cfgen/examples/singlenode.yaml CDF.yaml
