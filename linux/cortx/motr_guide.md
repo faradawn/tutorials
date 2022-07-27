@@ -1,32 +1,68 @@
 # How to deploy motr
+1 - Reserve bare metals
+- Option 1: Storage node with CENTOS7 (7.9) and skip Part 1
+- Option 2: Skylake with CENTOS7 (7.9) and follow Part 1
 
-### Part 1 - Building Motr
-- Chameleon storage node; image: CENTOS7 (7.9)
-- [Motr Official Quickstart Guide](https://github.com/Seagate/cortx-motr/blob/main/doc/Quick-Start-Guide.rst#running-tests)
-- Auto deployment script:
-  - `sudo su`
+2 - Use auto deployment script [optional]
   - `wget https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/motr_script.sh && chmod +x motr_script.sh`
   - `./motr_script.sh`
   - total time: 15 min
 
+
+### Part 1 - Create loop devices
 ```
+# 1 - Create files (25 GB each, 20s * 5 = 2min)
+sudo chown -R cc /mnt
+mkdir -p /mnt/extra/loop-files/
+cd /mnt/extra/loop-files/
+for i in {1..5}; do dd if=/dev/zero of=loopbackfile${i}.img bs=100M count=250; done
+
+# 2 - Setup loop devices
+for i in {1..5}; do sudo losetup -fP loopbackfile${i}.img; done
+
+# 3 - Format devices into filesystems 
+for i in {1..5}; do printf "y" | sudo mkfs.ext4 /mnt/extra/loop-files/loopbackfile${i}.img; done
+
+# 4 - Mount loop devices
+for i in {0..4}; do mkdir -p /mnt/extra/loop-devs/loop${i}; done
+cd /mnt/extra/loop-devs/
+for i in {0..4}; do sudo mount -o loop /dev/loop${i} /mnt/extra/loop-devs/loop${i}; done
+
+# [Optional] Remove
+rm -rf /mnt/extra/loop-files/*.img  
+for i in {0..4}; do sudo losetup -d /dev/loop${i}; done
+  
+# check disk usage
+du -sh .
+df -h
+
+# check filesystem
+lsblk -f
+```
+
+
+### Part 2 - Build Motr and Hare
+```
+# === First - Build Motr === #
+
 # clone repository
+cd /home/cc
 git clone --recursive https://github.com/Seagate/cortx-motr.git
 
 # install pip and python
-yum group install -y "Development Tools"
-yum install -y python-devel ansible tmux
+sudo yum group install -y "Development Tools"
+sudo yum install -y python-devel ansible tmux
 curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py
 python get-pip.py pip==19.3.1            
 sudo pip install --target=/usr/lib64/python2.7/site-packages ipaddress
 
 # force ansible to use python2
 sudo su
-echo "all:" >> /etc/ansible/hosts
-echo "  ansible_python_interpreter: \"/usr/bin/python2\"" >> /etc/ansible/hosts
+sudo bash -c "echo 'all:' >> /etc/ansible/hosts"
+sudo bash -c "echo '  ansible_python_interpreter: \"/usr/bin/python2\"' >> /etc/ansible/hosts"
 
 # run build dependencies (9 min)
-cd cortx-motr
+cd /home/cc/cortx-motr
 time sudo ./scripts/install-build-deps
 
 # configure Luster (use eth0 which is UP)
@@ -34,19 +70,20 @@ sudo sed -i 's|tcp(eth1)|tcp(eth0)|g' /etc/modprobe.d/lnet.conf
 cat /etc/modprobe.d/lnet.conf
 sudo modprobe lnet
 
-# configure libfabric 
+# download libfabric 1.11.2 [optional[
 wget https://github.com/Seagate/cortx/releases/download/build-dependencies/libfabric-1.11.2-1.el7.x86_64.rpm
 wget https://github.com/Seagate/cortx/releases/download/build-dependencies/libfabric-devel-1.11.2-1.el7.x86_64.rpm
 sudo rpm -i libfabric-1.11.2-1.el7.x86_64.rpm
 sudo rpm -i libfabric-devel-1.11.2-1.el7.x86_64.rpm
+
+# If follow check of libfabric's version is 1.11.2, can skip the above step
+fi_info --version
 sudo sed -i 's|tcp(eth1)|tcp(eth0)|g' /etc/libfab.conf
 
-# build motr (7 min)
+# build motr (1 min with 48 cores, 7 min with 1 core)
 sudo ./autogen.sh && sudo ./configure && time sudo make -j48
-```
 
-### Part 2 - Compiling Python Util
-```
+# complie python util 
 cd /home/cc
 sudo yum install -y gcc rpm-build python36 python36-pip python36-devel python36-setuptools openssl-devel libffi-devel python36-dbus
 git clone --recursive https://github.com/Seagate/cortx-utils -b main
@@ -56,12 +93,13 @@ sudo pip3 install -r https://raw.githubusercontent.com/Seagate/cortx-utils/main/
 sudo pip3 install -r https://raw.githubusercontent.com/Seagate/cortx-utils/main/py-utils/python_requirements.ext.txt
 cd py-utils/dist
 sudo yum install -y cortx-py-utils-*.noarch.rpm
-```
 
-### Part 3 - Building Hare
-```
-cd /home/cc
+
+
+# === Second - Build Motr === #
+
 # clone repo
+cd /home/cc
 git clone https://github.com/Seagate/cortx-hare.git && cd cortx-hare
 
 # install fecter
@@ -74,39 +112,53 @@ sudo yum -y install yum-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
 sudo yum -y install consul-1.9.1
 
-# build and install motr [here
-cd cortx-motr && time sudo ./scripts/install-motr-service --link
+# build and install motr
+cd /home/cc/cortx-motr
+sudo ./scripts/install-motr-service --link
 export M0_SRC_DIR=$PWD
-cd -
 
 # build hare (2 min, 55 passed, 3 skipped, 36 warnings; 0.5min)
-cd cortx-hare
+cd /home/cc/cortx-hare
 sudo make
 sudo make install
 
 # create hare group
 sudo groupadd --force hare
 sudo usermod --append --groups hare $USER
-su cc
-sudo su
+sudo chown -R cc /var/lib/hare
 
 # add path
 PATH=/opt/seagate/cortx/hare/bin:$PATH
 ```
 
-### Part 4 - Start a Hare cluster
-- [singlenode CDF](https://gist.github.com/faradawn/c6cb4209d578608aa550865990b83352)
+
+
+
+
+### Part 3 - Start a Hare cluster
 ```
 # create cdf file
-hostnamectl set-hostname node-1
+cd /home/cc/cortx-hare
 cp /opt/seagate/cortx/hare/share/cfgen/examples/singlenode.yaml CDF.yaml
-vi CDF.yaml
-- hostname: node-1
-- eth0
-- libfab (default)
-- /dev/sda, /dev/sdb
-- ref /dev/sda, node-1; /dev/sdb, node-1
-- dataunits: 1 (default)
+
+sed -i "s|hostname: localhost|hostname: `hostname`|g" CDF.yaml
+sed -i "s|node: localhost|node: `hostname`|g" CDF.yaml
+sed -i 's|data_iface: eth1|data_iface: eth0|g' CDF.yaml
+
+### [For loop devices] (loop 5,6 for data, loop7 for log)
+sed -i '/loop0/d' CDF.yaml
+sed -i '/loop1/d' CDF.yaml
+sed -i '/loop2/d' CDF.yaml
+sed -i '/loop3/d' CDF.yaml
+sed -i '/loop4/d' CDF.yaml
+sed -i '/loop7/d' CDF.yaml
+sed -i '/loop8/d' CDF.yaml
+sed -i "s|loop9|loop7|g" CDF.yaml
+
+### [For a storage node] (sdc, sdd for data, sde for log)
+
+
+
 
 # bootstrap (0.5 min)
 time hctl bootstrap --mkfs /home/cc/cortx-hare/CDF.yaml
@@ -134,21 +186,28 @@ Services:
     [started]  ioservice           0x7200000000000001:0x2          inet:tcp:10.52.3.159@21003 
     [unknown]  m0_client_other     0x7200000000000001:0x3          inet:tcp:10.52.3.159@22501 # PROCESS_FID, LOCAL_ADDR
     [unknown]  m0_client_other     0x7200000000000001:0x4          inet:tcp:10.52.3.159@22502
-
-HA_ADDR=inet:tcp:10.52.3.159@22001
-LOCAL_ADDR=inet:tcp:10.52.3.159@22501
-PROFILE_FID=0x7000000000000001:0x0
-PROCESS_FID=0x7200000000000001:0x3
-obj_id=12345670 # random number
 ```
+
+
+
 
 ### Part 5 - Running example1.c
 ```
 cd /home/cc/cortx-motr/motr/examples
+hctl status > temp
+export HA_ADDR=$(grep hax temp | sed 's/.*inet/inet/') && echo $HA_ADDR
+export LOCAL_ADDR=$(grep -m 1 m0_client_other temp | sed 's/.*inet/inet/') && echo $LOCAL_ADDR
+export PROFILE_FID=$(grep "None None" temp | sed s/.\'default.*// | sed 's/ *0x/"<0x/;s/$/>"/') && echo $PROFILE_FID
+export PROCESS_FID=$(grep -m 1 m0_client_other temp | sed '0,/.*m0_client_other */s//"</' | sed 's/ *inet.*/>"/') && echo $PROCESS_FID
+export obj_id=12345670
+
+echo "$HA_ADDR $LOCAL_ADDR $PROFILE_FID $PROCESS_FID $obj_id"
+
 export LD_LIBRARY_PATH=/home/cc/cortx-motr/motr/.libs/
 gcc -I/home/cc/cortx-motr -DM0_EXTERN=extern -DM0_INTERNAL= -Wno-attributes -L/home/cc/cortx-motr/motr/.libs -lmotr example1.c -o example1
-./example1 inet:tcp:10.52.3.159@22001 inet:tcp:10.52.3.159@22501 "<0x7000000000000001:0x0>" "<0x7200000000000001:0x3>" 12345670
+echo -e "\nPlease run the following:\n\n./example1 $HA_ADDR $LOCAL_ADDR $PROFILE_FID $PROCESS_FID $obj_id\n\n"
 ```
+
 successful output
 ```
 AAAAAAAAAAAAAAAAAAAAAAAA
