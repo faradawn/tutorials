@@ -2,7 +2,7 @@
 # https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/motr_script.sh
 
 PS3='Please enter your choice: '
-options=("1) Create 5 loop devices" "2) Deploy Motr directly"  "3) Quit")
+options=("1) Create 5 loop devices" "2) Build Motr and Hare directly"  "3) Bootstrap Hare" "4) Quit")
 select opt in "${options[@]}"
 do
     case $opt in
