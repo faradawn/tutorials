@@ -2,11 +2,11 @@
 # https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/motr_script.sh
 
 PS3='Please enter your choice: '
-options=("1) Create 5 loop devices" "2) Build Motr and Hare directly"  "3) Bootstrap Hare" "4) Quit")
+options=("Create 5 loop devices" "Build motr and hare"  "Bootstrap hare for loop devices" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
-        "1")
+        "Create 5 loop devices")
 # 1 - Create files (25 GB each, 20s * 5 = 2min)
 sudo chown -R cc /mnt
 mkdir -p /mnt/extra/loop-files/
@@ -35,8 +35,8 @@ exit
 
 
 
-        "2")
-echo "you chose build motr directly"
+"Build motr and hare directly")
+echo "you chose build motr and hare directly"
 sleep 1
 
 # clone repository
@@ -126,7 +126,8 @@ exit
 
 
 
-        "3")
+# Option 3
+"Bootstrap hare for loop devices")
 # create cdf file
 cd /home/cc/cortx-hare
 cp /opt/seagate/cortx/hare/share/cfgen/examples/singlenode.yaml CDF.yaml
@@ -168,8 +169,11 @@ echo -e "\nPlease run the following:\n\n./example1 $HA_ADDR $LOCAL_ADDR $PROFILE
 
 exit
 ;;
-        
-        "4")
+    
+    
+    
+
+        "Quit")
             break
             ;;
         *) echo "invalid option $REPLY";;
