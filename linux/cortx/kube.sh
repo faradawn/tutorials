@@ -1,4 +1,5 @@
 #!/bin/bash
+# wget https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh && chmod +x kube.sh
 
 echo "=== Part 1 - Install Kubernetes ==="
 # edit host IP
