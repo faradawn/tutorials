@@ -112,33 +112,30 @@ kubectl create -f https://gist.githubusercontent.com/faradawn/2288618db8ad005996
 
 
 ## Part 2 - Install CORTX
+- If Skylake, create loop devices:
+- `wget https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/motr_script.sh && chmod +x motr_script.sh`
+- `./motr_script.sh`
+- choose option 1
+
+
 ```
 # clone k8s repo
-# - change csm_mgmt_admin_secret: Cortx123!
-# - change node-1, node-2, etc. to your hostname
-# - datapods, sdc, sdd (512G)
-# - available loop disks: loop5, loop7, loop8, loop9, loop10
+git clone -b main https://github.com/Seagate/cortx-k8s
+cd cortx-k8s/k8_cortx_cloud;
+mv solution.example.yaml solution.yaml
 
-git clone -b main https://github.com/Seagate/cortx-k8s; cd cortx-k8s/k8_cortx_cloud; mv solution.example.yaml solution.yaml
-
-# change secret
+# change secret, hostname, and remove cvg-02
 yq -i '.solution.secrets.content.csm_mgmt_admin_secret = "Cortx123!"' solution.yaml
-
-# change node to hostname
 yq -i ".solution.storage_sets[0].nodes = [\"$HOSTNAME\"]" solution.yaml
-
-# remove cvg-02
 yq -i 'del(.solution.storage_sets[0].storage[1])' solution.yaml
 
-# change metadata pod
+# change metadata and data pod
 yq -i '.solution.storage_sets[0].storage[0].devices.metadata = {"path": "/dev/loop5", "size": "20Gi"}' solution.yaml
-
-# change datapods
-yq -i '.solution.storage_sets[0].storage[0].devices.data = [{"path": "/dev/loop7", "size": "20Gi"}]' solution.yaml
-yq -i '.solution.storage_sets[0].storage[0].devices.data += {"path": "/dev/loop8", "size": "20Gi"}' solution.yaml
+yq -i '.solution.storage_sets[0].storage[0].devices.data = [{"path": "/dev/loop6", "size": "20Gi"}]' solution.yaml
+yq -i '.solution.storage_sets[0].storage[0].devices.data += {"path": "/dev/loop7", "size": "20Gi"}' solution.yaml
 
 # 1 - run pre-req
-sudo ./prereq-deploy-cortx-cloud.sh -d /dev/loop9 -s solution.yaml
+sudo ./prereq-deploy-cortx-cloud.sh -d /dev/loop8 -s solution.yaml
 
 # 2 - untaint master 
 kubectl taint node `hostname` node-role.kubernetes.io/master:NoSchedule-
@@ -146,11 +143,16 @@ kubectl taint node `hostname` node-role.kubernetes.io/control-plane:NoSchedule-
 
 # 3 - start deploy (single node takes 6-12 min)
 time ./deploy-cortx-cloud.sh solution.yaml
-
-# [if fail, can try] restart core-dns pods
-kubectl rollout restart -n kube-system deployment/coredns
 ```
 
+Trouble shoot 
+```
+# if prereq didn't succeed, helm not found
+manully install helm
+
+# if deployment fails, restart core-dns pods
+kubectl rollout restart -n kube-system deployment/coredns
+```
 
 
 ## Part 3 - Benchmark CORTX
