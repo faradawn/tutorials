@@ -134,7 +134,8 @@ yq -i '.solution.storage_sets[0].storage[0].devices.metadata = {"path": "/dev/lo
 yq -i '.solution.storage_sets[0].storage[0].devices.data = [{"path": "/dev/loop6", "size": "20Gi"}]' solution.yaml
 yq -i '.solution.storage_sets[0].storage[0].devices.data += {"path": "/dev/loop7", "size": "20Gi"}' solution.yaml
 
-# 1 - run pre-req
+# 1 - run pre-req (two times)
+./prereq-deploy-cortx-cloud.sh -d /dev/loop8 -s solution.yaml
 sudo ./prereq-deploy-cortx-cloud.sh -d /dev/loop8 -s solution.yaml
 
 # 2 - untaint master 
