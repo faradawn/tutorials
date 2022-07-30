@@ -1,7 +1,7 @@
 # How to deploy motr
 1 - Reserve bare metals
-- Option 1: Storage node with CENTOS7 (7.9) and skip Part 1
-- Option 2: Skylake with CENTOS7 (7.9) and follow Part 1
+- Option 1: Storage node with CENTOS7 (7.9) (can skip Part 1)
+- Option 2: Skylake with CENTOS7 (7.9) (create loop devices)
 
 2 - Use auto deployment script [optional]
   - `wget https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/motr_script.sh && chmod +x motr_script.sh`
@@ -43,8 +43,7 @@ lsblk -f
 
 ### Part 2 - Build Motr and Hare
 ```
-# === First - Build Motr === #
-
+# === First build motr === #
 # clone repository
 cd /home/cc
 git clone --recursive https://github.com/Seagate/cortx-motr.git
@@ -57,7 +56,6 @@ python get-pip.py pip==19.3.1
 sudo pip install --target=/usr/lib64/python2.7/site-packages ipaddress
 
 # force ansible to use python2
-sudo su
 sudo bash -c "echo 'all:' >> /etc/ansible/hosts"
 sudo bash -c "echo '  ansible_python_interpreter: \"/usr/bin/python2\"' >> /etc/ansible/hosts"
 
@@ -70,18 +68,17 @@ sudo sed -i 's|tcp(eth1)|tcp(eth0)|g' /etc/modprobe.d/lnet.conf
 cat /etc/modprobe.d/lnet.conf
 sudo modprobe lnet
 
-# download libfabric 1.11.2 [optional[
+# [optional] download libfabric 1.11.2
+fi_info --version
 wget https://github.com/Seagate/cortx/releases/download/build-dependencies/libfabric-1.11.2-1.el7.x86_64.rpm
 wget https://github.com/Seagate/cortx/releases/download/build-dependencies/libfabric-devel-1.11.2-1.el7.x86_64.rpm
 sudo rpm -i libfabric-1.11.2-1.el7.x86_64.rpm
 sudo rpm -i libfabric-devel-1.11.2-1.el7.x86_64.rpm
 
-# If follow check of libfabric's version is 1.11.2, can skip the above step
-fi_info --version
 sudo sed -i 's|tcp(eth1)|tcp(eth0)|g' /etc/libfab.conf
 
 # build motr (1 min with 48 cores, 7 min with 1 core)
-sudo ./autogen.sh && sudo ./configure && time sudo make -j48
+./autogen.sh && ./configure && time make -j48
 
 # complie python util 
 cd /home/cc
@@ -95,9 +92,7 @@ cd py-utils/dist
 sudo yum install -y cortx-py-utils-*.noarch.rpm
 
 
-
-# === Second - Build Motr === #
-
+# === Second build hare === #
 # clone repo
 cd /home/cc
 git clone https://github.com/Seagate/cortx-hare.git && cd cortx-hare
@@ -119,7 +114,7 @@ export M0_SRC_DIR=$PWD
 
 # build hare (2 min, 55 passed, 3 skipped, 36 warnings; 0.5min)
 cd /home/cc/cortx-hare
-sudo make
+make
 sudo make install
 
 # create hare group
@@ -156,9 +151,16 @@ sed -i '/loop8/d' CDF.yaml
 sed -i "s|loop9|loop7|g" CDF.yaml
 
 ### [For a storage node] (sdc, sdd for data, sde for log)
-
-
-
+sed -i 's/loop0/sdc/g' CDF.yaml
+sed -i 's/loop1/sdd/g' CDF.yaml
+sed -i 's/loop9/sde/g' CDF.yaml
+sed -i '/loop2/d' CDF.yaml
+sed -i '/loop3/d' CDF.yaml
+sed -i '/loop4/d' CDF.yaml
+sed -i '/loop5/d' CDF.yaml
+sed -i '/loop6/d' CDF.yaml
+sed -i '/loop7/d' CDF.yaml
+sed -i '/loop8/d' CDF.yaml
 
 # bootstrap (0.5 min)
 time hctl bootstrap --mkfs /home/cc/cortx-hare/CDF.yaml
@@ -217,28 +219,6 @@ Object deletion: 0
 app completed: 0
 ```
 
-### Part 6 - Install Min IO
-```
-# download MinIo
-wget https://dl.min.io/server/minio/release/linux-amd64/minio
-chmod +x minio
-sudo mkdir -p /mnt/data && sudo chown -R cc /mnt/data
-./minio server /mnt/data
-
-# download minio-cli
-wget https://dl.min.io/client/mc/release/linux-amd64/mc
-chmod +x mc
-echo 'alias mc="/home/cc/minio-bench/mc"' | sudo tee -a /etc/bashrc
-mc alias set myminio http://10.52.2.108:9000 minioadmin minioadmin
-
-# create file
-gcc -o create_file create_file.c
-./create_file 16 1 -h
-
-# upload and download a file
-./mc cp 16KB myminio/bucket1/
-./mc cp myminio/bucket1/16KB .
-```
 
 ### Terminologies
 - LNet: communication protocal
