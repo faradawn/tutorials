@@ -30,10 +30,12 @@
 
 
 ## 💧 C++ 模版
+
+
 ### 面试模版
 - 注意除0，数组长度为0
-```
-// #include <bits/stdc++.h>
+```c++
+#include <bits/stdc++.h>
 #include <vector>
 #include <iostream>
 
@@ -42,25 +44,35 @@ vector<int> vec2 = (4, -1);
 vector<int> aa = solution(vec, 2);
 vector<int> solution(vector<int> &A, int K) {}
 ```
-### sort tuple
+
+
+### 自定义 compare opterator
+Priority queue (custom min heap)
+```c++
+class Greater{
+public:
+	bool operator()(tuple<int,int,int> const &t1, tuple<int,int,int> const &t2){
+	    return get<0>(t1) > get<0>(t2);
+	}
+};
+
+class Solution {
+public:
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        priority_queue<tuple<int,int,int>, vector<tuple<int,int,int>>, Greater>q;
+        q.push({1,2,3});
+	}
+};
 ```
+
+Sort
+```c++
 vector<tuple<int,int>>lines(10);
 lines[i] = make_tuple(3,6);
 sort(lines.start(), lines.end(), 
 	[](auto const &t1, auto const &t2) {
         return get<1>(t1) < get<1>(t2) || (get<1>(t1)==get<1>(t2) && get<0>(t1)>get<0>(t2))
 	})
-```
-### 打印 vector
-```c++
-void printArr(vector<vector<int>> &vec){
-  for(auto &it : vec){
-    for(auto &i : it) cout<<i<<" ";
-    cout<<endl;
-  }
-}
-
-vector<vector<int>>dp(n+1, vector<int>(W+1, 0));
 ```
 
 ### 遍历 map
@@ -173,6 +185,7 @@ vector<int>* func(vector<int>* nums){
     return &vec;
 }
 ```
+
 ### 如何使用 unordered_map?
 ```c++
 #include <unordered_map>
