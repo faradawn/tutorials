@@ -1,32 +1,32 @@
 # Linux Guide
 
-## Bash basics
-for loop
+## Basic Setup
+### Set timezone
+```
+sudo timedatectl set-timezone America/Chicago
+```
+
+### Write a for-loop
 ```
 for i in {0..4}; do sudo echo $i; done
 ```
 
-## GDB commands [2022-01-22]
+### Set vim tab size
 ```
-list -
-disas
+:set tabstop=4
+:set expandtab # turn tab into space
 
-x/20xg, x/20xw $esp
-p/x
+:!echo $VIM # tried /usr/shared/vimrc and /etc/vimrc or .vimrc -- no use
+vi ~/.vimrc
 
-info frame, info stack
-b *bad_echo+34
-
-vim :sp shellcode.h
-
+%d to delete all
 ```
 
-## run bash script from web
-```sh
+### Run bash script from web
+```
 source <(curl -s https://raw.githubusercontent.com/faradawn/tutorials/main/linux/bash_scripts/benchmark.sh)
 ```
 
-## Bash Tricks
 bashrc vs bash_profile
 ```
 .bashrc is for interactive non-login shell (when type bash)
@@ -42,7 +42,7 @@ echo -e "Hi,\n\nI am leaving early.\n\nBest,\nFaradawn" | mail -s "A Request to 
 ```
 
 
-loop and function
+### Bash loop and function
 ```sh
 #!/bin/bash
 run() {
@@ -60,7 +60,7 @@ if [ $# -eq 0 ]; then
 fi
 ```
 
-accumulator
+### Bash accumulator
 ```sh
 sum=0
 while read -r line; do
@@ -69,16 +69,22 @@ done < <(run $1 $2)
 ```
 
 
-## Vim Trick
-```
-:set tabstop=4
-:set expandtab # turn tab into space
 
-:!echo $VIM # tried /usr/shared/vimrc and /etc/vimrc or .vimrc -- no use
-vi ~/.vimrc
-
-%d to delete all
+## GDB commands [2022-01-22]
 ```
+list -
+disas
+
+x/20xg, x/20xw $esp
+p/x
+
+info frame, info stack
+b *bad_echo+34
+
+vim :sp shellcode.h
+```
+
+
 
 ## How format USB on Mac?
 Apple forum: https://discussions.apple.com/thread/8132218
