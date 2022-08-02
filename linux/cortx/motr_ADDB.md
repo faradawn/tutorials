@@ -1,9 +1,12 @@
-# How to use ADDB
+# How to use ADDB and other util
 - Skylake CENTOS7 (7.9)
 - [Deploy motr and hare](https://github.com/faradawn/tutorials/blob/main/linux/cortx/motr_guide.md)
 
-## Part 1 - Using ADDB 2
-**1 - start the test (2.5 min)**
+## Part 1 - Using ADDB2
+- [ADDB2.rst](https://github.com/Seagate/cortx-motr/blob/main/doc/ADDB.rst)
+- [dtm0-demo-happy-path](https://github.com/Seagate/cortx-motr/blob/documentation/doc/dev/dtm/dtm0-demo-happy-path.org)
+
+### [Optional] Run a system test (2.5 min)
 ```
 time sudo /home/cc/cortx-motr/m0t1fs/linux_kernel/st/m0t1fs_test.sh
 ```
@@ -17,26 +20,7 @@ Test log available at /var/motr/systest-257548/motr_2022-07-27_20:44:28.log.
 m0t1fs: FAILURE 1
 ```
 
-**2 - check what stobs are there**
-```
-sudo ls -l /var/motr/systest-*/????/addb-stobs-*
-```
-
-output
-```
-/var/motr/systest-257548/ios1/addb-stobs-258804:
-total 8
--rw-r--r-- 1 root root    9 Jul 27 20:44 id
-drwx------ 2 root root 4096 Jul 27 20:44 o
-
-/var/motr/systest-257548/ios1/addb-stobs-260547:
-total 8
--rw-r--r-- 1 root root    9 Jul 27 20:45 id
-drwx------ 2 root root 4096 Jul 27 20:45 o
-```
-
-
-**3 - choose an io stobs, such as the first one, and run addb2dump**
+Then ADDB2 dump
 ```
 sudo /home/cc/cortx-motr/utils/m0run m0addb2dump -- /var/motr/systest-257548/ios1/addb-stobs-258804/o/*2 | less
 ```
@@ -51,19 +35,71 @@ output (might take 20s)
 |         0 :         0 | 
 |         0 :         0 | 
 |         0 :         0 | 
-|         0 :         0 | 
-|         0 :         0 | 
-|         0 :         0 | 
-|         0 :         0 | 
-|         0 :         0 | 
-|         0 :         0 | 
-|         0 :         0 | 
 |         node             <0:0>
 |         pid              258804
 |         locality         2
 |         thread           7f574bfff700
 |         ast              
 ```
+
+
+### 1 - import to database
+```
+# run the test (2 min)
+hctl shutdown
+cd /home/cc/cortx-motr/dtm0/it/all2all
+sudo ./all2all 
+
+  # failed the last ctgdump
+  # missing client_addb_17730 file
+
+# check what stobs generated
+sudo ls -l /var/motr/
+
+sudo bash -c "echo 'alias addb=\"sudo /home/cc/cortx-motr/utils/m0run m0addb2dump\"' >> /etc/bashrc"
+source /etc/bashrc
+
+# dump addb samples (04:05, first one of the two) - why generate two stobs files?
+addb -f -- /var/motr/m0d-0x7200000000000001\:0x1/addb-stobs-247950/o/100000000000000\:2 > dump_1.txt
+addb -f -- /var/motr/m0d-0x7200000000000001\:0x2/addb-stobs-249192/o/100000000000000\:2 > dump_2.txt
+addb -f -- /var/motr/m0d-0x7200000000000001\:0x3/addb-stobs-249647/o/100000000000000\:2 > dump_3.txt
+addb -f -- /var/motr/m0d-0x7200000000000001\:0x4/addb-stobs-250115/o/100000000000000\:2 > dump_4.txt
+
+# generate the db
+git clone --recursive https://github.com/Seagate/seagate-tools.git
+ln -s seagate-tools/performance/PerfLine/roles/perfline_setup/files/chronometry_v2 chronometry_v2
+
+# [missing client stob file] 
+cp dump[cs]*.txt chronometry_v2 && cd chronometry_v2
+python3 addb2db.py --dumps dump[cs]_*.txt --db m0play.db.a2a
+
+
+# python install peeweee
+pip3 install peewee graphviz
+
+# my try [chronomty_v2 not dir, where is addb2db]
+cp *dump* chronometry_v2 && cd chronometry_v2
+python3 addb2db.py --dumps *dump* --db m0play.db.a2a
+```
+
+
+On storage node
+```
+# build motr until "./autogen && ./config"
+
+# make
+time { MAKE_OPTS=-j64 CONFIGURE_OPTS=--enable-dtm0\ --disable-altogether-mode\ --enable-debug\ --with-trace-ubuf-size=32 sudo ./scripts/m0 rebuild || echo FAIL; }
+
+# continue build python util and hare
+
+
+# run the test (1.5 min)
+cd /home/cc/cortx-motr/dtm0/it/all2all
+sudo ./all2all
+
+# [ctgdump failed]
+```
+
 
 ## Part 2 - Using m0tracedump
 - [Run example1.c](https://github.com/faradawn/tutorials/blob/main/linux/cortx/motr_guide.md#part-5---running-example1c)
