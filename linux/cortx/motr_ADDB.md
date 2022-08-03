@@ -1,8 +1,7 @@
-# How to use ADDB and other util
+# How to use ADDB
 - Skylake CENTOS7 (7.9)
 
 ## Part 1 - Building Motr
-- [Referencing deploy motr and hare](https://github.com/faradawn/tutorials/blob/main/linux/cortx/motr_guide.md)
 ```
 # === First build motr === #
 # clone repository
@@ -102,6 +101,9 @@ PATH=/opt/seagate/cortx/hare/bin:$PATH
 # Start all2all test
 cd /home/cc/cortx-motr/dtm0/it/all2all
 sudo ./all2all
+  
+  [Four m0d-0x7200000000000001 files successfully dumpped]
+  [ctgdump error]
 ```
 
 
