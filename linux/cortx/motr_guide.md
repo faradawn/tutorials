@@ -29,6 +29,7 @@ cd /mnt/extra/loop-devs/
 for i in {0..4}; do sudo mount -o loop /dev/loop${i} /mnt/extra/loop-devs/loop${i}; done
 
 # [Optional] Remove
+for i in {0..4}; do sudo umount /mnt/extra/loop-devs/loop${i}; done
 rm -rf /mnt/extra/loop-files/*.img  
 for i in {0..4}; do sudo losetup -d /dev/loop${i}; done
   
@@ -77,8 +78,13 @@ sudo rpm -i libfabric-devel-1.11.2-1.el7.x86_64.rpm
 
 sudo sed -i 's|tcp(eth1)|tcp(eth0)|g' /etc/libfab.conf
 
-# build motr (1 min with 48 cores, 7 min with 1 core)
-./autogen.sh && ./configure && time make -j48
+# [Important!] build motr (1 min with 48 cores, 7 min with 1 core)
+cd /home/cc/cortx-motr
+sudo chown -R .
+./autogen.sh && ./configure && make -j48
+
+
+# === Second build hare === #
 
 # complie python util 
 cd /home/cc
@@ -91,8 +97,6 @@ sudo pip3 install -r https://raw.githubusercontent.com/Seagate/cortx-utils/main/
 cd py-utils/dist
 sudo yum install -y cortx-py-utils-*.noarch.rpm
 
-
-# === Second build hare === #
 # clone repo
 cd /home/cc
 git clone https://github.com/Seagate/cortx-hare.git && cd cortx-hare
@@ -125,8 +129,6 @@ sudo chown -R cc /var/lib/hare
 # add path
 PATH=/opt/seagate/cortx/hare/bin:$PATH
 ```
-
-
 
 
 
@@ -163,7 +165,7 @@ sed -i '/loop7/d' CDF.yaml
 sed -i '/loop8/d' CDF.yaml
 
 # bootstrap (0.5 min)
-time hctl bootstrap --mkfs /home/cc/cortx-hare/CDF.yaml
+hctl bootstrap --mkfs /home/cc/cortx-hare/CDF.yaml
 
 # check status
 hctl status
