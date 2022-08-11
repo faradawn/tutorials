@@ -2,42 +2,27 @@
 # https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/motr_script.sh
 
 PS3='Please enter your choice: '
-options=("Create loop devices" "Build motr and hare"  "Bootstrap for loop devices" "Quit")
+options=("Build Motr and Hare" "Bootstrap Hare" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
-        "Create loop devices")
-# 1 - Create files (25 GB each, 20s * 5 = 2min)
-sudo chown -R cc /mnt
-mkdir -p /mnt/extra/loop-files/
-cd /mnt/extra/loop-files/
-for i in {1..5}; do dd if=/dev/zero of=loopbackfile${i}.img bs=100M count=250; done
-
-# 2 - Setup loop devices
-for i in {1..5}; do sudo losetup -fP loopbackfile${i}.img; done
-
-# 3 - Format devices into filesystems 
-for i in {1..5}; do printf "y" | sudo mkfs.ext4 /mnt/extra/loop-files/loopbackfile${i}.img; done
-
-# 4 - Mount loop devices
-for i in {0..4}; do mkdir -p /mnt/extra/loop-devs/loop${i}; done
-cd /mnt/extra/loop-devs/
-for i in {0..4}; do sudo mount -o loop /dev/loop${i} /mnt/extra/loop-devs/loop${i}; done
-
-# [Optional] Remove
-rm -rf /mnt/extra/loop-files/*.img  
-for i in {0..4}; do sudo losetup -d /dev/loop${i}; done
-
-echo "=== done creating 5 loop devices: /dev/loop5, /dev/loop5, /dev/loop7, /dev/loop8, /dev/loop9 ==="
-
-exit
-;;
-
 
 
 "Build motr and hare")
+
+sudo chown -R cc /mnt
+mkdir -p /mnt/extra/loop-files/
+for i in {0..9}; do
+  dd if=/dev/zero of=/mnt/extra/loop-files/disk$i.img bs=1M count=1 seek=10000
+  sudo losetup /dev/loop$i /mnt/extra/loop-files/disk$i.img
+done
+
+echo "=== done creating 10 loop devices: /dev/loop0 ... /dev/loop9 ==="
+
 echo "you chose build motr and hare directly"
 sleep 1
+
+# === First, build motr === #
 
 # clone repository
 cd /home/cc
@@ -56,25 +41,22 @@ sudo bash -c "echo '  ansible_python_interpreter: \"/usr/bin/python2\"' >> /etc/
 
 # run build dependencies (9 min)
 cd /home/cc/cortx-motr
-time sudo ./scripts/install-build-deps
+sudo ./scripts/install-build-deps
 
-# configure Luster (use eth0 which is UP)
+# configure libfab and lnet (use ethX which is UP)
+sudo sed -i 's|tcp(eth1)|tcp(eth0)|g' /etc/libfab.conf
 sudo sed -i 's|tcp(eth1)|tcp(eth0)|g' /etc/modprobe.d/lnet.conf
-cat /etc/modprobe.d/lnet.conf
 sudo modprobe lnet
 
-# download libfabric 1.11.2 [optional[
-wget https://github.com/Seagate/cortx/releases/download/build-dependencies/libfabric-1.11.2-1.el7.x86_64.rpm
-wget https://github.com/Seagate/cortx/releases/download/build-dependencies/libfabric-devel-1.11.2-1.el7.x86_64.rpm
-sudo rpm -i libfabric-1.11.2-1.el7.x86_64.rpm
-sudo rpm -i libfabric-devel-1.11.2-1.el7.x86_64.rpm
+# build motr [for ADDB] (1 min with 48 cores, 7 min with 1 core)
+cd /home/cc/cortx-motr
+sudo chown -R cc .
+./autogen.sh
+./configure --with-trace-max-level=M0_DEBUG
+make -j48
 
-# If follow check of libfabric's version is 1.11.2, can skip the above step
-fi_info --version
-sudo sed -i 's|tcp(eth1)|tcp(eth0)|g' /etc/libfab.conf
 
-# build motr (1 min with 48 cores, 7 min with 1 core)
-sudo ./autogen.sh && sudo ./configure && time sudo make -j48
+# === Second, build hare === #
 
 # complie python util 
 cd /home/cc
@@ -108,7 +90,7 @@ export M0_SRC_DIR=$PWD
 
 # build hare (2 min, 55 passed, 3 skipped, 36 warnings; 0.5min)
 cd /home/cc/cortx-hare
-sudo make
+make
 sudo make install
 
 # create hare group
@@ -126,7 +108,7 @@ exit
 
 
 # Option 3
-"Bootstrap for loop devices")
+"Bootstrap Hare")
 # create cdf file
 cd /home/cc/cortx-hare
 cp /opt/seagate/cortx/hare/share/cfgen/examples/singlenode.yaml CDF.yaml
