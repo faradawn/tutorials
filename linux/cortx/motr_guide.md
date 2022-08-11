@@ -1,15 +1,7 @@
 # How to deploy motr
-1 - Reserve bare metals
-- Option 1: Storage node with CENTOS7 (7.9) (can skip Part 1)
-- Option 2: Skylake with CENTOS7 (7.9) (create loop devices)
+Skylake with CC-CentOS7 (7.9) or CentOS7-2003 (7.8)
 
-2 - Use auto deployment script [optional]
-  - `wget https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/motr_script.sh && chmod +x motr_script.sh`
-  - `./motr_script.sh`
-  - total time: 15 min
-
-
-### Part 1 - Create loop devices
+### Part 1 - Creating loop devices
 ```
 # 1 - Create files (25 GB each, 20s * 5 = 2min)
 sudo chown -R cc /mnt
@@ -32,19 +24,13 @@ for i in {0..4}; do sudo mount -o loop /dev/loop${i} /mnt/extra/loop-devs/loop${
 for i in {0..4}; do sudo umount /mnt/extra/loop-devs/loop${i}; done
 rm -rf /mnt/extra/loop-files/*.img  
 for i in {0..4}; do sudo losetup -d /dev/loop${i}; done
-  
-# check disk usage
-du -sh .
-df -h
-
-# check filesystem
-lsblk -f
 ```
 
 
-### Part 2 - Build Motr and Hare
+### Part 2 - Building Motr and Hare
 ```
-# === First build motr === #
+# === First, build motr === #
+
 # clone repository
 cd /home/cc
 git clone --recursive https://github.com/Seagate/cortx-motr.git
@@ -64,27 +50,19 @@ sudo bash -c "echo '  ansible_python_interpreter: \"/usr/bin/python2\"' >> /etc/
 cd /home/cc/cortx-motr
 time sudo ./scripts/install-build-deps
 
-# configure Luster (use eth0 which is UP)
+# configure libfab and lnet (use ethX which is UP)
+sudo sed -i 's|tcp(eth1)|tcp(eth0)|g' /etc/libfab.conf
 sudo sed -i 's|tcp(eth1)|tcp(eth0)|g' /etc/modprobe.d/lnet.conf
-cat /etc/modprobe.d/lnet.conf
 sudo modprobe lnet
 
-# [optional] download libfabric 1.11.2
-fi_info --version
-wget https://github.com/Seagate/cortx/releases/download/build-dependencies/libfabric-1.11.2-1.el7.x86_64.rpm
-wget https://github.com/Seagate/cortx/releases/download/build-dependencies/libfabric-devel-1.11.2-1.el7.x86_64.rpm
-sudo rpm -i libfabric-1.11.2-1.el7.x86_64.rpm
-sudo rpm -i libfabric-devel-1.11.2-1.el7.x86_64.rpm
-
-sudo sed -i 's|tcp(eth1)|tcp(eth0)|g' /etc/libfab.conf
-
-# [Important!] build motr (1 min with 48 cores, 7 min with 1 core)
+# build motr [for ADDB] (1 min with 48 cores, 7 min with 1 core)
 cd /home/cc/cortx-motr
-sudo chown -R .
-./autogen.sh && ./configure && make -j48
+sudo chown -R cc .
+./autogen.sh
+./configure --with-trace-max-level=M0_DEBUG
+make -j48
 
-
-# === Second build hare === #
+# === Second, build hare === #
 
 # complie python util 
 cd /home/cc
@@ -131,8 +109,7 @@ PATH=/opt/seagate/cortx/hare/bin:$PATH
 ```
 
 
-
-### Part 3 - Start a Hare cluster
+### Part 3 - Starting a Hare cluster
 ```
 # create cdf file
 cd /home/cc/cortx-hare
@@ -142,35 +119,20 @@ sed -i "s|hostname: localhost|hostname: `hostname`|g" CDF.yaml
 sed -i "s|node: localhost|node: `hostname`|g" CDF.yaml
 sed -i 's|data_iface: eth1|data_iface: eth0|g' CDF.yaml
 
-### [For loop devices] (loop 5,6 for data, loop7 for log)
 sed -i '/loop0/d' CDF.yaml
 sed -i '/loop1/d' CDF.yaml
 sed -i '/loop2/d' CDF.yaml
 sed -i '/loop3/d' CDF.yaml
 sed -i '/loop4/d' CDF.yaml
-sed -i '/loop7/d' CDF.yaml
 sed -i '/loop8/d' CDF.yaml
-sed -i "s|loop9|loop7|g" CDF.yaml
-
-### [For a storage node] (sdc, sdd for data, sde for log)
-sed -i 's/loop0/sdc/g' CDF.yaml
-sed -i 's/loop1/sdd/g' CDF.yaml
-sed -i 's/loop9/sde/g' CDF.yaml
-sed -i '/loop2/d' CDF.yaml
-sed -i '/loop3/d' CDF.yaml
-sed -i '/loop4/d' CDF.yaml
-sed -i '/loop5/d' CDF.yaml
-sed -i '/loop6/d' CDF.yaml
-sed -i '/loop7/d' CDF.yaml
-sed -i '/loop8/d' CDF.yaml
+sed -i "s|loop9|loop8|g" CDF.yaml
 
 # bootstrap (0.5 min)
 hctl bootstrap --mkfs /home/cc/cortx-hare/CDF.yaml
-
-# check status
-hctl status
 ```
-successful output
+
+
+- check hctl status
 ```
 Bytecount:
     critical : 0
@@ -194,7 +156,6 @@ Services:
 
 
 
-
 ### Part 5 - Running example1.c
 ```
 cd /home/cc/cortx-motr/motr/examples
@@ -212,7 +173,7 @@ gcc -I/home/cc/cortx-motr -DM0_EXTERN=extern -DM0_INTERNAL= -Wno-attributes -L/h
 echo -e "\nPlease run the following:\n\n./example1 $HA_ADDR $LOCAL_ADDR $PROFILE_FID $PROCESS_FID $obj_id\n\n"
 ```
 
-successful output
+- output
 ```
 AAAAAAAAAAAAAAAAAAAAAAAA
 Object read: 0
@@ -222,7 +183,60 @@ app completed: 0
 ```
 
 
-### Terminologies
+### Trouble Shoot
+
+- Ipaddr is None during bootstrap
+```
+[ERROR] Exiting with FAILURE status. Reason: Unexpected None ipaddr found in list: [Node(name='host-10-52-0-11', ipaddr=None)]
+
+# check ifconfig and find eth1 is UP
+sudo sed -i 's|tcp(eth0)|tcp(eth1)|g' /etc/libfab.conf
+sudo sed -i 's|tcp(eth0)|tcp(eth1)|g' /etc/modprobe.d/lnet.conf
+sudo modprobe lnet
+sed -i 's|data_iface: eth0|data_iface: eth1|g' CDF.yaml
+
+hctl bootstrap --mkfs /home/cc/cortx-hare/CDF.yaml
+```
+
+- How remove loop devices
+```
+# [optional] remove loop devices
+for i in {0..9}; do
+  sudo losetup -d /dev/loop$i
+done
+
+rm -rf /mnt/extra/loop-files
+```
+
+
+- How to check disk usage
+```
+# [Optional] Check disk usage
+du -sh .
+df -h
+lsblk -f
+
+[cc@sky-1 mnt]$ lsblk
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+sda      8:0    0 223.6G  0 disk 
+├─sda1   8:1    0   550M  0 part /boot/efi
+├─sda2   8:2    0     8M  0 part 
+└─sda3   8:3    0   223G  0 part /
+loop0    7:0    0   9.8G  0 loop 
+loop1    7:1    0   9.8G  0 loop 
+loop2    7:2    0   9.8G  0 loop 
+loop3    7:3    0   9.8G  0 loop 
+loop4    7:4    0   9.8G  0 loop 
+loop5    7:5    0   9.8G  0 loop 
+loop6    7:6    0   9.8G  0 loop 
+loop7    7:7    0   9.8G  0 loop 
+loop8    7:8    0   9.8G  0 loop 
+loop9    7:9    0   9.8G  0 loop 
+```
+
+
+
+
 - LNet: communication protocal
 - fabric: export the user-space API of OFI (OpenFabric interface)
 - RDMA (remote direct memory access)
