@@ -2,10 +2,19 @@
 Skylake with CC-CentOS7 (7.9) or CentOS7-2003 (7.8)
 
 ### Part 1 - Creating loop devices
+quick method
+```
+sudo mkdir -p /mnt/extra/loop-files/
+for i in {0..9}; do
+    sudo dd if=/dev/zero of=/mnt/extra/loop-files/disk$i.img bs=100M count=50
+    sudo losetup /dev/loop$i /mnt/extra/loop-files/disk$i.img
+done
+sudo chown -R cc /mnt
+```
+
+another method
 ```
 # 1 - Create files (25 GB each, 20s * 5 = 2min)
-sudo chown -R cc /mnt
-mkdir -p /mnt/extra/loop-files/
 cd /mnt/extra/loop-files/
 for i in {1..5}; do dd if=/dev/zero of=loopbackfile${i}.img bs=100M count=250; done
 
@@ -35,18 +44,19 @@ for i in {0..4}; do sudo losetup -d /dev/loop${i}; done
 cd /home/cc
 git clone --recursive https://github.com/Seagate/cortx-motr.git
 
+# [optional] switch to Jul. 26 commit
+cd /home/cc/cortx-motr && git checkout 58f3d69e51a049eb5d5e2576040cc5ee732e2410
+
 # install pip and python
 sudo yum group install -y "Development Tools"
 sudo yum install -y python-devel ansible tmux
 curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py
 python get-pip.py pip==19.3.1            
 sudo pip install --target=/usr/lib64/python2.7/site-packages ipaddress
-
-# force ansible to use python2
 sudo bash -c "echo 'all:' >> /etc/ansible/hosts"
 sudo bash -c "echo '  ansible_python_interpreter: \"/usr/bin/python2\"' >> /etc/ansible/hosts"
 
-# run build dependencies (9 min)
+# build dependencies (9 min)
 cd /home/cc/cortx-motr
 time sudo ./scripts/install-build-deps
 
@@ -89,7 +99,7 @@ sudo yum -y install yum-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
 sudo yum -y install consul-1.9.1
 
-# build and install motr
+# link motr
 cd /home/cc/cortx-motr
 sudo ./scripts/install-motr-service --link
 export M0_SRC_DIR=$PWD
@@ -184,6 +194,26 @@ app completed: 0
 
 
 ### Trouble Shoot
+- mkfs failed [Aug 12]
+```
+2022-08-16 15:20:00: Starting Motr (phase2, mkfs)...Job for motr-mkfs@0x7200000000000001:0x2.service failed because the control process exited with error code. See "systemctl status motr-mkfs@0x7200000000000001:0x2.service" and "journalctl -xe" for details.
+```
+
+solution:
+```
+# revert to Aug 3 version 
+# git rev-parse HEAD, git log
+cortx-motr commit-id: git checkout c651fe9d715e93c7d2c16aed6e29e29c94e0cf01
+cortx-hare commit-id: git checkout 150112e7912ac810876413917bf36932ae39fb69
+
+# [trying]
+- directly bootstrap
+- cd cortx-hare make, "future feature annotations is not defined"
+- cd motr, autogen, config, make; cortx-hare make; "future feature annotations is not defined"
+- remove both folders, checkout motr Aug. 3, hare using Aug. 5. Hare make success (although motr make small issue)
+```
+
+
 
 - Ipaddr is None during bootstrap
 ```
