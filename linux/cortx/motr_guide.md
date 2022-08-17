@@ -2,39 +2,14 @@
 Skylake with CC-CentOS7 (7.9) or CentOS7-2003 (7.8)
 
 ### Part 1 - Creating loop devices
-quick method
 ```
 sudo mkdir -p /mnt/extra/loop-files/
 for i in {0..9}; do
-    sudo dd if=/dev/zero of=/mnt/extra/loop-files/disk$i.img bs=100M count=50
+    sudo dd if=/dev/zero of=/mnt/extra/loop-files/disk$i.img bs=100M count=52
     sudo losetup /dev/loop$i /mnt/extra/loop-files/disk$i.img
 done
 sudo chown -R cc /mnt
 ```
-
-another method
-```
-# 1 - Create files (25 GB each, 20s * 5 = 2min)
-cd /mnt/extra/loop-files/
-for i in {1..5}; do dd if=/dev/zero of=loopbackfile${i}.img bs=100M count=250; done
-
-# 2 - Setup loop devices
-for i in {1..5}; do sudo losetup -fP loopbackfile${i}.img; done
-
-# 3 - Format devices into filesystems 
-for i in {1..5}; do printf "y" | sudo mkfs.ext4 /mnt/extra/loop-files/loopbackfile${i}.img; done
-
-# 4 - Mount loop devices
-for i in {0..4}; do mkdir -p /mnt/extra/loop-devs/loop${i}; done
-cd /mnt/extra/loop-devs/
-for i in {0..4}; do sudo mount -o loop /dev/loop${i} /mnt/extra/loop-devs/loop${i}; done
-
-# [Optional] Remove
-for i in {0..4}; do sudo umount /mnt/extra/loop-devs/loop${i}; done
-rm -rf /mnt/extra/loop-files/*.img  
-for i in {0..4}; do sudo losetup -d /dev/loop${i}; done
-```
-
 
 ### Part 2 - Building Motr and Hare
 ```
@@ -230,12 +205,9 @@ hctl bootstrap --mkfs /home/cc/cortx-hare/CDF.yaml
 
 - How remove loop devices
 ```
-# [optional] remove loop devices
-for i in {0..9}; do
-  sudo losetup -d /dev/loop$i
-done
-
-rm -rf /mnt/extra/loop-files
+# for i in {0..9}; do sudo umount /mnt/extra/loop-devs/loop${i}; done
+sudo rm -rf /mnt/extra/loop-files/*.img  
+for i in {0..5}; do sudo losetup -d /dev/loop${i}; done
 ```
 
 
