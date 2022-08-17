@@ -47,6 +47,8 @@ vector<int> solution(vector<int> &A, int K) {}
 
 
 ### 自定义 compare opterator
+- [Custom Set Operator](https://stackoverflow.com/questions/2620862/using-custom-stdset-comparator)
+
 Priority queue (custom min heap)
 ```c++
 class Greater{
@@ -56,13 +58,11 @@ public:
 	}
 };
 
-class Solution {
-public:
-    int kthSmallest(vector<vector<int>>& matrix, int k) {
-        priority_queue<tuple<int,int,int>, vector<tuple<int,int,int>>, Greater>q;
-        q.push({1,2,3});
-	}
-};
+// to use in Solution class
+priority_queue<tuple<int,int,int>, vector<tuple<int,int,int>>, Greater>q;
+q.push({1,2,3});
+
+sort(envelopes.begin(), envelopes.end(), Compare());
 ```
 
 Sort
