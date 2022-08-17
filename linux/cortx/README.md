@@ -1,19 +1,7 @@
 # How to deploy CORTX on Kubernetes
-1 - Reserve bare metals
-- Option 1: storage node with CENTOS7-2003 (7.8)
-- Option 2: skylake with CENTOS7 (7.9) and [setup loop devices](https://github.com/faradawn/tutorials/blob/main/linux/cortx/motr_loop_device.md)
+- CENTOS7-2003 (7.8) or CC-CENTOS7 (7.9)
 
-2 - Remove extra device mappers [optional]
-- [How to remove RAID and LVM](https://github.com/faradawn/tutorials/blob/main/linux/cortx/linux_raid_lvm_partition.md)
-
-3 - Use auto script [optional]
-- `wget https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/kube.sh && chmod +x kube.sh`
-- `time ./kube.sh` (Kubernetes deployment takes 5 min; Cortx 10 min)
-- initialize the cluster (at the end of Part 1)
-- skip to Part 2 - Install Cortx
-
-
-## Part 1 - Install Kubernetes
+## Part 1 - Install Kubernetes (5 min)
 ```
 # edit host IP
 ip=`ifconfig | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | head -1` && echo $ip
@@ -111,14 +99,16 @@ kubectl create -f https://gist.githubusercontent.com/faradawn/2288618db8ad005996
 ```
 
 
-## Part 2 - Install CORTX
-- If Skylake, create loop devices:
-- `wget https://raw.githubusercontent.com/faradawn/tutorials/main/linux/cortx/motr_script.sh && chmod +x motr_script.sh`
-- `./motr_script.sh`
-- choose option 1
-
-
+## Part 2 - Install CORTX (10 min)
 ```
+# create loop devices (10.8Gi each)
+sudo mkdir -p /mnt/extra/loop-files/
+for i in {0..3}; do
+    sudo dd if=/dev/zero of=/mnt/extra/loop-files/disk$i.img bs=100M count=110
+    sudo losetup /dev/loop$i /mnt/extra/loop-files/disk$i.img
+done
+sudo chown -R cc /mnt
+
 # clone k8s repo
 git clone -b main https://github.com/Seagate/cortx-k8s
 cd cortx-k8s/k8_cortx_cloud;
@@ -130,13 +120,12 @@ yq -i ".solution.storage_sets[0].nodes = [\"$HOSTNAME\"]" solution.yaml
 yq -i 'del(.solution.storage_sets[0].storage[1])' solution.yaml
 
 # change metadata and data pod
-yq -i '.solution.storage_sets[0].storage[0].devices.metadata = {"path": "/dev/loop5", "size": "20Gi"}' solution.yaml
-yq -i '.solution.storage_sets[0].storage[0].devices.data = [{"path": "/dev/loop6", "size": "20Gi"}]' solution.yaml
-yq -i '.solution.storage_sets[0].storage[0].devices.data += {"path": "/dev/loop7", "size": "20Gi"}' solution.yaml
+yq -i '.solution.storage_sets[0].storage[0].devices.metadata = [{"path": "/dev/loop1", "size": "5Gi"}'] solution.yaml
+yq -i '.solution.storage_sets[0].storage[0].devices.data = [{"path": "/dev/loop2", "size": "5Gi"}]' solution.yaml
 
 # 1 - run pre-req (two times)
-./prereq-deploy-cortx-cloud.sh -d /dev/loop8 -s solution.yaml
-sudo ./prereq-deploy-cortx-cloud.sh -d /dev/loop8 -s solution.yaml
+./prereq-deploy-cortx-cloud.sh -d /dev/loop3
+sudo ./prereq-deploy-cortx-cloud.sh -d /dev/loop3
 
 # 2 - untaint master 
 kubectl taint node `hostname` node-role.kubernetes.io/master:NoSchedule-
