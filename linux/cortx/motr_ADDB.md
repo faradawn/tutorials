@@ -1,114 +1,62 @@
 # How to use ADDB
 - Skylake CENTOS7 (7.9)
 
-## Part 1 - Building Motr
+## Part 1 - ADDB in Motr
+- Search "interesting pid" in [Daniar's Guide](https://github.com/daniarherikurniawan/cortx-bench-extra/blob/main/README.txt)
 ```
-# === First build motr === #
-# clone repository
-cd /home/cc
+# get hctl parameters
+hctl status > temp
+export HA_ADDR=$(grep hax temp | sed 's/.*inet/inet/') && echo $HA_ADDR
+export LOCAL_ADDR=$(grep -m 1 m0_client_other temp | sed 's/.*inet/inet/') && echo $LOCAL_ADDR
+export PROFILE_FID=$(grep "None None" temp | sed s/.\'default.*// | sed 's/ *0x/"<0x/;s/$/>"/') && echo $PROFILE_FID
+export PROCESS_FID=$(grep -m 1 m0_client_other temp | sed '0,/.*m0_client_other */s//"</' | sed 's/ *inet.*/>"/') && echo $PROCESS_FID
+export obj_id=12345670
+
+echo "$HA_ADDR $LOCAL_ADDR $PROFILE_FID $PROCESS_FID $obj_id"
+
+export LD_LIBRARY_PATH=/mnt/extra/cortx-motr/motr/.libs
+./example1_multithd_dan $HA_ADDR $LOCAL_ADDR $PROFILE_FID $PROCESS_FID $obj_id 1 1 1
+
+
+
+awk '{print $5}' cob_id.txt | sed 's/,//g' > cob.txt
+```
+
+
+
+
+
+## Part Optional - Within cortx_K8s
+```
+DATA_POD=$(kubectl get pods -l cortx.io/service-type=cortx-data --no-headers | awk '{print $1}' | head -n 1)
+
+kubectl exec -it $DATA_POD -c cortx-hax -- /bin/bash -c "hctl status"
+kubectl exec $DATA_POD -- hctl status
+
+kubectl exec --stdin --tty $DATA_POD -- /bin/bash
+
+mkdir -p /mnt/extra
+cd /mnt/extra
+yum install -y git
+yum groupinstall -y  "Development Tools"
+
 git clone --recursive https://github.com/Seagate/cortx-motr.git
+cd cortx-motr/motr/examples
 
-# install pip and python
-sudo yum group install -y "Development Tools"
-sudo yum install -y python-devel ansible tmux
-curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py
-python get-pip.py pip==19.3.1            
-sudo pip install --target=/usr/lib64/python2.7/site-packages ipaddress
+hctl status > temp
+export HA_ADDR=$(grep hax temp | sed 's/.*inet/inet/') && echo $HA_ADDR
+export LOCAL_ADDR=$(grep -m 1 m0_client_other temp | sed 's/.*inet/inet/') && echo $LOCAL_ADDR
+export PROFILE_FID=$(grep "None None" temp | sed s/.\'default.*// | sed 's/ *0x/"<0x/;s/$/>"/') && echo $PROFILE_FID
+export PROCESS_FID=$(grep -m 1 m0_client_other temp | sed '0,/.*m0_client_other */s//"</' | sed 's/ *inet.*/>"/') && echo $PROCESS_FID
+export obj_id=12345670
 
-# force ansible to use python2
-sudo bash -c "echo 'all:' >> /etc/ansible/hosts"
-sudo bash -c "echo '  ansible_python_interpreter: \"/usr/bin/python2\"' >> /etc/ansible/hosts"
+echo "$HA_ADDR $LOCAL_ADDR $PROFILE_FID $PROCESS_FID $obj_id"
 
-# run build dependencies (9 min)
-cd /home/cc/cortx-motr
-time sudo ./scripts/install-build-deps
-
-# configure Luster interface to eth0
-sudo sed -i 's|tcp(eth1)|tcp(eth0)|g' /etc/modprobe.d/lnet.conf
-cat /etc/modprobe.d/lnet.conf
-sudo modprobe lnet
-
-# configure libfab interface to etho0
-sudo sed -i 's|tcp(eth1)|tcp(eth0)|g' /etc/libfab.conf
-
-# [Important!] build motr (1 min with 48 cores, 7 min with 1 core)
-cd /home/cc/cortx-motr
-sudo chown -R cc .
-./autogen.sh && ./configure
-
-# [option 1: default make]
-make -j48
-
-# [option 2: all2all make] 7 min
-# time { MAKE_OPTS=-j48 CONFIGURE_OPTS=--enable-dtm0\ --disable-altogether-mode\ --enable-debug\ --with-trace-ubuf-size=32 sudo ./scripts/m0 rebuild || echo FAIL; }
-
-# === Second build hare === #
-
-# complie python util 
-cd /home/cc
-sudo yum install -y gcc rpm-build python36 python36-pip python36-devel python36-setuptools openssl-devel libffi-devel python36-dbus
-git clone --recursive https://github.com/Seagate/cortx-utils -b main
-cd cortx-utils
-./jenkins/build.sh -v 2.0.0 -b 2
-sudo pip3 install -r https://raw.githubusercontent.com/Seagate/cortx-utils/main/py-utils/python_requirements.txt
-sudo pip3 install -r https://raw.githubusercontent.com/Seagate/cortx-utils/main/py-utils/python_requirements.ext.txt
-cd py-utils/dist
-sudo yum install -y cortx-py-utils-*.noarch.rpm
-
-# clone repo
-cd /home/cc
-git clone https://github.com/Seagate/cortx-hare.git && cd cortx-hare
-
-# install fecter
-sudo yum -y install python3 python3-devel yum-utils
-sudo yum localinstall -y https://yum.puppetlabs.com/puppet/el/7/x86_64/puppet-agent-7.0.0-1.el7.x86_64.rpm
-sudo ln -sf /opt/puppetlabs/bin/facter /usr/bin/facter
-
-# install consul
-sudo yum -y install yum-utils
-sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
-sudo yum -y install consul-1.9.1
-
-# build and install motr
-cd /home/cc/cortx-motr
-sudo ./scripts/install-motr-service --link
-export M0_SRC_DIR=$PWD
-
-# build hare (2 min, 55 passed, 3 skipped, 36 warnings; 0.5min)
-cd /home/cc/cortx-hare
-make
-sudo make install
-
-# create hare group
-sudo groupadd --force hare
-sudo usermod --append --groups hare $USER
-sudo chown -R cc /var/lib/hare
-
-# add path
-PATH=/opt/seagate/cortx/hare/bin:$PATH
+export LD_LIBRARY_PATH=/mnt/extra/cortx-motr/motr/.libs/
+gcc -I/home/cc/cortx-motr -DM0_EXTERN=extern -DM0_INTERNAL= -Wno-attributes -L/mnt/extra/cortx-motr/motr/.libs -lmotr example1.c -o example1
+echo -e "\nPlease run the following:\n\n./example1 $HA_ADDR $LOCAL_ADDR $PROFILE_FID $PROCESS_FID $obj_id\n\n"
 ```
 
-
-## Part 2 - Running a test
-- Option 1: [Run all2all test](https://github.com/Seagate/cortx-motr/tree/main/dtm0/it/all2all)
-```
-# Start all2all test
-cd /home/cc/cortx-motr/dtm0/it/all2all
-time sudo ./all2all
-
-  # [Four m0d-0x7200000000000001 files successfully dumpped]
-  # [ctgdump error]
-  # [Created 6 trace files in the all2all folder]
-```
-
-
-- Option 2: [Run m0t1fs test](https://github.com/Seagate/cortx-motr/blob/main/doc/ADDB.rst)
-```
-sudo /home/cc/cortx-motr/m0t1fs/linux_kernel/st/m0t1fs_test.sh
-
-  # [failed with three erros]
-  # [Didn't create trace files in the curretn folder]
-```
 
 
 
