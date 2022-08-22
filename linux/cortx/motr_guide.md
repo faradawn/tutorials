@@ -11,7 +11,7 @@ done
 sudo chown -R cc /mnt
 ```
 
-### Part 2 - Building Motr and Hare
+### Part 2 - Building Motr and Hare (12 min)
 ```
 # === First, build motr === #
 
@@ -23,42 +23,49 @@ git clone --recursive https://github.com/Seagate/cortx-motr.git
 cd /home/cc/cortx-motr && git checkout 58f3d69e51a049eb5d5e2576040cc5ee732e2410
 
 # install pip and python
-sudo yum group install -y "Development Tools"
-sudo yum install -y python-devel ansible tmux
+sudo yum group install -y "Development Tools" | tail -5
+sudo yum install -y python-devel ansible tmux | tail -5
 curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py
 python get-pip.py pip==19.3.1            
 sudo pip install --target=/usr/lib64/python2.7/site-packages ipaddress
 sudo bash -c "echo 'all:' >> /etc/ansible/hosts"
 sudo bash -c "echo '  ansible_python_interpreter: \"/usr/bin/python2\"' >> /etc/ansible/hosts"
 
-# build dependencies (9 min)
+## build dependencies (9 min)
 cd /home/cc/cortx-motr
-time sudo ./scripts/install-build-deps
+time sudo ./scripts/install-build-deps > log-deps
+tail -4 log-deps
 
 # configure libfab and lnet (use ethX which is UP)
 sudo sed -i 's|tcp(eth1)|tcp(eth0)|g' /etc/libfab.conf
 sudo sed -i 's|tcp(eth1)|tcp(eth0)|g' /etc/modprobe.d/lnet.conf
 sudo modprobe lnet
 
-# build motr [for ADDB] (1 min with 48 cores, 7 min with 1 core)
+## build motr (1 min with 48 cores, 7 min with 1 core)
 cd /home/cc/cortx-motr
 sudo chown -R cc .
-./autogen.sh
-./configure --with-trace-max-level=M0_DEBUG
-make -j48
+
+./autogen.sh > log-autogen
+tail -5 log-autogen
+
+./configure --with-trace-max-level=M0_DEBUG > log-configure
+tail -5 log-configure
+
+make -j48 > log-make
+tail -5 log-make
 
 # === Second, build hare === #
 
 # complie python util 
 cd /home/cc
-sudo yum install -y gcc rpm-build python36 python36-pip python36-devel python36-setuptools openssl-devel libffi-devel python36-dbus
+sudo yum install -y -q gcc rpm-build python36 python36-pip python36-devel python36-setuptools openssl-devel libffi-devel python36-dbus
 git clone --recursive https://github.com/Seagate/cortx-utils -b main
 cd cortx-utils
-./jenkins/build.sh -v 2.0.0 -b 2
-sudo pip3 install -r https://raw.githubusercontent.com/Seagate/cortx-utils/main/py-utils/python_requirements.txt
-sudo pip3 install -r https://raw.githubusercontent.com/Seagate/cortx-utils/main/py-utils/python_requirements.ext.txt
+./jenkins/build.sh -v 2.0.0 -b 2 > log-jenkins
+sudo pip3 install -q -r https://raw.githubusercontent.com/Seagate/cortx-utils/main/py-utils/python_requirements.txt 2> /dev/null
+sudo pip3 install -q -r https://raw.githubusercontent.com/Seagate/cortx-utils/main/py-utils/python_requirements.ext.txt 2> /dev/null
 cd py-utils/dist
-sudo yum install -y cortx-py-utils-*.noarch.rpm
+sudo yum install -y -q cortx-py-utils-*.noarch.rpm
 
 # clone repo
 cd /home/cc
