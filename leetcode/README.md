@@ -1,18 +1,50 @@
-# 💪 一切为了算法
+# 🔥 力扣刷题顺序
 
-## 🔥 Leetcode Topics
-第一部分
-- [ ] Hash
-- [ ] 树
-- [ ] 排序
-- [ ] 深度搜索
+## Part 1 - 基本结构
 
-第二部分
-- [ ] 二分查找
-- [ ] 动态规划
+<details>  
+<summary> 回溯与BFS  </summary>
+
+- [752. Open the Lock](https://leetcode.com/problems/open-the-lock/)，BFS 要用 unordered_set 从而比 map 快，用 string 不要 vector，在哪里 check dead 都行
+- [773. Sliding Puzzle](https://leetcode.com/problems/sliding-puzzle/)，标准 BFS，用 unordered_set 和 string，初始化 vector = {{1,2},{1,2}}	
+
+</details>
+
+
+## Part 2 - 二叉树
+<details>  
+<summary> 1. 纲领和亚马逊 </summary>
+	
+- [100. Same Tree](https://leetcode.com/problems/same-tree/)，Easy, 两棵树一起前序遍历
+- [101. Symmetric Tree](https://leetcode.com/problems/symmetric-tree/)，Esay, check(l->left, r->right) and check(l->right, r->left)；可看看DFS做法
+- 
+</details>
+
+<details>  
+<summary> 2. 思路篇 </summary>
+	
+- [226. Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree/)，子问题 左和右互换
+- [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)，前序遍历构建linked list，或子问题 把左架接到右
+- [116. Populating Next Right Pointers in Each Node](https://leetcode.com/problems/populating-next-right-pointers-in-each-node/), 三叉树遍历或BFS
+
+</details>
+
+<details>  
+<summary> 3. 构造篇  </summary>
+	
+- [654. Maximum Binary Tree](https://leetcode.com/problems/maximum-binary-tree/)，简单解用自问题，找最大然后左右分治；更快方法可用 stack 在 discussion 顶部
+- [105. Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)，用前序作为根节点，用中序找到左右子节点
+- [106. Construct Binary Tree from Inorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/)，用后序作为根节点， 用中序找左右
+- [889. Construct Binary Tree from Preorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/)，难一些，前序和后序都作为根节点，
+	
+
+</details>
+
+- [ ] 二叉搜索树
 
 第三部分
 - [ ] 图
+- [ ] 深度搜索
 - [ ] 查并集
 
 第四部分
