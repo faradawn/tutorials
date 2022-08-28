@@ -32,11 +32,19 @@
 <details>  
 <summary> 3. 构造篇  </summary>
 	
-- [654. Maximum Binary Tree](https://leetcode.com/problems/maximum-binary-tree/)，简单解用自问题，找最大然后左右分治；更快方法可用 stack 在 discussion 顶部
+- [654. Maximum Binary Tree](https://leetcode.com/problems/maximum-binary-tree/)，简单解用子问题，找最大然后左右分治；更快方法可用 stack 在 discussion 顶部
 - [105. Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)，用前序作为根节点，用中序找到左右子节点
 - [106. Construct Binary Tree from Inorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/)，用后序作为根节点， 用中序找左右
-- [889. Construct Binary Tree from Preorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/)，难一些，前序和后序都作为根节点，
+- [889. Construct Binary Tree from Preorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/)，需要每次找第二颗left child，然后在post order中定位并分成左右子树；注意，left subtree 包含 index，right subtree 不包含右边界！
+- [297. Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/)，变成string，可学习 istringstream
+- [652. Find Duplicate Subtrees](https://leetcode.com/problems/find-duplicate-subtrees/)，利用 serialize 方法，stringlify 每个 subtree 并存到 map 里；same tree那道题可否 stringlify tree？	
+
+</details>
+
+<details>  
+<summary> 4. 归并排序  </summary>
 	
+- 
 
 </details>
 
