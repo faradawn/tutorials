@@ -1,4 +1,8 @@
 # 🔥 力扣刷题顺序
+一些资源
+- [CP-Algorithms](https://cp-algorithms.com/#navigation)
+- [Sphere Online Judge](https://www.spoj.com/problems/TOPOSORT/)
+- [labuladong](https://labuladong.github.io/algo/)
 
 ## Part 1 - 基本结构
 
@@ -48,9 +52,26 @@
 
 </details>
 
-- [ ] 二叉搜索树
 
-第三部分
+<details>  
+<summary> 5. 图的DFS遍历  </summary>
+
+- [797. All Paths From Source to Target](https://leetcode.com/problems/all-paths-from-source-to-target/)
+
+</details>
+
+## Part 3 - 动态规划
+
+<details>  
+<summary> 1. 字符串  </summary>
+
+- [678. Valid Parenthesis String](https://leetcode.com/problems/valid-parenthesis-string/)，好题，对角线dp，每次分成左右两segment dp；或 recursion with memo (faster)
+- 
+</details>
+
+
+
+
 - [ ] 图
 - [ ] 深度搜索
 - [ ] 查并集
