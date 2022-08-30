@@ -7,6 +7,13 @@
 ## Part 1 - 基本结构
 
 <details>  
+<summary> 数组  </summary>
+- [48. Rotate Image](https://leetcode.com/problems/rotate-image/)，顺时针：左上到右下对角线transpose，然后reverse每一列；顺时针：另一条对角线，然后reverse每一列。
+- 
+</details>
+
+
+<details>  
 <summary> 回溯与BFS  </summary>
 
 - [752. Open the Lock](https://leetcode.com/problems/open-the-lock/)，BFS 要用 unordered_set 从而比 map 快，用 string 不要 vector，在哪里 check dead 都行
@@ -56,7 +63,9 @@
 <details>  
 <summary> 5. 图的DFS遍历  </summary>
 
-- [797. All Paths From Source to Target](https://leetcode.com/problems/all-paths-from-source-to-target/)
+- [797. All Paths From Source to Target](https://leetcode.com/problems/all-paths-from-source-to-target/)，简单题标准DFS，也可以stack方法
+- [133. Clone Graph](https://leetcode.com/problems/clone-graph/)，需要 hash map for copies of nodes, 否则每次创建新的node不是旧的的neighbor
+- [2049. Count Nodes With the Highest Score](https://leetcode.com/problems/count-nodes-with-the-highest-score/discuss/1537530/JAVA-Simple-DFS-Solution-generalised-for-any-tree-with-detailed-comments.-TO(V%2BE)-SO(V%2BE))，没做出，DFS
 
 </details>
 
