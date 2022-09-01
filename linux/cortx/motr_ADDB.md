@@ -1,7 +1,6 @@
 # How to use ADDB
-- Skylake CENTOS7 (7.9)
-- the login user is cc
-
+- Can try it on jupyter notebook on [Chameleon Trovi](https://chameleoncloud.org/experiment/share/84c1d598-699b-4e8d-bee5-6fb7f5937504)
+- Or on a Skylake CENTOS 7.9 baremetal
 
 ## Part 1 - Building Motr
 ```
