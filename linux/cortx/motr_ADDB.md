@@ -220,7 +220,7 @@ gcc -I/mnt/extra/cortx-motr -DM0_EXTERN=extern -DM0_INTERNAL= -Wno-attributes -L
 ./example1_multithd_dan $HA_ADDR $LOCAL_ADDR $PROFILE_FID $PROCESS_FID $obj_id 0 0 1
 ```
 
-## Part 5 - Finding the ADDB
+## Part 5 - Generating ADDB graphs
 - some important output are indented and commented  
 ```
 # install dependencies
