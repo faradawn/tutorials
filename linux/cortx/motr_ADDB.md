@@ -339,8 +339,9 @@ scp -i $SSHKEY_FILE cc@$server_ip:/mnt/extra/cortx-motr/motr/examples/req_timeli
     # req_timelines_260499_1868.png                 100%   29KB 432.7KB/s   00:00    
 ```
 
-
-
+## Contributors
+- Daniar Kurniawan: daniar@uchicago.edu
+- Faradawn Yang: faradawn@uchicago.edu
 
 
 
