@@ -1,25 +1,46 @@
 # 🔥 力扣刷题顺序
-一些资源
+<details>  
+<summary> 一些资源  </summary>
+
 - [CP-Algorithms](https://cp-algorithms.com/#navigation)
 - [Sphere Online Judge](https://www.spoj.com/problems/TOPOSORT/)
 - [labuladong](https://labuladong.github.io/algo/)
 
+</details>
+
 ## Part 1 - 基本结构
 
 <details>  
+<summary> 双指针  </summary>
+
+
+</details>
+
+<details>  
 <summary> 数组  </summary>
+
 - [48. Rotate Image](https://leetcode.com/problems/rotate-image/)，顺时针：左上到右下对角线transpose，然后reverse每一列；顺时针：另一条对角线，然后reverse每一列。
 - 
 </details>
 
 
 <details>  
-<summary> 回溯与BFS  </summary>
-- [46. Permutations](https://leetcode.com/problems/permutations/)，标准 backtrack with onPath.
-- [78. Subsets](https://leetcode.com/problems/subsets/?show=1)，子集每次从下一个开始
-- [77. Combinations](https://leetcode.com/problems/combinations/)，第 n 层的树
-- [90. Subsets II](https://leetcode.com/problems/subsets-ii/)，有重复元素，需要剪枝
-- [40. Combination Sum II](https://leetcode.com/problems/combination-sum-ii/)，总合等于 target，需要剪枝
+<summary> 回溯排列组合  </summary>
+
+- [46. Permutations](https://leetcode.com/problems/permutations/)，标准 onPath  
+- [47. Permutations II](https://leetcode.com/problems/permutations-ii/)，剪枝, nums[i] == nums[i-1] and !used[i-1]  
+- [78. Subsets](https://leetcode.com/problems/subsets/?show=1)，每次从下一个开始  
+- [77. Combinations](https://leetcode.com/problems/combinations/)，每次从下一个开始，只取 depth == k 的一层
+- [39. Combination Sum](https://leetcode.com/problems/combination-sum/)，每次从这个开始，来模仿取同一元素无限次  
+- [90. Subsets II](https://leetcode.com/problems/subsets-ii/)，有重复元素，排序，剪枝 nums[i] == nums[i-1]
+- [40. Combination Sum II](https://leetcode.com/problems/combination-sum-ii/)，排序，剪枝 nums[i] == nums[i-1]
+- [216. Combination Sum III](https://leetcode.com/problems/combination-sum-iii/)，1-9 取 k 个数的合等于 n，每次从下一个开始，标准
+
+</details>
+
+
+<details>  
+<summary> 回溯应用题  </summary>
 
 - *seg fault* [Geek. Finding all distinct sum](https://practice.geeksforgeeks.org/problems/find-all-distinct-subset-or-subsequence-sums4424/1)，需要memo但seg fault
 - [752. Open the Lock](https://leetcode.com/problems/open-the-lock/)，BFS 要用 unordered_set 从而比 map 快，用 string 不要 vector，在哪里 check dead 都行
