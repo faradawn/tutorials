@@ -11,8 +11,13 @@
 ## Part 1 - 基本结构
 
 <details>  
-<summary> 双指针  </summary>
+<summary> 链表双指针  </summary>
 
+- [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)，使用 prioity_queue<CMP p1 > p2> minHeap，把 k 个 head 存到 pq minHeap 中
+- [19. Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/)，找到倒数第n+1个节点，x->next = x->next->next，使用dummy避免删除头的报错
+- [876. Middle of the Linked List](https://leetcode.com/problems/middle-of-the-linked-list/)，找到中点，若偶数就右边的，直接双指针 while(fast and fast->next), return slow
+- [264. Ugly Number II](https://leetcode.com/problems/ugly-number-ii/)，数学，三个链表合并
+- [数学gcd，lcm](https://mp.weixin.qq.com/s/XXsWwDml_zHiTEFPZtbe3g)，公众号文章
 
 </details>
 
