@@ -151,6 +151,9 @@ vector<int> solution(vector<int> &A, int K) {}
 
 ### 自定义 compare opterator
 - [Custom Set Operator](https://stackoverflow.com/questions/2620862/using-custom-stdset-comparator)
+- priority_queue default: 60 50 40
+- multiset default: 40 50 60
+- map default: 1 2 3
 
 Priority queue (custom min heap)
 ```c++
@@ -161,7 +164,6 @@ public:
 	}
 };
 
-// to use in Solution class
 priority_queue<tuple<int,int,int>, vector<tuple<int,int,int>>, Greater>q;
 q.push({1,2,3});
 
@@ -176,6 +178,15 @@ sort(lines.start(), lines.end(),
 	[](auto const &t1, auto const &t2) {
         return get<1>(t1) < get<1>(t2) || (get<1>(t1)==get<1>(t2) && get<0>(t1)>get<0>(t2))
 	})
+```
+
+Multiset
+```c++
+multiset<int> mult;
+default: 40 50 60
+
+multiset<int, greater<int>> mult;
+greater: 60, 50, 30
 ```
 
 ### 遍历 map
