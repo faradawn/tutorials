@@ -343,11 +343,3 @@ scp -i $SSHKEY_FILE cc@$server_ip:/mnt/extra/cortx-motr/motr/examples/req_timeli
 - Daniar Kurniawan: daniar@uchicago.edu
 - Faradawn Yang: faradawn@uchicago.edu
 
-
-
-
-
-
-
-
-
