@@ -157,17 +157,16 @@ vector<int> solution(vector<int> &A, int K) {}
 
 Priority queue (custom min heap)
 ```c++
-class Greater{
-public:
-	bool operator()(tuple<int,int,int> const &t1, tuple<int,int,int> const &t2){
+priority_queue<int, vector<int>, greater<int>> pq; // min heap;
+
+struct CMP{
+	bool operator()(tuple<int,int> const &t1, tuple<int,int> const &t2){
 	    return get<0>(t1) > get<0>(t2);
 	}
 };
 
-priority_queue<tuple<int,int,int>, vector<tuple<int,int,int>>, Greater>q;
-q.push({1,2,3});
-
-sort(envelopes.begin(), envelopes.end(), Compare());
+priority_queue<tuple<int,int>, vector<tuple<int,int>>, CMP>q;
+q.top(); q.pop(); q.push();
 ```
 
 Sort
@@ -178,6 +177,13 @@ sort(lines.start(), lines.end(),
 	[](auto const &t1, auto const &t2) {
         return get<1>(t1) < get<1>(t2) || (get<1>(t1)==get<1>(t2) && get<0>(t1)>get<0>(t2))
 	})
+
+sort(envelopes.begin(), envelopes.end(), Compare());
+```
+
+Set
+```c++
+set<tuple<int,int>, CMP>; 
 ```
 
 Multiset
