@@ -1,7 +1,6 @@
 # Python Tips and Notes
 
-## Install venv
-安装
+## Part 0 - Install venv
 ```
 python3 -m pip install --user virtualenv 
 # pip install virtualenv
@@ -18,6 +17,60 @@ python3 -m pip install beautifulsoup4
 # use requirements.txt
 python3 -m pip install -r requirements.txt
 ```
+
+## Part 1 - Using pandas and CSV
+
+### 1 - Creating a dataframe
+```py
+import pandas as pd
+data = {
+    'ID': [1, 2, 3],
+    'NAME': ['Jake', 'Amy', 'Bob'],
+    'CITY': ['Chicago', 'LA', 'LA'],
+    'COUNTRY': ['US', 'US', 'US'],
+    'CONTRCNT': [5, 10, 15]
+}
+df = pd.DataFrame(data)
+print(df)
+
+   ID  NAME     CITY COUNTRY  CONTRCNT
+0   1  Jake  Chicago      US         5
+1   2   Amy       LA      US        10
+2   3   Bob       LA      US        15
+```
+
+### 2 - Doing queries
+- `unique() -> array`
+- 'value_counts() -> series`
+
+```py
+df.shape[0] # how many rows
+df.shape[1] # how many columns
+
+# 1 - total customers
+df.shape[0]
+
+# 2 - how many customers in each city -> Series
+a = df['CITY'].value_counts()
+
+# 3 - Which country has the largest number of customers' contracts
+country = df['COUNTRY'].unique()
+maxName = ""
+maxCnt = 0
+for val in country:
+    a = df.loc[df['COUNTRY'] == val, 'CONTRCNT'].sum()
+    if a > maxCnt:
+        maxCnt = a
+        maxName = val
+
+# 4 - How many unique cities have at least one customer in them?
+len(df['CITY'].unique())
+```
+
+
+
+
+
 
 ## Python数学
 generator is an iterable
