@@ -18,7 +18,7 @@
 
 ## 快速食物
 ![img](./img/food/food-instant-1.jpg)
-![img](./img/food/food-instant-2.jpg)
+![img](./img/food/food-instant-2.JPG)
 ![img](./img/food/food-instant-3.jpg)
 
 ## 正餐食物
