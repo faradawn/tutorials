@@ -1,6 +1,7 @@
 from collections import defaultdict, deque
 
 def backtrace(parent, start, end):
+    """ reconstruct the bfs path """
     resPath = []
     while start != end:
         resPath.append(start)
@@ -10,7 +11,6 @@ def backtrace(parent, start, end):
     y = 0
     
     resStr = []
-    
     for cur in reversed(resPath):
         curx, cury = cur.split(',')
         curx = int(curx)
@@ -19,99 +19,88 @@ def backtrace(parent, start, end):
         if curx == x:
             if cury > y:
                 resStr.append("north")
-            elif cury < y:
+            else:
                 resStr.append("south")
         elif cury == y:
             if curx > x:
                 resStr.append("east")
-            elif curx < x:
+            else:
                 resStr.append("west")
+        
         x = curx
         y = cury
         
     return resStr
+                
+    
 
-        
-def solution(path):
+def shorten_path(original_path: List[str]) -> List[str]:
+    """Find the shortest path through the maze given the steps Duo took.
+
+    Parameters:
+        original_path: The list of steps Duo took through a maze.
+            Containts only the string literals 'north', 'east', 'south',
+            and 'west'.
+
+    Returns:
+        A shorter path of steps through the maze containing only the
+        string literals 'north', 'east', 'south', and 'west'.
+    """
+    # print("intput", original_path)
+    
     x = 0
     y = 0
-    prev = str(0) + ',' + str(0)
+    prev = "0,0"
     adj = defaultdict(list)
     
-    for s in path:
+    for s in original_path:
         if s == "south": y -= 1
         elif s == "north": y += 1
-        elif s == "west": x -= 1
+        elif s == "west": x-= 1
         elif s == "east": x += 1
         
         if prev not in adj:
             adj[prev] = []
         
-        cur = str(x)+','+str(y)
+        cur = str(x) + ',' + str(y)
+        if cur not in adj:
+            adj[cur] = []
         
         if str(x-1)+','+str(y) in adj:
             adj[str(x-1)+','+str(y)].append(cur)
+            adj[cur].append(str(x-1)+','+str(y))
         if str(x+1)+','+str(y) in adj:
             adj[str(x+1)+','+str(y)].append(cur)
+            adj[cur].append(str(x+1)+','+str(y))
         if str(x)+','+str(y-1) in adj:
             adj[str(x)+','+str(y-1)].append(cur)
+            adj[cur].append(str(x)+','+str(y-1))
         if str(x)+','+str(y+1) in adj:
             adj[str(x)+','+str(y+1)].append(cur)
-        
+            adj[cur].append(str(x)+','+str(y+1))
+            
         prev = cur
     
-    # start dfs
-    endnode = prev
+    
+    # dfs
+    
     visited = {}
-    parent = {}
+    parent = {} # for backtrace path
     q = deque()
     q.append("0,0")
+    
+    print("adj", adj["0,-1"], adj["7,-1"], adj["7,-7"])
     
     while q:
         for i in range(len(q)):
             cur = q.popleft()
-            if cur == endnode:
+            if cur == prev:
                 return backtrace(parent, cur, "0,0")
             for t in adj[cur]:
                 if t not in visited:
                     q.append(t)
                     parent[t] = cur
                     visited[t] = 1
-
-# test case 1
-myinput = ["south", "east", "east", "south", "south", "west", "west", "east", "east", "south"]
-
-# test case 2
-myinput = []
-temp = ["south"]*3
-myinput += temp
-temp = ["east"]*5
-myinput += temp
-temp = ["south"]*2
-myinput += temp
-temp = ["west"]*5
-myinput += temp
-temp = ["south"]*2
-myinput += temp
-temp = ["east"]*2
-myinput += temp
-temp = ["north"]*2
-myinput += temp
-temp = ["east"]*3
-myinput += temp
-temp = ["north"]*2
-myinput += temp
-temp = ["west"]*5
-myinput += temp
-temp = ["north"]*2
-myinput += temp
-temp = ["east"]*7
-myinput += temp
-temp = ["south"]*8
-myinput += temp
-
-# test case 3
-myinput = ["south","south","south","south","east","north","east","south","east", "north","north","east"]
-
-res = solution(myinput)
-print(res)
+    
+    return []
+        
