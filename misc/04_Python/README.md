@@ -2,20 +2,22 @@
 
 ## Part 0 - Install venv
 ```
+# download virtualenv
 python3 -m pip install --user virtualenv 
-# pip install virtualenv
+
+# create a env
 python3 -m venv env
 source env/bin/activate
+
+# check
 which python
 
-# activate 之后
-python3 -m pip install --upgrade pip
-python3 -m pip install requests
-python3 -m pip install selenium
-python3 -m pip install beautifulsoup4
+# install packages
+pip install --upgrade pip
+pip install numpy
 
-# use requirements.txt
-python3 -m pip install -r requirements.txt
+# install with requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Part 1 - Using pandas and CSV
