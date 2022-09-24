@@ -11,6 +11,13 @@ source env/bin/activate
 
 # check
 which python
+pip list
+
+Package    Version
+---------- -------
+numpy      1.23.3
+pip        22.2.2
+setuptools 56.0.0
 
 # install packages
 pip install --upgrade pip
