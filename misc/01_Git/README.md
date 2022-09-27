@@ -1,15 +1,17 @@
 # 一份给忙碌者的 Git 教程
 
-## Part 1 -  如何配置SSH
+## Part 1 - 如何配置SSH
 ```
-ssh-keygen -f ~/.ssh/mykey
-ssh-copy-id -i ~/.ssh/mykey user@192...
-vi config
+ssh-keygen -t ed25519
+vim copy and paste to github
 
-Host 232
-  HostName 192.168.56.232
-  User student
-  IdentityFile ~/.ssh/vbox232
+ssh eval "$(ssh-agent -s)"
+ssh-add csil-key
+
+vi config
+Host github.com
+  AddKeysToAgent yes
+  IdentityFile ~/.ssh/csil-key
 ```
 
 ### bash和git
