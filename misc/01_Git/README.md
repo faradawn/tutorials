@@ -1,6 +1,7 @@
-# 一份给忙碌者的 Git 教程
+# How to set up Git for the First Time
 
-## Part 1 - 如何配置SSH
+## Part 1: Set up Git
+### 1 - generate ssh
 ```
 ssh-keygen -t ed25519
 vim copy and paste to github
@@ -14,17 +15,21 @@ Host github.com
   IdentityFile ~/.ssh/csil-key
 ```
 
-### bash和git
-配置 .bash_profie
+### 2 - Set up Git username
 ```
+git config user.name "bob"
+git config user.email bob@gmail.com
+```
+
+### 3 - Setup Bash Profile 
+```
+# in .bash_profie
 PS1="\[\033[1;36m\]\w "
 
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
-
-alias by="cd ~/cs-home/byto-web/byto-web; code .; yarn serve"
 
 alias ..="cd .."
 alias gi="git push"
@@ -33,31 +38,19 @@ alias ga="git add ."
 alias gc="git commit -m"
 alias cl="clear"
 ```
-配置 git 用户名
-```
-git config --global --edit
-git config --global user.name "bob"
-git config --global user.email bob@gmail.com
-git config --global init.defaultBranch master
-```
-设置 git ssh
-```
-在git tutorial
-```
 
-### VS Code 设置
+### 4 - VS Code Setting
 ```
-下载插件：
-vim, one dark pro, 
+Theme: one dark pro, 
 
-允许按住键盘：
+# Allow keyboard pressing
 defaults write -g ApplePressAndHoldEnabled -bool false
 defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
 
-跳到上一个编辑：
+# Jump to last edit
 control -, control shift -
 
-设置 tab size 空格
+# Set tab size
 "editor.tabSize": 4,
 "[javascript]": {
     "editor.tabSize": 2
@@ -67,9 +60,9 @@ control -, control shift -
 },
 
 "editor.insertSpaces": true
-
 ```
-HTML 中文语言模版
+
+### 5 - HTML Chinese Template
 ```
 <!DOCTYPE html>
 <html lang="zh-Hans">
@@ -84,49 +77,7 @@ HTML 中文语言模版
 </html>
 ```
 
-
-## 第一步：配置global config
-在全局ignore files
-```
-cd ~
-git config --global user.name feynman
-git config --global user.email feynman@ghotmail.com
-
-echo "DS_Store
-.vscode/" >> .gitirgnore_global
-
-git config --global core.excludesFile "~/.gitignore_global"
-```
-新建repository
-```
-// 网页上 点击“new repository”
-git init
-git branch -m main
-git add .
-git commit -m 'first commit'
-git push -u origin main
-```
-添加ssh
-```
-// on mac
-mkdir .ssh; cd .ssh
-ssh-keygen -t rsa -f mygit_rsa
-  按回车跳过 passphrase
-
-vi ~/.ssh/config
-
-===
-Host github.com
-  AddKeysToAgent yes
-  IdentityFile ~/.ssh/mygit_rsa
-===
-
-pbcopy < ~/.ssh/mygit_rsa.pub
-  去github - settings SSH and GPG keys - add SSH key
-  黏贴，完成！
-```
-
-## 第二步：进阶操作
+## Part 2: Advanced create branch
 新建并切换分支
 ```
 git branch -a // 查看现在的branch
