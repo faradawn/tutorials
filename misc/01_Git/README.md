@@ -21,6 +21,14 @@ git config user.name "bob"
 git config user.email bob@gmail.com
 ```
 
+### 3 - Create a branch
+```
+git checkout -b sds-library
+# change branch name
+git branch -m string-sds 
+git push --set-upstream origin string-sds
+```
+
 ### 3 - Setup Bash Profile 
 ```
 # in .bash_profie
