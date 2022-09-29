@@ -31,15 +31,18 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
 
-alias ..="cd .."
 alias gi="git push"
 alias gl="git pull"
-alias ga="git add ."
-alias gc="git commit -m"
-alias cl="clear"
 ```
 
-### 4 - VS Code Setting
+### 4 - Vim set tab/space size
+```
+:set tabstop=4
+:set shiftwidth=4
+:set expandtab
+```
+
+### 5 - VS Code Setting
 ```
 Theme: one dark pro, 
 
