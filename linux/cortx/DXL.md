@@ -71,11 +71,10 @@ source ~/.bashrc
 
 ### 3 - Configure Hadoop
 ```
-# add to hadoop-env
-vi ~/hadoop/etc/hadoop/hadoop-env.sh
+# 1) vi ~/hadoop/etc/hadoop/hadoop-env.sh
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
-# vi ~/hadoop/etc/hadoop/core-site.xml
+# 2) vi ~/hadoop/etc/hadoop/core-site.xml
 <configuration>
     <property>
         <name>fs.defaultFS</name>
@@ -83,7 +82,7 @@ export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
     </property>
 </configuration>
 
-# vi ~/hadoop/etc/hadoop/hdfs-site.xml
+# 3) vi ~/hadoop/etc/hadoop/hdfs-site.xml
 <configuration>
     <property>
         <name>dfs.replication</name>
@@ -100,7 +99,7 @@ export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 </configuration>
 
 
-# vi ~/hadoop/etc/hadoop/yarn-site.xml
+# 4) vi ~/hadoop/etc/hadoop/yarn-site.xml
 <configuration>
     <property>
         <name>yarn.nodemanager.aux-services</name>
@@ -117,7 +116,7 @@ export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 </configuration>
 
 
-# vi ~/hadoop/etc/hadoop/mapred-site.xml (only on namenode)
+# 5) vi ~/hadoop/etc/hadoop/mapred-site.xml (only on namenode)
 <configuration>
     <property>
         <name>mapreduce.jobtracker.address</name>
@@ -129,6 +128,15 @@ export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
     </property>
 </configuration>
 
+# copy to worker
+scp ~
+scp ~/hadoop/etc/hadoop/hadoop-env.sh gpu-ubuntu-2:~/hadoop/etc/hadoop/hadoop-env.sh
+scp ~/hadoop/etc/hadoop/core-site.xml gpu-ubuntu-2:~/hadoop/etc/hadoop/core-site.xml
+scp ~/hadoop/etc/hadoop/hdfs-site.xml gpu-ubuntu-2:~/hadoop/etc/hadoop/hdfs-site.xml
+scp ~/hadoop/etc/hadoop/yarn-site.xml gpu-ubuntu-2:~/hadoop/etc/hadoop/yarn-site.xml
+scp ~/hadoop/etc/hadoop/mapred-site.xml gpu-ubuntu-2:~/hadoop/etc/hadoop/mapred-site.xml
+
+source /etc/environment
 
 # create data folder
 sudo mkdir -p /usr/local/hadoop/hdfs/data
@@ -142,10 +150,31 @@ chmod 700 /usr/local/hadoop/hdfs/data
 129.114.109.75
 
 # vi ~/hadoop/etc/hadoop/workers
-129.114.109.164
-
+129.114.109.16
 ```
 
+### 5 - Start
+```
+hdfs namenode -format
+
+start-dfs.sh
+
+jps
+# 18978 SecondaryNameNode
+# 19092 Jps
+# 18686 NameNode
+
+# Stop 
+stop-dfs.sh
+```
+
+### 6 - Uploading a file
+```
+
+hdfs dfs -mkdir -p /user/cc/
+
+
+```
 
 
 
