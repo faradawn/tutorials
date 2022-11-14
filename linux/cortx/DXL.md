@@ -1,7 +1,10 @@
 # Install DXL
 - Mi-100 gpu, Ubuntu 20.04
 - [Alibaba-XDL Readme](https://github.com/alibaba/x-deeplearning/wiki/%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85)
-- 
+- Try public ip in etc/hosts
+- Configure JAVA HOME in 3 sh files
+
+
 ## Part 1: Install Docker and XDL
 ```
 # Install Docker
@@ -64,6 +67,7 @@ export HADOOP_HDFS_HOME=${HADOOP_HOME}
 export YARN_HOME=${HADOOP_HOME}
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
+# add JAVA_HOME to yarn-env.sh, mapred-env.sh, hadoop-env.sh
 
 # source bash
 source ~/.bashrc
@@ -128,16 +132,6 @@ export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
     </property>
 </configuration>
 
-# copy to worker
-scp ~
-scp ~/hadoop/etc/hadoop/hadoop-env.sh gpu-ubuntu-2:~/hadoop/etc/hadoop/hadoop-env.sh
-scp ~/hadoop/etc/hadoop/core-site.xml gpu-ubuntu-2:~/hadoop/etc/hadoop/core-site.xml
-scp ~/hadoop/etc/hadoop/hdfs-site.xml gpu-ubuntu-2:~/hadoop/etc/hadoop/hdfs-site.xml
-scp ~/hadoop/etc/hadoop/yarn-site.xml gpu-ubuntu-2:~/hadoop/etc/hadoop/yarn-site.xml
-scp ~/hadoop/etc/hadoop/mapred-site.xml gpu-ubuntu-2:~/hadoop/etc/hadoop/mapred-site.xml
-
-source /etc/environment
-
 # create data folder
 sudo mkdir -p /usr/local/hadoop/hdfs/data
 sudo chown cc:cc -R /usr/local/hadoop/hdfs/data
@@ -151,6 +145,16 @@ chmod 700 /usr/local/hadoop/hdfs/data
 
 # vi ~/hadoop/etc/hadoop/workers
 129.114.109.16
+
+# Copy to worker
+scp /etc/hosts gpu-ubuntu-2:/etc/hosts
+scp ~/hadoop/etc/hadoop/hadoop-env.sh gpu-ubuntu-2:~/hadoop/etc/hadoop/hadoop-env.sh
+scp ~/hadoop/etc/hadoop/core-site.xml gpu-ubuntu-2:~/hadoop/etc/hadoop/core-site.xml
+scp ~/hadoop/etc/hadoop/hdfs-site.xml gpu-ubuntu-2:~/hadoop/etc/hadoop/hdfs-site.xml
+scp ~/hadoop/etc/hadoop/yarn-site.xml gpu-ubuntu-2:~/hadoop/etc/hadoop/yarn-site.xml
+scp ~/hadoop/etc/hadoop/mapred-site.xml gpu-ubuntu-2:~/hadoop/etc/hadoop/mapred-site.xml
+scp ~/hadoop/etc/hadoop/masters gpu-ubuntu-2:~/hadoop/etc/hadoop/masters
+scp ~/hadoop/etc/hadoop/workers gpu-ubuntu-2:~/hadoop/etc/hadoop/workers
 ```
 
 ### 5 - Start
