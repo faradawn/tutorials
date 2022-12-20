@@ -1,12 +1,18 @@
 # Linux Guide
 
 ## Basic Setup
+
 ### Set timezone
 ```
 sudo timedatectl set-timezone America/Chicago
 ```
 
-### Write a for-loop
+### Check CPU
+```
+cat /proc/cpuinfo
+```
+
+### Bash for-loop
 ```
 for i in {0..4}; do sudo echo $i; done
 ```
