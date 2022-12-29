@@ -1,5 +1,24 @@
 # How to Create Disk Paritions, Remove RAID, and Remove LVM
 
+### Remove loop devices
+```
+sudo losetup -d /dev/loop0
+```
+
+### Remove loop devices created by Snap
+```
+sudo snap list --all
+
+Name    Version        Rev    Tracking       Publisher   Notes
+core20  20220826       1623   latest/stable  canonical✓  base
+lxd     4.0.9-8e2046b  22753  4.0/stable/…   canonical✓  -
+snapd   2.57.2         17029  latest/stable  canonical✓  snapd
+
+cc@fara-flashnet:~$ sudo snap remove lxd
+lxd removed
+```
+
+
 ### Remove RAID on a disk
 ```
 # check disk types
@@ -57,10 +76,7 @@ vgremove ceph-88106951-0b32-490f-bc7e-2049d23f1df2
 ```
 
 
-### Remove loop devices
-```
-losetup -d /dev/loop0
-```
+
 
 ### Remove and create partition
 ```
