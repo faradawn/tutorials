@@ -21,8 +21,6 @@ git clone https://github.com/ucare-uchicago/flashnet.git
 cd flashnet
 vim commonutils/common_scripts/setup.sh
 apt-get install tmux
-
-
 ```
 
 
