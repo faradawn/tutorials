@@ -1,0 +1,498 @@
+{
+  "LBRCRD2022-03-01": {
+    "security_code": "LBRCRD2022-03-01",
+    "asset_class": "mcc",
+    "commodity_1": "LBR",
+    "commodity_2": "CRD",
+    "swap_rate": 11,
+    "expiry": "2022-03-01"
+  },
+  "CRDLBR2022-03-01": {
+    "security_code": "CRDLBR2022-03-01",
+    "asset_class": "mcc",
+    "commodity_1": "CRD",
+    "commodity_2": "LBR",
+    "swap_rate": 0.08,
+    "expiry": "2022-03-01"
+  },
+  "LBRCRD2022-06-01": {
+    "security_code": "LBRCRD2022-06-01",
+    "asset_class": "mcc",
+    "commodity_1": "LBR",
+    "commodity_2": "CRD",
+    "swap_rate": 16,
+    "expiry": "2022-06-01"
+  },
+  "CRDLBR2022-06-01": {
+    "security_code": "CRDLBR2022-06-01",
+    "asset_class": "mcc",
+    "commodity_1": "CRD",
+    "commodity_2": "LBR",
+    "swap_rate": 0.06,
+    "expiry": "2022-06-01"
+  },
+  "LBRCRD2022-09-01": {
+    "security_code": "LBRCRD2022-09-01",
+    "asset_class": "mcc",
+    "commodity_1": "LBR",
+    "commodity_2": "CRD",
+    "swap_rate": 12,
+    "expiry": "2022-09-01"
+  },
+  "CRDLBR2022-09-01": {
+    "security_code": "CRDLBR2022-09-01",
+    "asset_class": "mcc",
+    "commodity_1": "CRD",
+    "commodity_2": "LBR",
+    "swap_rate": 0.08,
+    "expiry": "2022-09-01"
+  },
+  "LBRCRD2022-12-01": {
+    "security_code": "LBRCRD2022-12-01",
+    "asset_class": "mcc",
+    "commodity_1": "LBR",
+    "commodity_2": "CRD",
+    "swap_rate": 2,
+    "expiry": "2022-12-01"
+  },
+  "CRDLBR2022-12-01": {
+    "security_code": "CRDLBR2022-12-01",
+    "asset_class": "mcc",
+    "commodity_1": "CRD",
+    "commodity_2": "LBR",
+    "swap_rate": 0.51,
+    "expiry": "2022-12-01"
+  },
+  "GRNCRD2022-03-01": {
+    "security_code": "GRNCRD2022-03-01",
+    "asset_class": "mcc",
+    "commodity_1": "GRN",
+    "commodity_2": "CRD",
+    "swap_rate": 13,
+    "expiry": "2022-03-01"
+  },
+  "CRDGRN2022-03-01": {
+    "security_code": "CRDGRN2022-03-01",
+    "asset_class": "mcc",
+    "commodity_1": "CRD",
+    "commodity_2": "GRN",
+    "swap_rate": 0.09,
+    "expiry": "2022-03-01"
+  },
+  "GRNCRD2022-06-01": {
+    "security_code": "GRNCRD2022-06-01",
+    "asset_class": "mcc",
+    "commodity_1": "GRN",
+    "commodity_2": "CRD",
+    "swap_rate": 4,
+    "expiry": "2022-06-01"
+  },
+  "CRDGRN2022-06-01": {
+    "security_code": "CRDGRN2022-06-01",
+    "asset_class": "mcc",
+    "commodity_1": "CRD",
+    "commodity_2": "GRN",
+    "swap_rate": 0.24,
+    "expiry": "2022-06-01"
+  },
+  "GRNCRD2022-09-01": {
+    "security_code": "GRNCRD2022-09-01",
+    "asset_class": "mcc",
+    "commodity_1": "GRN",
+    "commodity_2": "CRD",
+    "swap_rate": 18,
+    "expiry": "2022-09-01"
+  },
+  "CRDGRN2022-09-01": {
+    "security_code": "CRDGRN2022-09-01",
+    "asset_class": "mcc",
+    "commodity_1": "CRD",
+    "commodity_2": "GRN",
+    "swap_rate": 0.06,
+    "expiry": "2022-09-01"
+  },
+  "GRNCRD2022-12-01": {
+    "security_code": "GRNCRD2022-12-01",
+    "asset_class": "mcc",
+    "commodity_1": "GRN",
+    "commodity_2": "CRD",
+    "swap_rate": 17,
+    "expiry": "2022-12-01"
+  },
+  "CRDGRN2022-12-01": {
+    "security_code": "CRDGRN2022-12-01",
+    "asset_class": "mcc",
+    "commodity_1": "CRD",
+    "commodity_2": "GRN",
+    "swap_rate": 0.06,
+    "expiry": "2022-12-01"
+  },
+  "ORECRD2022-03-01": {
+    "security_code": "ORECRD2022-03-01",
+    "asset_class": "mcc",
+    "commodity_1": "ORE",
+    "commodity_2": "CRD",
+    "swap_rate": 17,
+    "expiry": "2022-03-01"
+  },
+  "CRDORE2022-03-01": {
+    "security_code": "CRDORE2022-03-01",
+    "asset_class": "mcc",
+    "commodity_1": "CRD",
+    "commodity_2": "ORE",
+    "swap_rate": 0.06,
+    "expiry": "2022-03-01"
+  },
+  "ORECRD2022-06-01": {
+    "security_code": "ORECRD2022-06-01",
+    "asset_class": "mcc",
+    "commodity_1": "ORE",
+    "commodity_2": "CRD",
+    "swap_rate": 4,
+    "expiry": "2022-06-01"
+  },
+  "CRDORE2022-06-01": {
+    "security_code": "CRDORE2022-06-01",
+    "asset_class": "mcc",
+    "commodity_1": "CRD",
+    "commodity_2": "ORE",
+    "swap_rate": 0.26,
+    "expiry": "2022-06-01"
+  },
+  "ORECRD2022-09-01": {
+    "security_code": "ORECRD2022-09-01",
+    "asset_class": "mcc",
+    "commodity_1": "ORE",
+    "commodity_2": "CRD",
+    "swap_rate": 16,
+    "expiry": "2022-09-01"
+  },
+  "CRDORE2022-09-01": {
+    "security_code": "CRDORE2022-09-01",
+    "asset_class": "mcc",
+    "commodity_1": "CRD",
+    "commodity_2": "ORE",
+    "swap_rate": 0.06,
+    "expiry": "2022-09-01"
+  },
+  "ORECRD2022-12-01": {
+    "security_code": "ORECRD2022-12-01",
+    "asset_class": "mcc",
+    "commodity_1": "ORE",
+    "commodity_2": "CRD",
+    "swap_rate": 20,
+    "expiry": "2022-12-01"
+  },
+  "CRDORE2022-12-01": {
+    "security_code": "CRDORE2022-12-01",
+    "asset_class": "mcc",
+    "commodity_1": "CRD",
+    "commodity_2": "ORE",
+    "swap_rate": 0.05,
+    "expiry": "2022-12-01"
+  },
+  "BRKCRD2022-03-01": {
+    "security_code": "BRKCRD2022-03-01",
+    "asset_class": "mcc",
+    "commodity_1": "BRK",
+    "commodity_2": "CRD",
+    "swap_rate": 20,
+    "expiry": "2022-03-01"
+  },
+  "CRDBRK2022-03-01": {
+    "security_code": "CRDBRK2022-03-01",
+    "asset_class": "mcc",
+    "commodity_1": "CRD",
+    "commodity_2": "BRK",
+    "swap_rate": 0.04,
+    "expiry": "2022-03-01"
+  },
+  "BRKCRD2022-06-01": {
+    "security_code": "BRKCRD2022-06-01",
+    "asset_class": "mcc",
+    "commodity_1": "BRK",
+    "commodity_2": "CRD",
+    "swap_rate": 14,
+    "expiry": "2022-06-01"
+  },
+  "CRDBRK2022-06-01": {
+    "security_code": "CRDBRK2022-06-01",
+    "asset_class": "mcc",
+    "commodity_1": "CRD",
+    "commodity_2": "BRK",
+    "swap_rate": 0.07,
+    "expiry": "2022-06-01"
+  },
+  "BRKCRD2022-09-01": {
+    "security_code": "BRKCRD2022-09-01",
+    "asset_class": "mcc",
+    "commodity_1": "BRK",
+    "commodity_2": "CRD",
+    "swap_rate": 18,
+    "expiry": "2022-09-01"
+  },
+  "CRDBRK2022-09-01": {
+    "security_code": "CRDBRK2022-09-01",
+    "asset_class": "mcc",
+    "commodity_1": "CRD",
+    "commodity_2": "BRK",
+    "swap_rate": 0.05,
+    "expiry": "2022-09-01"
+  },
+  "BRKCRD2022-12-01": {
+    "security_code": "BRKCRD2022-12-01",
+    "asset_class": "mcc",
+    "commodity_1": "BRK",
+    "commodity_2": "CRD",
+    "swap_rate": 12,
+    "expiry": "2022-12-01"
+  },
+  "CRDBRK2022-12-01": {
+    "security_code": "CRDBRK2022-12-01",
+    "asset_class": "mcc",
+    "commodity_1": "CRD",
+    "commodity_2": "BRK",
+    "swap_rate": 0.08,
+    "expiry": "2022-12-01"
+  },
+  "MA_2022-03-01": {
+    "security_code": "MA_2022-03-01",
+    "asset_class": "laf",
+    "underlying": "MAIZE",
+    "expiry": "2022-03-01"
+  },
+  "MA_2022-06-01": {
+    "security_code": "MA_2022-06-01",
+    "asset_class": "laf",
+    "underlying": "MAIZE",
+    "expiry": "2022-06-01"
+  },
+  "MA_2022-09-01": {
+    "security_code": "MA_2022-09-01",
+    "asset_class": "laf",
+    "underlying": "MAIZE",
+    "expiry": "2022-09-01"
+  },
+  "MA_2022-12-01": {
+    "security_code": "MA_2022-12-01",
+    "asset_class": "laf",
+    "underlying": "MAIZE",
+    "expiry": "2022-12-01"
+  },
+  "WH_2022-03-01": {
+    "security_code": "WH_2022-03-01",
+    "asset_class": "laf",
+    "underlying": "WHEAT",
+    "expiry": "2022-03-01"
+  },
+  "WH_2022-06-01": {
+    "security_code": "WH_2022-06-01",
+    "asset_class": "laf",
+    "underlying": "WHEAT",
+    "expiry": "2022-06-01"
+  },
+  "WH_2022-09-01": {
+    "security_code": "WH_2022-09-01",
+    "asset_class": "laf",
+    "underlying": "WHEAT",
+    "expiry": "2022-09-01"
+  },
+  "WH_2022-12-01": {
+    "security_code": "WH_2022-12-01",
+    "asset_class": "laf",
+    "underlying": "WHEAT",
+    "expiry": "2022-12-01"
+  },
+  "TE_2022-03-01": {
+    "security_code": "TE_2022-03-01",
+    "asset_class": "laf",
+    "underlying": "TEA",
+    "expiry": "2022-03-01"
+  },
+  "TE_2022-06-01": {
+    "security_code": "TE_2022-06-01",
+    "asset_class": "laf",
+    "underlying": "TEA",
+    "expiry": "2022-06-01"
+  },
+  "TE_2022-09-01": {
+    "security_code": "TE_2022-09-01",
+    "asset_class": "laf",
+    "underlying": "TEA",
+    "expiry": "2022-09-01"
+  },
+  "TE_2022-12-01": {
+    "security_code": "TE_2022-12-01",
+    "asset_class": "laf",
+    "underlying": "TEA",
+    "expiry": "2022-12-01" 
+  },
+  "CO_2022-03-01": {
+    "security_code": "CO_2022-03-01",
+    "asset_class": "laf",
+    "underlying": "COFFEE",
+    "expiry": "2022-03-01"
+  },
+  "CO_2022-06-01": {
+    "security_code": "CO_2022-06-01",
+    "asset_class": "laf",
+    "underlying": "COFFEE",
+    "expiry": "2022-06-01"
+  },
+  "CO_2022-09-01": {
+    "security_code": "CO_2022-09-01",
+    "asset_class": "laf",
+    "underlying": "COFFEE",
+    "expiry": "2022-09-01"
+  },
+  "CO_2022-12-01": {
+    "security_code": "CO_2022-12-01",
+    "asset_class": "laf",
+    "underlying": "COFFEE",
+    "expiry": "2022-12-01"
+  },
+  "WA_2022-03-01": {
+    "security_code": "WA_2022-03-01",
+    "asset_class": "laf",
+    "underlying": "WALNUT",
+    "expiry": "2022-03-01"
+  },
+  "WA_2022-06-01": {
+    "security_code": "WA_2022-06-01",
+    "asset_class": "laf",
+    "underlying": "WALNUT",
+    "expiry": "2022-06-01"
+  },
+  "WA_2022-09-01": {
+    "security_code": "WA_2022-09-01",
+    "asset_class": "laf",
+    "underlying": "WALNUT",
+    "expiry": "2022-09-01"
+  },
+  "WA_2022-12-01": {
+    "security_code": "WA_2022-12-01",
+    "asset_class": "laf",
+    "underlying": "WALNUT",
+    "expiry": "2022-12-01"
+  },
+  "PE_2022-03-01": {
+    "security_code": "PE_2022-03-01",
+    "asset_class": "laf",
+    "underlying": "PEANUT",
+    "expiry": "2022-03-01"
+  },
+  "PE_2022-06-01": {
+    "security_code": "PE_2022-06-01",
+    "asset_class": "laf",
+    "underlying": "PEANUT",
+    "expiry": "2022-06-01"
+  },
+  "PE_2022-09-01": {
+    "security_code": "PE_2022-09-01",
+    "asset_class": "laf",
+    "underlying": "PEANUT",
+    "expiry": "2022-09-01"
+  },
+  "PE_2022-12-01": {
+    "security_code": "PE_2022-12-01",
+    "asset_class": "laf",
+    "underlying": "PEANUT",
+    "expiry": "2022-12-01"
+  },
+  "CA_2022-03-01": {
+    "security_code": "CA_2022-03-01",
+    "asset_class": "laf",
+    "underlying": "CASHEW",
+    "expiry": "2022-03-01"
+  },
+  "CA_2022-06-01": {
+    "security_code": "CA_2022-06-01",
+    "asset_class": "laf",
+    "underlying": "CASHEW",
+    "expiry": "2022-06-01"
+  },
+  "CA_2022-09-01": {
+    "security_code": "CA_2022-09-01",
+    "asset_class": "laf",
+    "underlying": "CASHEW",
+    "expiry": "2022-09-01"
+  },
+  "CA_2022-12-01": {
+    "security_code": "CA_2022-12-01",
+    "asset_class": "laf",
+    "underlying": "CASHEW",
+    "expiry": "2022-12-01"
+  },
+  "GR_2022-03-01": {
+    "security_code": "GR_2022-03-01",
+    "asset_class": "laf",
+    "underlying": "GREEN BEAN",
+    "expiry": "2022-03-01"
+  },
+  "GR_2022-06-01": {
+    "security_code": "GR_2022-06-01",
+    "asset_class": "laf",
+    "underlying": "GREEN BEAN",
+    "expiry": "2022-06-01"
+  },
+  "GR_2022-09-01": {
+    "security_code": "GR_2022-09-01",
+    "asset_class": "laf",
+    "underlying": "GREEN BEAN",
+    "expiry": "2022-09-01"
+  },
+  "GR_2022-12-01": {
+    "security_code": "GR_2022-12-01",
+    "asset_class": "laf",
+    "underlying": "GREEN BEAN",
+    "expiry": "2022-12-01"
+  },
+  "RE_2022-03-01": {
+    "security_code": "RE_2022-03-01",
+    "asset_class": "laf",
+    "underlying": "RED BEAN",
+    "expiry": "2022-03-01"
+  },
+  "RE_2022-06-01": {
+    "security_code": "RE_2022-06-01",
+    "asset_class": "laf",
+    "underlying": "RED BEAN",
+    "expiry": "2022-06-01"
+  },
+  "RE_2022-09-01": {
+    "security_code": "RE_2022-09-01",
+    "asset_class": "laf",
+    "underlying": "RED BEAN",
+    "expiry": "2022-09-01"
+  },
+  "RE_2022-12-01": {
+    "security_code": "RE_2022-12-01",
+    "asset_class": "laf",
+    "underlying": "RED BEAN",
+    "expiry": "2022-12-01"
+  },
+  "MI_2022-03-01": {
+    "security_code": "MI_2022-03-01",
+    "asset_class": "laf",
+    "underlying": "MILK",
+    "expiry": "2022-03-01"
+  },
+  "MI_2022-06-01": {
+    "security_code": "MI_2022-06-01",
+    "asset_class": "laf",
+    "underlying": "MILK",
+    "expiry": "2022-06-01"
+  },
+  "MI_2022-09-01": {
+    "security_code": "MI_2022-09-01",
+    "asset_class": "laf",
+    "underlying": "MILK",
+    "expiry": "2022-09-01"
+  },
+  "MI_2022-12-01": {
+    "security_code": "MI_2022-12-01",
+    "asset_class": "laf",
+    "underlying": "MILK",
+    "expiry": "2022-12-01"
+  }
+}

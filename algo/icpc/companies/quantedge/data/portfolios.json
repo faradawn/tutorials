@@ -1,0 +1,24 @@
+[
+  { "portfolio_code": "BHSL", "description": "BuyHighSellLow" },
+  { "portfolio_code": "BLSH", "description": "BuyLowSellHigh" },
+  { "portfolio_code": "ITFI", "description": "ItchyFingers" },
+  { "portfolio_code": "CORE", "description": "Core" },
+  { 
+    "portfolio_code": "RIFR",
+    "description": "RiskFree",
+    "children": ["BHSL", "BLSH"],
+    "operation": "add"
+  },
+  {
+    "portfolio_code": "RECO",
+    "description": "RealisticCore",
+    "children": ["CORE", "ITFI"],
+    "operation": "subtract"
+  },
+  {
+    "portfolio_code": "ALL",
+    "description": "ALL",
+    "children": ["RIFR", "RECO"],
+    "operation": "add"
+  }
+]

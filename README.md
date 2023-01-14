@@ -2,14 +2,15 @@
 
 ## Folder structure
 
-### Folder 1 - Leetcode
-- [Graph](./leetcode/graph/)
-- [Hash](./leetcode/hash/)
-- [Math](./leetcode/math/)
+### Folder 1 - Algo
+- [Graph](./algo/graph/)
+- [Hash](./algo/hash/)
+- [Math](./algo/math/)
 
 ### Folder 2 - Linux
-- [Hacking file systems](./linux/hack-file-system/)  
 - [CORTX](./linux/cortx/)
+- [Flashnet](./linux/flashnet/)
+- [Hacking file systems](./linux/hack-file-system/)  
 
 ### Folder 3 - Misc
 - [Git](./misc/01_Git/)

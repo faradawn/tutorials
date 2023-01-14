@@ -1,0 +1,1733 @@
+[
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "BRKCRD2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "BRK",
+      "commodity_2": "CRD",
+      "swap_rate": 20,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 7.25
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "BRKCRD2022-06-01",
+      "asset_class": "mcc",
+      "commodity_1": "BRK",
+      "commodity_2": "CRD",
+      "swap_rate": 14,
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 1.0714285714285714
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "BRKCRD2022-09-01",
+      "asset_class": "mcc",
+      "commodity_1": "BRK",
+      "commodity_2": "CRD",
+      "swap_rate": 18,
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": -0.6111111111111112
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "BRKCRD2022-12-01",
+      "asset_class": "mcc",
+      "commodity_1": "BRK",
+      "commodity_2": "CRD",
+      "swap_rate": 12,
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 15.166666666666668
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CA_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "CASHEW",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": -504.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CA_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "CASHEW",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -560.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CA_2022-06-01",
+      "asset_class": "laf",
+      "underlying": "CASHEW",
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -731.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CA_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "CASHEW",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -2180.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CA_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "CASHEW",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -1955.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CA_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "CASHEW",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 69.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CO_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "COFFEE",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -1008.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CO_2022-06-01",
+      "asset_class": "laf",
+      "underlying": "COFFEE",
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -425.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CO_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "COFFEE",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 1580.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CO_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "COFFEE",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 2900.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CO_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "COFFEE",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 1081.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDBRK2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "BRK",
+      "swap_rate": 0.04,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": -33.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDBRK2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "BRK",
+      "swap_rate": 0.04,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -60.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDBRK2022-09-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "BRK",
+      "swap_rate": 0.05,
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 82.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDBRK2022-12-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "BRK",
+      "swap_rate": 0.08,
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -7.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDBRK2022-12-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "BRK",
+      "swap_rate": 0.08,
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 40.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDGRN2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "GRN",
+      "swap_rate": 0.09,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 53.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDGRN2022-06-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "GRN",
+      "swap_rate": 0.24,
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 159.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDGRN2022-06-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "GRN",
+      "swap_rate": 0.24,
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -159.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDGRN2022-12-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "GRN",
+      "swap_rate": 0.06,
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": -42.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDGRN2022-12-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "GRN",
+      "swap_rate": 0.06,
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -29.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDLBR2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "LBR",
+      "swap_rate": 0.08,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 62.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDLBR2022-06-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "LBR",
+      "swap_rate": 0.06,
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 25.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDLBR2022-09-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "LBR",
+      "swap_rate": 0.08,
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": -47.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDLBR2022-09-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "LBR",
+      "swap_rate": 0.08,
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 81.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDLBR2022-12-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "LBR",
+      "swap_rate": 0.51,
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 24.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDLBR2022-12-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "LBR",
+      "swap_rate": 0.51,
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 5.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDORE2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "ORE",
+      "swap_rate": 0.06,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 33.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDORE2022-06-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "ORE",
+      "swap_rate": 0.26,
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 2.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDORE2022-12-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "ORE",
+      "swap_rate": 0.05,
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 73.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "GRNCRD2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "GRN",
+      "commodity_2": "CRD",
+      "swap_rate": 13,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": -5.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "GRNCRD2022-09-01",
+      "asset_class": "mcc",
+      "commodity_1": "GRN",
+      "commodity_2": "CRD",
+      "swap_rate": 18,
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -2.1666666666666665
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "GR_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "GREEN BEAN",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -1120.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "GR_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "GREEN BEAN",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 210.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "GR_2022-06-01",
+      "asset_class": "laf",
+      "underlying": "GREEN BEAN",
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -561.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "GR_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "GREEN BEAN",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": -600.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "GR_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "GREEN BEAN",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 420.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "GR_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "GREEN BEAN",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 1587.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "GR_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "GREEN BEAN",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": -46.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "LBRCRD2022-06-01",
+      "asset_class": "mcc",
+      "commodity_1": "LBR",
+      "commodity_2": "CRD",
+      "swap_rate": 16,
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -4.0625
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "LBRCRD2022-06-01",
+      "asset_class": "mcc",
+      "commodity_1": "LBR",
+      "commodity_2": "CRD",
+      "swap_rate": 16,
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": -3.4375
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "LBRCRD2022-09-01",
+      "asset_class": "mcc",
+      "commodity_1": "LBR",
+      "commodity_2": "CRD",
+      "swap_rate": 12,
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 14.083333333333332
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "LBRCRD2022-12-01",
+      "asset_class": "mcc",
+      "commodity_1": "LBR",
+      "commodity_2": "CRD",
+      "swap_rate": 2,
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 27.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "MA_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "MAIZE",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 532.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "MA_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "MAIZE",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 994.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "MI_2022-06-01",
+      "asset_class": "laf",
+      "underlying": "MILK",
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -459.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "MI_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "MILK",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 480.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "MI_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "MILK",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": -2047.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "ORECRD2022-06-01",
+      "asset_class": "mcc",
+      "commodity_1": "ORE",
+      "commodity_2": "CRD",
+      "swap_rate": 4,
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 9.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "ORECRD2022-06-01",
+      "asset_class": "mcc",
+      "commodity_1": "ORE",
+      "commodity_2": "CRD",
+      "swap_rate": 4,
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 6.75
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "ORECRD2022-09-01",
+      "asset_class": "mcc",
+      "commodity_1": "ORE",
+      "commodity_2": "CRD",
+      "swap_rate": 16,
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 3.625
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "ORECRD2022-09-01",
+      "asset_class": "mcc",
+      "commodity_1": "ORE",
+      "commodity_2": "CRD",
+      "swap_rate": 16,
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -4.4375
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "ORECRD2022-12-01",
+      "asset_class": "mcc",
+      "commodity_1": "ORE",
+      "commodity_2": "CRD",
+      "swap_rate": 20,
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 2.35
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "PE_2022-06-01",
+      "asset_class": "laf",
+      "underlying": "PEANUT",
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 697.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "PE_2022-06-01",
+      "asset_class": "laf",
+      "underlying": "PEANUT",
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -1530.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "PE_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "PEANUT",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -220.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "PE_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "PEANUT",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 1150.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "PE_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "PEANUT",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 2737.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "PE_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "PEANUT",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -437.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "RE_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "RED BEAN",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -1036.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "RE_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "RED BEAN",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 1498.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "RE_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "RED BEAN",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 3580.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "TE_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "TEA",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -546.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "TE_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "TEA",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": -4940.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "WA_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "WALNUT",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 728.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "WA_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "WALNUT",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": -644.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "WH_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "WHEAT",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -1134.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "WH_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "WHEAT",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -868.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "WH_2022-06-01",
+      "asset_class": "laf",
+      "underlying": "WHEAT",
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -1632.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "WH_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "WHEAT",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 460.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "WH_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "WHEAT",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -4761.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "BRKCRD2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "BRK",
+      "commodity_2": "CRD",
+      "swap_rate": 20,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 1.05
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "BRKCRD2022-06-01",
+      "asset_class": "mcc",
+      "commodity_1": "BRK",
+      "commodity_2": "CRD",
+      "swap_rate": 14,
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": -1.4285714285714286
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CA_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "CASHEW",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 280.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CO_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "COFFEE",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 658.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CO_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "COFFEE",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -1633.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDBRK2022-06-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "BRK",
+      "swap_rate": 0.07,
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -2.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDBRK2022-09-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "BRK",
+      "swap_rate": 0.05,
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 67.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDBRK2022-09-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "BRK",
+      "swap_rate": 0.05,
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -16.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDGRN2022-09-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "GRN",
+      "swap_rate": 0.06,
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -33.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDGRN2022-09-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "GRN",
+      "swap_rate": 0.06,
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 49.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDLBR2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "LBR",
+      "swap_rate": 0.08,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 8.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDLBR2022-06-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "LBR",
+      "swap_rate": 0.06,
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -91.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDLBR2022-12-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "LBR",
+      "swap_rate": 0.51,
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -85.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDORE2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "ORE",
+      "swap_rate": 0.06,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -53.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDORE2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "ORE",
+      "swap_rate": 0.06,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 44.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "GRNCRD2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "GRN",
+      "commodity_2": "CRD",
+      "swap_rate": 13,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -1.8461538461538463
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "GRNCRD2022-12-01",
+      "asset_class": "mcc",
+      "commodity_1": "GRN",
+      "commodity_2": "CRD",
+      "swap_rate": 17,
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -0.35294117647058826
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "GR_2022-06-01",
+      "asset_class": "laf",
+      "underlying": "GREEN BEAN",
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 731.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "GR_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "GREEN BEAN",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 2553.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "LBRCRD2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "LBR",
+      "commodity_2": "CRD",
+      "swap_rate": 11,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 3.090909090909091
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "LBRCRD2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "LBR",
+      "commodity_2": "CRD",
+      "swap_rate": 11,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 2.636363636363636
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "LBRCRD2022-09-01",
+      "asset_class": "mcc",
+      "commodity_1": "LBR",
+      "commodity_2": "CRD",
+      "swap_rate": 12,
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": -7.916666666666667
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "MA_2022-06-01",
+      "asset_class": "laf",
+      "underlying": "MAIZE",
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 408.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "MA_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "MAIZE",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": -260.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "MA_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "MAIZE",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 805.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "MI_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "MILK",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 154.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "MI_2022-06-01",
+      "asset_class": "laf",
+      "underlying": "MILK",
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -2397.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "MI_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "MILK",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -851.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "ORECRD2022-06-01",
+      "asset_class": "mcc",
+      "commodity_1": "ORE",
+      "commodity_2": "CRD",
+      "swap_rate": 4,
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -4.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "ORECRD2022-12-01",
+      "asset_class": "mcc",
+      "commodity_1": "ORE",
+      "commodity_2": "CRD",
+      "swap_rate": 20,
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 1.75
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "RE_2022-06-01",
+      "asset_class": "laf",
+      "underlying": "RED BEAN",
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 323.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "TE_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "TEA",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -1160.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "WA_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "WALNUT",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -574.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "WA_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "WALNUT",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -1725.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "WH_2022-06-01",
+      "asset_class": "laf",
+      "underlying": "WHEAT",
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": -663.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "BRKCRD2022-09-01",
+      "asset_class": "mcc",
+      "commodity_1": "BRK",
+      "commodity_2": "CRD",
+      "swap_rate": 18,
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 0.9444444444444444
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CA_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "CASHEW",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 920.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CA_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "CASHEW",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -1886.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CO_2022-06-01",
+      "asset_class": "laf",
+      "underlying": "COFFEE",
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -255.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CO_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "COFFEE",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 880.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDBRK2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "BRK",
+      "swap_rate": 0.04,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 29.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDGRN2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "GRN",
+      "swap_rate": 0.09,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -31.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDLBR2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "LBR",
+      "swap_rate": 0.08,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 89.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDORE2022-09-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "ORE",
+      "swap_rate": 0.06,
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -21.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDORE2022-12-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "ORE",
+      "swap_rate": 0.05,
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 44.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "CRDORE2022-12-01",
+      "asset_class": "mcc",
+      "commodity_1": "CRD",
+      "commodity_2": "ORE",
+      "swap_rate": 0.05,
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -16.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "GRNCRD2022-06-01",
+      "asset_class": "mcc",
+      "commodity_1": "GRN",
+      "commodity_2": "CRD",
+      "swap_rate": 4,
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -23.75
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "GRNCRD2022-06-01",
+      "asset_class": "mcc",
+      "commodity_1": "GRN",
+      "commodity_2": "CRD",
+      "swap_rate": 4,
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 23.5
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "GRNCRD2022-12-01",
+      "asset_class": "mcc",
+      "commodity_1": "GRN",
+      "commodity_2": "CRD",
+      "swap_rate": 17,
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 1.411764705882353
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "GR_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "GREEN BEAN",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": -280.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "GR_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "GREEN BEAN",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 880.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "LBRCRD2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "LBR",
+      "commodity_2": "CRD",
+      "swap_rate": 11,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 3.090909090909091
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "LBRCRD2022-12-01",
+      "asset_class": "mcc",
+      "commodity_1": "LBR",
+      "commodity_2": "CRD",
+      "swap_rate": 2,
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -39.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "MA_2022-06-01",
+      "asset_class": "laf",
+      "underlying": "MAIZE",
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": -510.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "MA_2022-06-01",
+      "asset_class": "laf",
+      "underlying": "MAIZE",
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -1598.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "MA_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "MAIZE",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 2300.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "MA_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "MAIZE",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": -1587.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "ORECRD2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "ORE",
+      "commodity_2": "CRD",
+      "swap_rate": 17,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -3.5294117647058822
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "ORECRD2022-03-01",
+      "asset_class": "mcc",
+      "commodity_1": "ORE",
+      "commodity_2": "CRD",
+      "swap_rate": 17,
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 2.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "ORECRD2022-09-01",
+      "asset_class": "mcc",
+      "commodity_1": "ORE",
+      "commodity_2": "CRD",
+      "swap_rate": 16,
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": -4.125
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "PE_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "PEANUT",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 504.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "PE_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "PEANUT",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": -406.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "PE_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "PEANUT",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 1840.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "RE_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "RED BEAN",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 2139.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "TE_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "TEA",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 1880.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "WA_2022-03-01",
+      "asset_class": "laf",
+      "underlying": "WALNUT",
+      "expiry": "2022-03-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 826.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "WA_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "WALNUT",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Alabaster",
+    "quantity": 120.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "WH_2022-06-01",
+      "asset_class": "laf",
+      "underlying": "WHEAT",
+      "expiry": "2022-06-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 1479.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "WH_2022-09-01",
+      "asset_class": "laf",
+      "underlying": "WHEAT",
+      "expiry": "2022-09-01"
+    },
+    "broker_code": "Comwealth",
+    "quantity": 440.0
+  },
+  {
+    "date": "2021-01-04",
+    "security": {
+      "security_code": "WH_2022-12-01",
+      "asset_class": "laf",
+      "underlying": "WHEAT",
+      "expiry": "2022-12-01"
+    },
+    "broker_code": "Bernstein",
+    "quantity": 1886.0
+  }
+]
