@@ -1,9 +1,8 @@
 # Getting Started
 - [Flashnet GitHub](https://github.com/ucare-uchicago/flashnet)
-- Multi-SSD devices: Chameleon@UC: P3-SSD-006, 009 (create lease and select storage_devices.0.media_type = SSD, storage_devices.1.media_type = SSD)
-- Ubuntu 20.04
-- Running time 4.5 hours
-
+- Multi-SSD devices: chi.UC: P3-SSD-006, 009 (create lease and select storage_devices.0.media_type = SSD, storage_devices.1.media_type = SSD)
+- Ubuntu 20.04 CUDA
+- Trace replay time 4.5 hours
 
 ### Rani Setup Ubuntu
 ```
