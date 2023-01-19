@@ -1,6 +1,7 @@
 # Python Tips and Notes
 
-## Part 0 - Install venv
+## Part 0: Install Virtual Environment
+### 1 - venv python3
 ```
 # download virtualenv
 python3 -m pip install --user virtualenv 
@@ -27,7 +28,18 @@ pip install numpy
 pip install -r requirements.txt
 ```
 
-## Part 1 - Using pandas and CSV
+### 2 - venv python2
+```
+sudo apt install python2
+wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
+sudo python2 get-pip.py
+
+python2 -m pip install virtualenv
+python2 -m virtualenv -p python2 env
+```
+
+
+## Part 1: Using pandas and CSV
 
 ### 1 - Creating a dataframe
 ```py
@@ -75,8 +87,6 @@ for val in country:
 # 4 - How many unique cities have at least one customer in them?
 len(df['CITY'].unique())
 ```
-
-
 
 
 
