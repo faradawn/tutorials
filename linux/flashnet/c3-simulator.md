@@ -2,6 +2,9 @@
 
 ## Install  
 ```
+# Clone repo
+git clone https://github.com/lalithsuresh/absim.git
+
 # Install python2
 conda create -n c3 python=2.7 simpy==2.2 numpy 
 conda activate c3
