@@ -96,4 +96,13 @@ sudo ./basic_test.sh
     make: *** [Makefile:43: lake_uspace] Error 127
     make: Leaving directory '/home/cc/LAKE/src/kapi/uspace'
     Error: Make failed exiting...
+    
+# Resolved by putting in .bashrc so nvcc is found
+export PATH="$PATH:/usr/local/cuda/bin"
+
+# Then, another error 
+kleio/py_wrapper.c:3:10: fatal error: numpy/ndarrayobject.h: No such file or directory
+    3 | #include <numpy/ndarrayobject.h>
+
+
 ```
