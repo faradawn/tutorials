@@ -83,7 +83,7 @@ git clone https://github.com/utcs-scea/LAKE.git
 cd Lake
 sudo ./basic_test.sh
 
-# Error
+# Error 1
     6.0.0-lake
     make: Entering directory '/home/cc/LAKE/src/kapi/uspace'
     rm -f lake_uspace
@@ -97,12 +97,22 @@ sudo ./basic_test.sh
     make: Leaving directory '/home/cc/LAKE/src/kapi/uspace'
     Error: Make failed exiting...
     
-# Resolved by putting in .bashrc so nvcc is found
+# FIX: add nvcc to PATH
 export PATH="$PATH:/usr/local/cuda/bin"
 
-# Then, another error 
+# Error 2
 kleio/py_wrapper.c:3:10: fatal error: numpy/ndarrayobject.h: No such file or directory
     3 | #include <numpy/ndarrayobject.h>
 
+# Fix: install numpy and link it to /usr/include
+pip install numpy
+pip show numpy
+sudo ln -s /home/cc/.local/lib/python3.10/site-packages/numpy/core/include/numpy/ /usr/include/numpy
 
+
+# Error 3
+
+
+
+# Fix 
 ```
