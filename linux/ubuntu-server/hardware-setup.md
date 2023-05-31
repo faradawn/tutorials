@@ -7,10 +7,15 @@
 - Lenovo E420, 2G RAM, F12, select usb hdd, lvm
 - Ubuntu name Faradawn Yang, username faradawn, password 9908, server name southisland
 - 网络保留默认 eth IPv4，如果edit IPv4 或 6 就会一直转圈圈
-- （永远不要 change ownership of /etc
+- （永远不要 change ownership of /etc)
+
+### Part 2: 配置 Ubuntu
+- 设置 root 密码， `sudo passwd root`
+- 上传 SSH key，先 ssh faradawn@ipv6 并输入密码, 然后 `sudo vi ~/.ssh/authorized_keys`, 再拷贝 id_rsa.pub
+- 设置时间 `sudo timedatectl set-timezone Asia/Shanghai`
 
 
-### Part 2: 光猫桥接
+### Part 3: 光猫桥接
 - 光猫桥接，路由器拨号，获取 IPv6 地址
 - 打客服，AI重置密码失败，打人工客服输入身份证号她告诉了密码，原来是编码的后六位，账户是APP查询的3000
 - Asus 路由器，1）外部网络，从动态IP改成PPoE，账户填写联通宽带的，应用本页面）
