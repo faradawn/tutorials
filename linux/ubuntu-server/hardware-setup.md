@@ -13,6 +13,14 @@
 - 设置 root 密码， `sudo passwd root`
 - 上传 SSH key，先 ssh faradawn@ipv6 并输入密码, 然后 `sudo vi ~/.ssh/authorized_keys`, 再拷贝 id_rsa.pub
 - 设置时间 `sudo timedatectl set-timezone Asia/Shanghai`
+- 允许盖上盖子
+  ```
+  sudo vi /etc/systemd/logind.conf
+  HandleLidSwitch=ignore
+  LidSwitchIgnoreInhibited=no
+  sudo service systemd-logind restart
+  ```
+
 
 
 ### Part 3: 光猫桥接
