@@ -1,22 +1,56 @@
 # Setup LAMP for Ubuntu 20.04
 
 ### Part 1. Install Apache
-- [Ali Install LAMP](https://help.aliyun.com/document_detail/405451.html?spm=a2c4g.405452.0.0.6742522aETMA7
+- [阿里云部署LAMP教程](https://help.aliyun.com/document_detail/405451.html?spm=a2c4g.405452.0.0.6742522aETMA7)
 ```
+# 安装 Apache
 sudo ufw disable
 sudo apt update
 sudo apt-get -y install apache2
-sudo vi /etc/apache2/sites-available/000-default.conf # Set servername to southisland.com
-  # Check http access http://southisland.asus.com/, which worked in browswer
-
-sudo systemctl reload apache2
-
 sudo chown -R faradawn:faradawn /var/www/html
+
+# 路由器端口转发 8000 -> 8000
+sudo vi /etc/apache2/ports.conf, 
+  - add Listen 8000
+  - 路由器端口转发 8000
+sudo vi /etc/apache2/sites-available/000-default.conf, 
+  - change to `<VirtualHost *:80 *:8000>`
+  - set ServerName southisland.asuscomm.com, ServerAlias *.southisland.asuscomm.com
+
+# 重启
+sudo systemctl reload apache2
 ```
 
-### Part 2. Let's Encrypt 
-- Doesn't work because ISP blocks 
+### Part 2. Install PHP and MySQL
 ```
-sudo apt install python3-certbot-apache
-sudo letsencrypt
+# 安装 mysql
+sudo apt -y install mysql-server
+sudo mysql
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password by 'mynewpassword';
+
+sudo mysql_secure_installation
+sudo mysql -uroot -p
+
+# 安装 php
+sudo apt-get install php libapache2-mod-php php-mysql
+sudo echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php
+sudo systemctl restart apache2
 ```
+
+### Part 3. MySQL setup
+```
+sudo mysql -uroot -p
+CREATE DATABASE quiz_db;
+use quiz_db;
+CREATE TABLE users (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  username VARCHAR(255),
+  q1 VARCHAR(255),
+  q2 VARCHAR(255)
+);
+```
+
+
+
+
+
