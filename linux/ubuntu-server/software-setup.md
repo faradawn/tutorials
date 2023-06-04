@@ -37,17 +37,24 @@ sudo echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php
 sudo systemctl restart apache2
 ```
 
-### Part 3. MySQL setup
+### Part 3. MySQL 设置中文
 ```
+sudo vi /etc/my.cnf
+
+    [mysqld]
+    collation-server = utf8_unicode_ci
+    init-connect='SET NAMES utf8'
+    character-set-server = utf8
+
+    [client]
+    default-character-set=utf8
+
+    [mysql]
+    default-character-set=utf8
+
+sudo service mysql restart
 sudo mysql -uroot -p
-CREATE DATABASE quiz_db;
-use quiz_db;
-CREATE TABLE users (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  username VARCHAR(255),
-  q1 VARCHAR(255),
-  q2 VARCHAR(255)
-);
+show variables like '%char%';
 ```
 
 
