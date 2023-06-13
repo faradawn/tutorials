@@ -186,13 +186,17 @@ Set
 set<tuple<int,int>, CMP>; 
 ```
 
-Multiset
+Multiset (can contain duplicates, use as priority queue)
 ```c++
 multiset<int> mult;
 default: 40 50 60
 
 multiset<int, greater<int>> mult;
 greater: 60, 50, 30
+	
+# as priority queue
+mult.erase(mult.find(val));
+pqTop = *pq.rbegin();
 ```
 
 ### 遍历 map
