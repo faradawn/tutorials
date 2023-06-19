@@ -1,5 +1,31 @@
 # 所有 Backtrack problems
 
+### 随机打乱数组
+ Yett's Fisher
+```
+default_random_engine generator;
+
+for (int i = 0 ; i < n; i++) {
+    // 生成一个 [i, n-1] 区间内的随机数
+    int r = uniform_int_distribution<int>(i, n - 1)(generator);
+    swap(temp[i], temp[r]);
+}
+```
+- 水塘抽样: 从左到右以 1/i 概率选择这个数。
+
+
+### GCD 方法
+```
+int GCD(int a, int b){
+    while(b != 0 ){
+        int temp = b;
+        b = a%b;
+        a = temp;
+    }
+    return a;
+}
+```
+
 ### BFS 要点
 - 在 push 的时候 insert 到 memo，在 inert 时候 check memo 并且 insert。
 ```
