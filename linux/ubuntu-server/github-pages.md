@@ -1,7 +1,13 @@
 # 如何部署 Github Pages
 
 ### TODO
+- HTTPS mixed content problem
+jquery-3.6.0.min.js:2 Mixed Content: The page at 'https://yu-xiaonan.github.io/client/host_create.html' was loaded over HTTPS, but requested an insecure XMLHttpRequest endpoint 'http://southisland.asuscomm.com:8000/server/create_questions.php'. This request has been blocked; the content must be served over HTTPS.
 
+- fix button click
+- display each question
+- add return home button
+- display set1, set2, ...
 
 ### 注册
 - qq 邮箱，发送邮箱验证码
@@ -18,9 +24,10 @@
   mysql -u root -p
   SHOW VARIABLES LIKE "general_log%";
   SET GLOBAL general_log = 'ON';
-  // 之后关闭
-  SET GLOBAL general_log = 'OFF';
+
   // 监测
   sudo tail -f /var/lib/mysql/southisland.log
+  // 之后关闭
+  SET GLOBAL general_log = 'OFF';
   
   ```
