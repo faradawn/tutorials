@@ -158,6 +158,21 @@ vector<int> solution(vector<int> &A, int K) {}
 - multiset default: 40 50 60
 - map default: 1 2 3
 
+ChatGPT define in class comparator
+```c++
+class Solution {
+public:
+    static bool cmp(const std::vector<int>& a, const std::vector<int>& b) {
+        return a.back() < b.back();
+    }
+
+    int minimumCost(int n, vector<vector<int>>& connections) {
+        sort(connections.begin(), connections.end(), cmp);
+    }
+};
+```
+
+
 Priority queue (custom min heap)
 ```c++
 priority_queue<int, vector<int>, greater<int>> pq; // min heap;
