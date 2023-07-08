@@ -135,6 +135,10 @@
 ## 💧 C++ 模版
 
 ### Debug
+- head overflow
+```
+arr[arr.size()-i] 其实是array越界，但vector在heap所以heap overflow。
+```
 - heap free after use
 ```
 auto &[i, j, mask] = q.front(); q.pop();
