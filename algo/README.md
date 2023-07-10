@@ -8,134 +8,24 @@
 
 </details>
 
-## Part 1 - 基本结构
-
-<details>  
-<summary> 链表双指针  </summary>
-
-- [23. Merge k Sorted Lists](https://leetcode.com/problems/merge-k-sorted-lists/)，使用 prioity_queue<CMP p1 > p2> minHeap，把 k 个 head 存到 pq minHeap 中
-- [19. Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/)，找到倒数第n+1个节点，x->next = x->next->next，使用dummy避免删除头的报错
-- [876. Middle of the Linked List](https://leetcode.com/problems/middle-of-the-linked-list/)，找到中点，若偶数就右边的，直接双指针 while(fast and fast->next), return slow
-- [264. Ugly Number II](https://leetcode.com/problems/ugly-number-ii/)，数学，三个链表合并
-- [数学gcd，lcm](https://mp.weixin.qq.com/s/XXsWwDml_zHiTEFPZtbe3g)，公众号文章
-
-</details>
-
-<details>  
-<summary> 数组  </summary>
-
-- [48. Rotate Image](https://leetcode.com/problems/rotate-image/)，顺时针：左上到右下对角线transpose，然后reverse每一列；顺时针：另一条对角线，然后reverse每一列。
-- 
-</details>
-
-
-<details>  
-<summary> 回溯排列组合  </summary>
-
-- [46. Permutations](https://leetcode.com/problems/permutations/)，标准 onPath  
-- [47. Permutations II](https://leetcode.com/problems/permutations-ii/)，剪枝, nums[i] == nums[i-1] and !used[i-1]  
-- [78. Subsets](https://leetcode.com/problems/subsets/?show=1)，每次从下一个开始  
-- [77. Combinations](https://leetcode.com/problems/combinations/)，每次从下一个开始，只取 depth == k 的一层
-- [39. Combination Sum](https://leetcode.com/problems/combination-sum/)，每次从这个开始，来模仿取同一元素无限次  
-- [90. Subsets II](https://leetcode.com/problems/subsets-ii/)，有重复元素，排序，剪枝 nums[i] == nums[i-1]
-- [40. Combination Sum II](https://leetcode.com/problems/combination-sum-ii/)，排序，剪枝 nums[i] == nums[i-1]
-- [216. Combination Sum III](https://leetcode.com/problems/combination-sum-iii/)，1-9 取 k 个数的合等于 n，每次从下一个开始，标准
-
-</details>
-
-
-<details>  
-<summary> 回溯应用题  </summary>
-
-- *seg fault* [Geek. Finding all distinct sum](https://practice.geeksforgeeks.org/problems/find-all-distinct-subset-or-subsequence-sums4424/1)，需要memo但seg fault
-- [752. Open the Lock](https://leetcode.com/problems/open-the-lock/)，BFS 要用 unordered_set 从而比 map 快，用 string 不要 vector，在哪里 check dead 都行
-- [773. Sliding Puzzle](https://leetcode.com/problems/sliding-puzzle/)，标准 BFS，用 unordered_set 和 string，初始化 vector = {{1,2},{1,2}}	
-
-</details>
-
-
-## Part 2 - 二叉树
-<details>  
-<summary> 1. 纲领和亚马逊 </summary>
-	
-- [100. Same Tree](https://leetcode.com/problems/same-tree/)，Easy, 两棵树一起前序遍历
-- [101. Symmetric Tree](https://leetcode.com/problems/symmetric-tree/)，Esay, check(l->left, r->right) and check(l->right, r->left)；可看看DFS做法
-- 
-</details>
-
-<details>  
-<summary> 2. 思路篇 </summary>
-	
-- [226. Invert Binary Tree](https://leetcode.com/problems/invert-binary-tree/)，子问题 左和右互换
-- [114. Flatten Binary Tree to Linked List](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/)，前序遍历构建linked list，或子问题 把左架接到右
-- [116. Populating Next Right Pointers in Each Node](https://leetcode.com/problems/populating-next-right-pointers-in-each-node/), 三叉树遍历或BFS
-
-</details>
-
-<details>  
-<summary> 3. 构造篇  </summary>
-	
-- [654. Maximum Binary Tree](https://leetcode.com/problems/maximum-binary-tree/)，简单解用子问题，找最大然后左右分治；更快方法可用 stack 在 discussion 顶部
-- [105. Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)，用前序作为根节点，用中序找到左右子节点
-- [106. Construct Binary Tree from Inorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/)，用后序作为根节点， 用中序找左右
-- [889. Construct Binary Tree from Preorder and Postorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-postorder-traversal/)，需要每次找第二颗left child，然后在post order中定位并分成左右子树；注意，left subtree 包含 index，right subtree 不包含右边界！
-- [297. Serialize and Deserialize Binary Tree](https://leetcode.com/problems/serialize-and-deserialize-binary-tree/)，变成string，可学习 istringstream
-- [652. Find Duplicate Subtrees](https://leetcode.com/problems/find-duplicate-subtrees/)，利用 serialize 方法，stringlify 每个 subtree 并存到 map 里；same tree那道题可否 stringlify tree？	
-
-</details>
-
-<details>  
-<summary> 4. 归并排序  </summary>
-	
-- 
-
-</details>
-
-
-<details>  
-<summary> 5. 图的DFS遍历  </summary>
-
-- [797. All Paths From Source to Target](https://leetcode.com/problems/all-paths-from-source-to-target/)，简单题标准DFS，也可以stack方法
-- [133. Clone Graph](https://leetcode.com/problems/clone-graph/)，需要 hash map for copies of nodes, 否则每次创建新的node不是旧的的neighbor
-- *wrong* [2049. Count Nodes With the Highest Score](https://leetcode.com/problems/count-nodes-with-the-highest-score/discuss/1537530/JAVA-Simple-DFS-Solution-generalised-for-any-tree-with-detailed-comments.-TO(V%2BE)-SO(V%2BE))，没做出，DFS
-
-
-</details>
-
-## Part 3 - 动态规划
-
-<details>  
-<summary> 1. 字符串  </summary>
-
-- [678. Valid Parenthesis String](https://leetcode.com/problems/valid-parenthesis-string/)，好题，对角线dp，每次分成左右两segment dp；或 recursion with memo (faster)
-- 
-</details>
-
-
-
-
-- [ ] 图
-- [ ] 深度搜索
-- [ ] 查并集
-
-第四部分
-- [ ] 字典树 trie
-- [ ] 单调栈 monotonic heap
-- [ ] 线段树
-- [ ] 随机化
-- [ ] 欧拉回路 + 强连通
-
-输入数组长度
-- 10^3 可dp knapsack O(n^2)
-    - codeforces 5000
-    - leetcode 3000 以内  
-- 10^4 需要 O(n) 或者 O(nlogn)
-
-
 ## 💧 C++ 模版
 
-### Debug
-- head overflow
+### Debug 记录
+- applying non-zero offset
+```
+applying non-zero offset 18446744073709551612 to null pointer (stl_iterator.h)
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior /usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../../../include/c++/9/bits/stl_iterator.h:865:45
+```
+Solution
+```
+static bool cmp(const vector<int>&a, const vector<int>&b){
+	return a.back() <= b.back();
+}
+
+- Change <= to <
+```
+
+- heap overflow
 ```
 arr[arr.size()-i] 其实是array越界，但vector在heap所以heap overflow。
 ```
