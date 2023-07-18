@@ -29,10 +29,18 @@ static bool cmp(const vector<int>&a, const vector<int>&b){
 ```
 arr[arr.size()-i] 其实是array越界，但vector在heap所以heap overflow。
 ```
-- heap free after use
+- heap-use-after-free
+情境一
 ```
 auto &[i, j, mask] = q.front(); q.pop();
 去掉 & 就好了, 因为pop之后还reference它
+```
+情景二: LRU cache
+```
+unordered_map<int, list<int>::iterator>>mp;
+int rc = *mp[key];
+这里 dereference 一个null iterator，因为mp[key]对应的list element已经被 pop_front 了。
+这是因为 ls.front 只存了value，没有存储key
 ```
 
 ### 面试模版
