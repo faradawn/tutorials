@@ -11,7 +11,15 @@
 
 ### Part 2: 配置 Ubuntu
 - 设置 root 密码， `sudo passwd root`
-- 上传 SSH key，先 ssh faradawn@ipv6 并输入密码, 然后 `sudo vi ~/.ssh/authorized_keys`, 再拷贝 id_rsa.pub
+- 设置ssh
+  ```
+  # ssh faradawn@ipv6
+  sudo apt-get install openssh-server
+  sudo systemctl enable ssh
+  sudo systemctl start ssh
+  sudo vi ~/.ssh/authorized_keys
+    -> 黏贴进来pubkey
+  ```
 - 设置时间 `sudo timedatectl set-timezone Asia/Shanghai`
 - 允许盖上盖子
   ```
