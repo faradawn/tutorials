@@ -51,11 +51,10 @@ int rc = *mp[key];
 #include <iostream>
 
 int dp[10][10] = {0};
-memset(dp, -1, sizeof dp); // -1 is setting bytes to 1111 1111, so it's still -1.
+memset(dp, -1, sizeof dp); // -1 is setting bytes to 1111 1111, so it's still -1. 不可以 dp = {-1}
 
 vector<int> vec = {1,2,3,4};
-vector<int> vec2 = (4, -1);
-vector<int> aa = solution(vec, 2);
+vector<int> vec = (4, -1);
 vector<int> solution(vector<int> &A, int K) {}
 ```
 
