@@ -13,9 +13,10 @@
 ### Debug 记录
 - 两个double比较不一样
 ```
-0.02 != 0.01
+0.02 != 0.02
 
-解决方法，把每次减改成累加：
+=== 解决方法：
+把每次减改成累加：
 之前是 double hour -= int, 最后 hour == (double)int / int，发现 0.02 != 0.02
 改成 double add += int, 最后 add += (double)int / int, 最终 add <= hour，成功 2.02 = 2.02
 ```
@@ -25,44 +26,65 @@
 ```
 applying non-zero offset 18446744073709551612 to null pointer (stl_iterator.h)
 SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior /usr/bin/../lib/gcc/x86_64-linux-gnu/9/../../../../include/c++/9/bits/stl_iterator.h:865:45
-```
-Solution
-```
+
+=== 解决方法：
+- 改 <= 为 <
+
 static bool cmp(const vector<int>&a, const vector<int>&b){
 	return a.back() <= b.back();
 }
 
-- Change <= to <
+
 ```
 
 - heap overflow
 ```
 arr[arr.size()-i] 其实是array越界，但vector在heap所以heap overflow。
 ```
+
 - heap-use-after-free
-情境一
 ```
+情境一
 auto &[i, j, mask] = q.front(); q.pop();
 去掉 & 就好了, 因为pop之后还reference它
-```
+
+
 情景二: LRU cache
-```
 unordered_map<int, list<int>::iterator>>mp;
 int rc = *mp[key];
 这里 dereference 一个null iterator，因为mp[key]对应的list element已经被 pop_front 了。
 这是因为 ls.front 只存了value，没有存储key
 ```
 
-### 面试模版
-- 注意除0，数组长度为0
+### 竞赛模版
+ICPC竞赛
 ```c++
-#include <bits/stdc++.h>
-#include <vector>
-#include <iostream>
+#define ll long long
+#define ull unsigned ll
+#define endl "\n"
+const int INF=0x3f3f3f3f;
+const int mod=1e9+7;
+const int N=1e6+5;
 
+void solve(){
+	ll n,m,a,b; cin>>n>>m>>a>>b;
+	ll ans=0;
+	for(int i=0;i*2<=n;i++){
+		if(i>m) continue;
+		ans=max(ans,a*i+min((n-2*i),(m-i)/2)*b);
+	} cout<<ans<<endl;
+}
+int main(){
+	ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+	int T=1; //cin>>T;
+    while(T--) solve();
+}
+
+// DP初始化
 int dp[10][10] = {0};
 memset(dp, -1, sizeof dp); // -1 is setting bytes to 1111 1111, so it's still -1. 不可以 dp = {-1}
 
+// 数组初始化
 vector<int> vec = {1,2,3,4};
 vector<int> vec = (4, -1);
 vector<int> solution(vector<int> &A, int K) {}
