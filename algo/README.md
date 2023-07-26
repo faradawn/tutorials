@@ -11,6 +11,16 @@
 ## 💧 C++ 模版
 
 ### Debug 记录
+- 两个double比较不一样
+```
+0.02 != 0.01
+
+解决方法，把每次减改成累加：
+之前是 double hour -= int, 最后 hour == (double)int / int，发现 0.02 != 0.02
+改成 double add += int, 最后 add += (double)int / int, 最终 add <= hour，成功 2.02 = 2.02
+```
+
+
 - applying non-zero offset
 ```
 applying non-zero offset 18446744073709551612 to null pointer (stl_iterator.h)
