@@ -1,0 +1,366 @@
+Ceph: Object storage (RADOS)
+
+Ceph Architecture
+Ceph Pool → Placement Groups (PGs) → Object Storage Devices (OSDs)
+
+Ceph decides which PG an object goes to by hashing the object ID.
+From the client, Ceph sends an object to a specific pool
+
+Pool: mypool
+
+#example:
+PG 1: [0, 1, 2]
+PG 2: [3, 4, 5]
+PG 3: [6, 7, 8]
+you can use "sudo ceph pg dump" to get all of the pg's statistics
+
+Ceph Client → Hash(Object id) → PG → write to three acting OSDs / read from primary OSD
+
+Flashnet target: read from second OSD/ third OSD
+
+Flow of model:
+Model 1
+Accept → primary OSD
+Reject —> model 2
+		Accept → acting[1]
+		Reject → acting[2]
+
+IMPORTANT FILES/FOLDERS:
+src/librados/model:
+	this is where you can initialize all of your models, create your own models
+	https://docs.google.com/document/d/1_EUMrzfycaK5pTHIsurCRAT7BmxpSjsgggEA2AUb1Rw/edit 
+
+src/osdc/Objecter.cc:
+	this is where we decide to which OSD we are redirecting the I/O, in function _calc_target
+
+1. Running the deploy script
+
+sudo chown cc -R /mnt/
+echo y | sudo yum update
+sudo yum makecache
+sudo yum -y install subscription-manager
+sudo yum -y install firewalld
+sudo yum -y install ceph-deploy
+    # Change to:
+        yum -y install http://download.ceph.com/rpm-luminous/el7/noarch/ceph-release-1-0.el7.noarch.rpm
+    export node1_ip="10.140.82.218"
+    sudo yum -y install ntp ntpdate ntp-doc
+    sudo ntpdate 0.us.pool.ntp.org
+    sudo hwclock --systohc
+    sudo systemctl enable ntpd.service
+    sudo systemctl start ntpd.service
+    sudo yum -y install openssh-server
+    sudo bash -c "echo $node1_ip rani-storage >> /etc/hosts"
+sudo ufw disable
+    sudo firewall-cmd --state
+    sudo setenforce 0
+    sudo sed -i 's/^SELINUX=enforcing$/SELINUX=disabled/' /etc/selinux/config
+    sudo yum -y install yum-plugin-priorities
+
+sudo -i
+    sudo mkdir -p /mnt/extra/ceph_cluster
+    cd /mnt/extra/ceph_cluster
+    echo "yes" | ceph-deploy new rani-storage
+    # If error "needs_ssh", run
+        echo "yes" | ceph-deploy new rani-storage --no-ssh-copykey
+    cat ceph.conf
+
+# output ceph config with required ceph arguments
+
+# If there isn't /etc/yum.repos.d/ceph.repo
+cat << EOF | sudo tee /etc/yum.repos.d/ceph.repo
+[ceph]
+name=Ceph packages for $basearch
+baseurl=https://download.ceph.com/rpm-luminous/el7/$basearch
+enabled=1
+gpgcheck=1
+priority=1
+type=rpm-md
+gpgkey=https://download.ceph.com/keys/release.asc
+
+[ceph-noarch]
+name=Ceph noarch packages
+baseurl=https://download.ceph.com/rpm-luminous/el7/noarch
+enabled=1
+gpgcheck=1
+priority=1
+type=rpm-md
+gpgkey=https://download.ceph.com/keys/release.asc
+
+[ceph-source]
+name=Ceph source packages
+baseurl=https://download.ceph.com/rpm-luminous/el7/SRPMS
+enabled=0
+gpgcheck=1
+type=rpm-md
+gpgkey=https://download.ceph.com/keys/release.asc
+EOF
+
+sudo mv /etc/yum.repos.d/ceph.repo /etc/yum.repos.d/ceph-deploy.repo
+    ceph-deploy install --release luminous rani-storage
+    ceph-deploy install --release luminous rani-storage --gpg-url https://download.ceph.com/keys/release.asc --repo-url https://download.ceph.com/rpm-luminous/el7/noarch/
+    # If error rpm install https://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/{key}.asc appear, do
+        cd /lib/python2.7/site-packages/ceph_deploy/hosts/centos
+        nano install.py
+        # Change all  "https://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/{key}.asc".format(key=key) to https://download.ceph.com/keys/release.asc
+        # There are 2 entries, they're both under ['rpm', '--import', '...']
+        # Retry ceph-deploy install
+            ceph-deploy install --release luminous rani-storage
+    # If error RuntimeError: Failed to execute command: rpm -Uvh --replacepkgs http://ceph.com/rpm-hammer/el7/noarch/ceph-release-1-0.el7.noarch.rpm
+        cd /lib/python2.7/site-packages/ceph_deploy/hosts/centos
+        nano install.py
+        # Change all  "http://ceph.com/rpm-luminous/el7/noarch/ceph-release-1-0.el7.noarch.rpm" to https://download.ceph.com/rpm-luminous/el7/noarch/
+        # There are 2 entries, they're both under ['rpm', '-Uvh', 'replacepkgs', ...']
+        # Retry ceph-deploy install
+            ceph-deploy install --release luminous rani-storage
+    # If error can't install epel-release, do
+        # Note that I incorporated the code already to /lib/python2.7/site-packages/ceph_deploy/hosts/centos/install.py
+        wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+        ls *.rpm
+        sudo yum -y reinstall epel-release-latest-7.noarch.rpm
+    # If error can't install yum-priorities, do
+
+exit
+    sudo sed -i "s|return TYPE == 'disk'|return TYPE == 'disk' or TYPE == 'loop' or TYPE == 'part'|g" /usr/lib/python2.7/site-packages/ceph_volume/util/disk.py
+    cat /usr/lib/python2.7/site-packages/ceph_volume/util/disk.py | grep "TYPE == 'loop'"
+
+# Copy config file to all nodes, create manager daemon, and create OSDs
+sudo -i
+    cd /mnt/extra/ceph_cluster
+    # If warning "The service command supports only basic LSB actions (start, stop, restart, try-restart, reload, force-reload, status). For other actions, please try to use systemctl." appear, run
+        yum update ceph-deploy
+    ceph-deploy mon create-initial
+    ceph-deploy admin rani-storage
+    ceph-deploy mgr create rani-storage
+    ceph-deploy mds create rani-storage
+    sudo ceph status
+
+ ceph-deploy osd create --data /dev/sde rani-storage
+ ceph-deploy osd create --data /dev/sdg rani-storage
+ ceph-deploy osd create --data /dev/sdk rani-storage
+
+# somehow, doesn’t work for sdf, sdh, sdi, sdj. Why??
+# If you have created a new VD using a disk or group of disks that were previously partitioned, you may see a message like this when you try to initialize the virtual disk for LVM. 
+# so maybe, those disks were partitioned already? Let’s check /etc/lvm/lvm.conf
+cat /etc/lvm/lvm.conf | grep “filter” ⇒ cannot find anything
+
+# If caught this error "device /dev/nvme1n1 excluded by a filter", run
+    wipefs -a /dev/nvme1n1
+
+ceph tell mon.\* injectargs '--mon-allow-pool-delete=true'
+
+# Create dashboard
+sudo -i
+    cd /mnt/extra/ceph_cluster
+    sudo ceph osd pool create mypool 1 1 # Create new pool with one placement group 
+    sudo ceph osd pool set mypool size 3
+    sudo ceph osd pool application enable mypool rgw
+
+    # Wait for some moments
+
+    sudo ceph -s
+    sudo ceph health
+    
+    sudo ceph mgr module enable dashboard
+    sudo ceph mgr services
+
+    # {
+    #    "dashboard": "http://rani-storage3:7000/"
+    # }
+
+    # Port Forwarding [Run at LOCAL]
+
+        ssh -L 9999:localhost:7000  cc@192.5.87.202
+
+        # visit this at local: http://localhost:9999/
+
+    # Delete pool [IF NEEDED]
+        sudo ceph osd pool delete mypool mypool --yes-i-really-really-mean-it
+
+echo y | sudo yum install librados2-devel
+
+2. Set up different primary OSDs
+
+ceph tell mon.\* injectargs '--mon_osd_allow_primary_affinity=true'
+ceph pg dump|grep 'active+clean'|egrep "\[0,"|wc -l
+
+    # dumped all
+    # 1 --> 0
+
+ceph osd primary-affinity osd.0 0
+
+    # set osd.0 primary-affinity to 0
+    # wait some time, 5–10 seconds
+
+ceph pg dump|grep 'active+clean'|egrep "\[0,"|wc -l
+
+    # dumped all
+    # 0
+
+sudo ceph pg dump
+
+    # …
+    # … [2,0,1] …
+    # primary osd is osd.2
+
+ceph osd primary-affinity osd.2 0
+sudo ceph pg dump
+
+    # …
+    # …  [1,0,2] …
+    # …
+
+# From here, we can say that we can specify the primary OSD from Ceph
+
+# edit crushmap
+ceph osd getcrushmap -o crushmap.cm
+
+# Ceph will output (-o) a compiled CRUSH map to the filename you specified. Since the CRUSH map is in a compiled form, you must decompile it first before you can edit it.
+# To decompile a CRUSH map, execute the following:
+
+crushtool -d crushmap.cm -o crushmap.txt # decompile to .txt format
+
+# Crushmap output
+    cat crushmap.txt
+    # begin crush map
+        # tunable choose_local_tries 0
+        # tunable choose_local_fallback_tries 0
+        # tunable choose_total_tries 50
+        # tunable chooseleaf_descend_once 1
+        # tunable chooseleaf_vary_r 1
+        # tunable chooseleaf_stable 1
+        # tunable straw_calc_version 1
+        # tunable allowed_bucket_algs 54
+
+    # devices
+        # device 0 osd.0 class ssd
+        # device 1 osd.1 class ssd
+        # device 2 osd.2 class ssd
+
+    # types
+        # type 0 osd
+        # type 1 host
+        # type 2 chassis
+        # type 3 rack
+        # type 4 row
+        # type 5 pdu
+        # type 6 pod
+        # type 7 room
+        # type 8 datacenter
+        # type 9 region
+        # type 10 root
+
+    # buckets
+        # host kahfi-storage {
+        #       id -3           # do not change unnecessarily
+        #       id -4 class ssd         # do not change unnecessarily
+        #       weight 20.958
+        #       alg straw2
+        #       hash 0  # rjenkins1
+        #       item osd.0 weight 6.986
+        #       item osd.1 weight 6.986
+        #       item osd.2 weight 6.986
+        # }       
+        # root default {
+        #       id -1           # do not change unnecessarily
+        #       id -2 class ssd         # do not change unnecessarily
+        #       # weight 13.973
+        #       alg straw2
+        #       hash 0  # rjenkins1
+        #       item kahfi-storage weight 13.973
+        # }
+
+    # rules
+        # rule replicated_rule {
+        #       id 0
+        #       type replicated
+        #       min_size 1
+        #       max_size 10
+        #       step take default
+        #       step chooseleaf firstn 0 type osd # change this line, initially the last word is "host", change it to "osd"
+        #       step emit
+        # }
+
+    # end crush map
+
+# Up to now, the replication rule (min_size) is 1. If we want N-way replication where N > 1, edit the crushmap.txt then compile it
+
+nano crushmap.txt
+
+# To compile a CRUSH map, execute the following:
+
+crushtool -c crushmap.txt -o new-crushmap.cm
+
+#To set the CRUSH map for your cluster, execute the following:
+
+ceph osd setcrushmap -i new-crushmap.cm
+
+3. Github stuff
+cd /mnt/extra
+git clone git@github.com:rannnnayy/ceph-flashnet-updated.git # change username, just use git ssh
+
+# Build Prerequisites
+cd ceph-flashnet-updated
+./install-deps.sh
+
+# Building Ceph
+./do_cmake.sh
+cd build
+nano /mnt/extra/ceph-flashnet-updated/build/boost/src/Boost-stamp/download-Boost.cmake
+# change the link to https://boostorg.jfrog.io/artifactory/main/release/1.66.0/source/boost_1_66_0.tar.bz2	
+# Make librados .so object files
+make librados
+
+4. Install boost library
+cd /mnt/extra/ceph-flashnet-updated/build/boost/src/Boost
+./bootstrap.sh --prefix=/usr/
+./b2
+sudo ./b2 install
+sudo cp /usr/lib/*boost* /usr/lib64/
+
+#Put code below in /usr/include/rados/flashnet.h
+#ifndef CEPH_FLASHNET_H
+#define CEPH_FLASHNET_H
+
+enum {
+        // Flashnet flags
+        CEPH_FLASHNET_WARMUP = 0x1,
+        CEPH_FLASHNET_ML_MAPPING = 0x2,
+        CEPH_FLASHNET_VANILLA_MAPPING = 0x4,
+        CEPH_FLASHNET_ML_GRANULARITY_MAPPING = 0x8,
+};
+
+#endif
+
+
+5. Run Ceph Flashnet Client
+mkdir /mnt/extra/ceph-flashnet-updated/data
+# move trace file to the above folder, get from ucare-10
+
+Stages:
+CEPH_FLASHNET_WARMUP (write the read I/Os into the pool)
+CEPH_FLASHNET_VANILLA_MAPPING (primary OSD 0) → trace_profile
+Input trace_profile into the flashnet model
+Convert the weights and biases into the .h format (Refer to number 6 in the readme)
+Put it in the /src/librados/model folder
+Change the primary OSD to OSD 1 (Refer to number 2 in the readme)
+CEPH_FLASHNET_VANILLA_MAPPING (primary OSD 1) → trace_profile 2
+Input trace_profile 2 into the flashnet model 2
+Convert the weights and biases into the .h format (Refer to number 6 in the readme)
+Put it in the /src/librados/model folder
+CEPH_FLASHNET_ML_MAPPING → trace_profile (ml_version)
+
+# Run one file
+cd /mnt/extra/ceph-flashnet-updated/flashnet-client
+sudo ./flashnet-client-replayer.sh CEPH_FLASHNET_WARMUP /mnt/extra/ceph-flashnet/data/trace_raw/msr.cut.per_50k.rw_20_80.145.trace
+sudo ./flashnet-client-replayer.sh CEPH_FLASHNET_VANILLA_MAPPING /mnt/extra/ceph-flashnet/data/trace_raw/msr.cut.per_50k.rw_20_80.145.trace 0
+sudo ./flashnet-client-replayer.sh CEPH_FLASHNET_ML_MAPPING /mnt/extra/ceph-flashnet/data/trace_raw/msr.cut.per_50k.rw_20_80.145.trace nn_kernel v1
+
+6. Convert weights and biases into header
+cd flashnet-client
+python3 ./HZquantization.py ceph nvme <input_folder_of_weights_and_biases> <output_folder_of_header> # you can change the first two arguments to differ between each model
+# move header into /src/librados/model/
+
+7. Create a new branch for trying multithreading
+git branch <your_branch>
+git checkout <your_branch>
