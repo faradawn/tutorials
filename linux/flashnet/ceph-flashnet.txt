@@ -50,7 +50,7 @@ sudo yum -y install ceph-deploy
     sudo systemctl enable ntpd.service
     sudo systemctl start ntpd.service
     sudo yum -y install openssh-server
-    sudo bash -c "echo $node1_ip rani-storage >> /etc/hosts"
+    sudo bash -c "echo $node1_ip fara-ceph-ssd-004 >> /etc/hosts"
 sudo ufw disable
     sudo firewall-cmd --state
     sudo setenforce 0
@@ -60,9 +60,9 @@ sudo ufw disable
 sudo -i
     sudo mkdir -p /mnt/extra/ceph_cluster
     cd /mnt/extra/ceph_cluster
-    echo "yes" | ceph-deploy new rani-storage
+    echo "yes" | ceph-deploy new fara-ceph-ssd-004
     # If error "needs_ssh", run
-        echo "yes" | ceph-deploy new rani-storage --no-ssh-copykey
+        echo "yes" | ceph-deploy new fara-ceph-ssd-004 --no-ssh-copykey
     cat ceph.conf
 
 # output ceph config with required ceph arguments
@@ -97,22 +97,23 @@ gpgkey=https://download.ceph.com/keys/release.asc
 EOF
 
 sudo mv /etc/yum.repos.d/ceph.repo /etc/yum.repos.d/ceph-deploy.repo
-    ceph-deploy install --release luminous rani-storage
-    ceph-deploy install --release luminous rani-storage --gpg-url https://download.ceph.com/keys/release.asc --repo-url https://download.ceph.com/rpm-luminous/el7/noarch/
+    ceph-deploy install --release luminous fara-ceph-ssd-004
+    ceph-deploy install --release luminous fara-ceph-ssd-004 --gpg-url https://download.ceph.com/keys/release.asc --repo-url https://download.ceph.com/rpm-luminous/el7/noarch/
     # If error rpm install https://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/{key}.asc appear, do
         cd /lib/python2.7/site-packages/ceph_deploy/hosts/centos
         nano install.py
         # Change all  "https://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/{key}.asc".format(key=key) to https://download.ceph.com/keys/release.asc
         # There are 2 entries, they're both under ['rpm', '--import', '...']
         # Retry ceph-deploy install
-            ceph-deploy install --release luminous rani-storage
+            ceph-deploy install --release luminous fara-ceph-ssd-004
+	# Here 
     # If error RuntimeError: Failed to execute command: rpm -Uvh --replacepkgs http://ceph.com/rpm-hammer/el7/noarch/ceph-release-1-0.el7.noarch.rpm
         cd /lib/python2.7/site-packages/ceph_deploy/hosts/centos
         nano install.py
         # Change all  "http://ceph.com/rpm-luminous/el7/noarch/ceph-release-1-0.el7.noarch.rpm" to https://download.ceph.com/rpm-luminous/el7/noarch/
         # There are 2 entries, they're both under ['rpm', '-Uvh', 'replacepkgs', ...']
         # Retry ceph-deploy install
-            ceph-deploy install --release luminous rani-storage
+            ceph-deploy install --release luminous fara-ceph-ssd-004
     # If error can't install epel-release, do
         # Note that I incorporated the code already to /lib/python2.7/site-packages/ceph_deploy/hosts/centos/install.py
         wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
@@ -130,14 +131,14 @@ sudo -i
     # If warning "The service command supports only basic LSB actions (start, stop, restart, try-restart, reload, force-reload, status). For other actions, please try to use systemctl." appear, run
         yum update ceph-deploy
     ceph-deploy mon create-initial
-    ceph-deploy admin rani-storage
-    ceph-deploy mgr create rani-storage
-    ceph-deploy mds create rani-storage
+    ceph-deploy admin fara-ceph-ssd-004
+    ceph-deploy mgr create fara-ceph-ssd-004
+    ceph-deploy mds create fara-ceph-ssd-004
     sudo ceph status
 
- ceph-deploy osd create --data /dev/sde rani-storage
- ceph-deploy osd create --data /dev/sdg rani-storage
- ceph-deploy osd create --data /dev/sdk rani-storage
+ ceph-deploy osd create --data /dev/sde fara-ceph-ssd-004
+ ceph-deploy osd create --data /dev/sdg fara-ceph-ssd-004
+ ceph-deploy osd create --data /dev/sdk fara-ceph-ssd-004
 
 # somehow, doesn’t work for sdf, sdh, sdi, sdj. Why??
 # If you have created a new VD using a disk or group of disks that were previously partitioned, you may see a message like this when you try to initialize the virtual disk for LVM. 
@@ -165,7 +166,7 @@ sudo -i
     sudo ceph mgr services
 
     # {
-    #    "dashboard": "http://rani-storage3:7000/"
+    #    "dashboard": "http://fara-ceph-ssd-0043:7000/"
     # }
 
     # Port Forwarding [Run at LOCAL]
