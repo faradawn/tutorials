@@ -1,69 +1,49 @@
-1. Preparation
-	sudo chown cc -R /mnt/ #change owner of the /mnt directory, so that we don't need to go into sudo mode all the time
-	# need to create loop device [DON'T NEED FOR STORAGE NVME NODE]
-	# https://www.thegeekdiary.com/how-to-create-virtual-block-device-loop-device-filesystem-in-linux/
-    	# If there is only 1 physical storage, you must create loop devices!
-        # linux support block device called the loop device, which maps a normal file onto a virtual block device
+# Based on Rani's Ceph Installation Script
 
-    	# Create a file (25 GB each) [Run-Once]
+- CENTOS 7, P3-SSD-004
 
-	  mkdir -p /mnt/extra/loop-files/
-        cd /mnt/extra/loop-files/
-        dd if=/dev/zero of=loopbackfile1.img bs=100M count=250
-        cp loopbackfile1.img loopbackfile2.img
-
- 	  cd /mnt/extra/loop-files/
-        sudo losetup -fP loopbackfile1.img
-        sudo losetup -fP loopbackfile2.img
-
-        losetup -a
-            # /dev/loop0: []: (/mnt/extra/loop-files/loopbackfile1.img)
-            # /dev/loop1: []: (/mnt/extra/loop-files/loopbackfile2.img)
-
-        printf "y" | sudo mkfs.ext4 /mnt/extra/loop-files/loopbackfile1.img 
-        printf "y" | sudo mkfs.ext4 /mnt/extra/loop-files/loopbackfile2.img 
-
-    # update centos 7
-	echo y | sudo yum update
-    sudo yum makecache
-    sudo yum -y install subscription-manager
-    sudo yum -y install firewalld
+# 1. Preparation
+sudo chown cc -R /mnt/
+echo y | sudo yum update # takes a long time
+sudo yum makecache
+sudo yum -y install subscription-manager
+sudo yum -y install firewalld
 
 # add ceph repo
 sudo -i
 echo -e "[ceph-noarch]\nname=Ceph noarch packages\nbaseurl=https://download.ceph.com/rpm-luminous/el7/noarch\nenabled=1\ngpgcheck=1\ntype=rpm-md\ngpgkey=https://download.ceph.com/keys/release.asc" >> /etc/yum.repos.d/ceph.repo
 sudo -i
-    cat /etc/yum.repos.d/ceph.repo
+cat /etc/yum.repos.d/ceph.repo
 
 # fill in the ip from the chameleon cloud, NOT the floating ip
-export node1_ip="10.52.2.216" # fill in your node ip, not floating ip
+export node1_ip="10.140.83.247"
 
 # install ceph deploy and update the clock on the server
 sudo yum -y install ceph-deploy
-    sudo yum -y install ntp ntpdate ntp-doc
-    sudo ntpdate 0.us.pool.ntp.org
-    sudo hwclock --systohc
-    sudo systemctl enable ntpd.service
-    sudo systemctl start ntpd.service
-    sudo yum -y install openssh-server
+sudo yum -y install ntp ntpdate ntp-doc
+sudo ntpdate 0.us.pool.ntp.org
+sudo hwclock --systohc
+sudo systemctl enable ntpd.service
+sudo systemctl start ntpd.service
+sudo yum -y install openssh-server
     
 # fill in the node ip with the node name. make sure the node name is the same as the instance name from the chameleon
 # in this example, i use ceph-osd
-    sudo bash -c "echo $node1_ip ceph-osd >> /etc/hosts"
+    sudo bash -c "echo $node1_ip host-10-140-83-247 >> /etc/hosts"
 
 # disable firewall connections
 sudo ufw disable
-    sudo firewall-cmd --state
-    sudo setenforce 0
-    sudo sed -i 's/^SELINUX=enforcing$/SELINUX=disabled/' /etc/selinux/config
-    sudo yum -y install yum-plugin-priorities
+sudo firewall-cmd --state
+sudo setenforce 0
+sudo sed -i 's/^SELINUX=enforcing$/SELINUX=disabled/' /etc/selinux/config
+sudo yum -y install yum-plugin-priorities
 
 # deploy ceph
 sudo -i
     sudo mkdir -p /mnt/extra/ceph_cluster
     cd /mnt/extra/ceph_cluster
-    echo "yes" | ceph-deploy new ceph-osd 
-    exit
+    echo "yes" | ceph-deploy new host-10-140-83-247
+exit
 
 # check ceph conf
 sudo -i
@@ -73,3 +53,15 @@ sudo -i
 # patch the repo
 sudo -i
     sudo mv /etc/yum.repos.d/ceph.repo /etc/yum.repos.d/ceph-deploy.repo
+
+
+# Next, pick up from line 129 on Rani's Readme 
+# https://github.com/kahfizulkifli/ceph-flashnet-updated/blob/rani/README.txt#L129C1-L130C1
+
+ceph-deploy mon create-initial
+
+-> Error: 
+[ceph_deploy.mon][ERROR ] ceph needs to be installed in remote host: host-10-140-83-247
+[ceph_deploy][ERROR ] GenericError: Failed to create 1 monitors
+
+
