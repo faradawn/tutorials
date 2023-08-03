@@ -56,9 +56,17 @@ sudo -i
 
 
 # Next, pick up from line 129 on Rani's Readme 
-# https://github.com/kahfizulkifli/ceph-flashnet-updated/blob/rani/README.txt#L129C1-L130C1
+# https://github.com/kahfizulkifli/ceph-flashnet-updated/blob/rani/README.txt
 
+sudo -i
+cd /mnt/extra/ceph_cluster
+# If warning "The service command supports only basic LSB actions (start, stop, restart, try-restart, reload, force-reload, status). For other actions, please try to use systemctl." appear, run
+    yum update ceph-deploy
 ceph-deploy mon create-initial
+ceph-deploy admin rani-storage
+ceph-deploy mgr create rani-storage
+ceph-deploy mds create rani-storage
+ceph status
 
 -> Error: 
 [ceph_deploy.mon][ERROR ] ceph needs to be installed in remote host: host-10-140-83-247
