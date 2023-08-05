@@ -53,6 +53,7 @@ sudo -i
 # patch the repo
 sudo -i
     sudo mv /etc/yum.repos.d/ceph.repo /etc/yum.repos.d/ceph-deploy.repo
+# Install Ceph
 
 
 # Next, pick up from line 129 on Rani's Readme 
