@@ -43,7 +43,6 @@ sudo -i
     sudo mkdir -p /mnt/extra/ceph_cluster
     cd /mnt/extra/ceph_cluster
     echo "yes" | ceph-deploy new host-10-140-83-247
-exit
 
 # check ceph conf
 sudo -i
@@ -53,24 +52,25 @@ sudo -i
 # patch the repo
 sudo -i
     sudo mv /etc/yum.repos.d/ceph.repo /etc/yum.repos.d/ceph-deploy.repo
-# Install Ceph
+# Fara, install Ceph
+    ceph-deploy install host-10-140-83-247
 
-
-# Next, pick up from line 129 on Rani's Readme 
-# https://github.com/kahfizulkifli/ceph-flashnet-updated/blob/rani/README.txt
+# Next, pick up from line 129 on Rani's Readme, https://github.com/kahfizulkifli/ceph-flashnet-updated/blob/rani/README.txt
 
 sudo -i
 cd /mnt/extra/ceph_cluster
-# If warning "The service command supports only basic LSB actions (start, stop, restart, try-restart, reload, force-reload, status). For other actions, please try to use systemctl." appear, run
-    yum update ceph-deploy
 ceph-deploy mon create-initial
-ceph-deploy admin rani-storage
-ceph-deploy mgr create rani-storage
-ceph-deploy mds create rani-storage
+ceph-deploy admin host-10-140-83-247
+ceph-deploy mgr create host-10-140-83-247
+ceph-deploy mds create host-10-140-83-247
 ceph status
 
--> Error: 
-[ceph_deploy.mon][ERROR ] ceph needs to be installed in remote host: host-10-140-83-247
-[ceph_deploy][ERROR ] GenericError: Failed to create 1 monitors
+# -> create-initial failed saying: 
+# [ceph_deploy.mon][ERROR ] ceph needs to be installed in remote host: host-10-140-83-247
+# [ceph_deploy][ERROR ] GenericError: Failed to create 1 monitors
+# -> do "ceph-deploy install host-10-140-83-247"
 
+ceph-deploy osd create --data /dev/nvme0n1 host-10-140-83-247
+ceph-deploy osd create --data /dev/nvme1n1 host-10-140-83-247
+ceph-deploy osd create --data /dev/nvme2n1 host-10-140-83-247
 
