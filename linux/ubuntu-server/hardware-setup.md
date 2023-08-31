@@ -28,7 +28,17 @@
   LidSwitchIgnoreInhibited=no
   sudo service systemd-logind restart
   ```
+- [2023-08-31] 关机
+  ```
+  # check uptime (91 dyas)
+  w
 
+  # all lid close
+  sudo vi /etc/systemd/logind.conf
+  HandleLidSwitch=suspend
+  LidSwitchIgnoreInhibited=yes
+  sudo service systemd-logind restart
+  ```
 
 
 ### Part 3: 光猫桥接
