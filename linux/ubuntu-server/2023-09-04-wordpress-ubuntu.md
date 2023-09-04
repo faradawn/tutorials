@@ -1,5 +1,5 @@
 # Install Wordpress on Ubuntu
-- AWS EC2 ubuntu 22.04
+- AWS 新加坡国内慢且ip封, 选香港, EC2 t3 micro (free tier) ubuntu 22.04.
 - [Digital Ocean guide](https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-on-ubuntu-22-04-with-a-lamp-stack)
 - [Vexx Host](https://vexxhost.com/resources/tutorials/how-to-install-wordpress-with-ubuntu-20-04-and-a-lamp-stack/)
 
