@@ -120,7 +120,12 @@ sudo systemctl reload apache2
   -> Success!
 ```
 
-
+## Login to Wordpress
+```
+http://18.163.208.46/wp-admin/
+- username: xx_user
+- password: xxpassword
+```
 
 
 
