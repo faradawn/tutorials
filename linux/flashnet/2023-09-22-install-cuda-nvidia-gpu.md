@@ -17,7 +17,26 @@ wget https://us.download.nvidia.com/XFree86/Linux-x86_64/515.76/NVIDIA-Linux-x86
 sudo sh NVIDIA-Linux-x86_64-515.76.run -s
 
 nvidia-smi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ```
+
+
+
 
 
 
