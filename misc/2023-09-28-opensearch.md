@@ -38,6 +38,13 @@ pip install -r requirements-dev.txt
 
 ## Logs
 
+### [2023-10-12] Questions for Dhurbo 
+- Can I download a ML model after training such as KMeans? No. How to find the undeployed model_id? Cannot find. 
+- Where did my uploaded data (CSV, models) go? Not a filesystem, but a database. When deploy model, will load into cache. 
+- What does it mean a model is responding on two nodes?
+- TODO: download the distil cased model and create a python script. 
+
+
 ### Develop ML model
 - Following the [notebook example](https://opensearch-project.github.io/opensearch-py-ml/examples/demo_ml_commons_integration.html) of sentence transformers.
 
