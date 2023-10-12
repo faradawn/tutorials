@@ -38,6 +38,9 @@ pip install -r requirements-dev.txt
 
 ## Logs
 
+### Develop ML model
+- Following the [notebook example](https://opensearch-project.github.io/opensearch-py-ml/examples/demo_ml_commons_integration.html) of sentence transformers.
+
 ### TODO: try ml demo notebook
 
 ### How to show all indicies?
