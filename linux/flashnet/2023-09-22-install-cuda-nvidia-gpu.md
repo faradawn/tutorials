@@ -1,6 +1,9 @@
-# Install RTX6000 for Ubuntu 20.04
-- RTX6000
-- CC-Ubuntu20.04 (1.27 GB)
+# Install CUDA CUDA 11.7.1 for RTX 6000
+- RTX6000, CC-Ubuntu20.04 (1.27 GB)
+- python 3.8.10, 
+- pytorch v2.0.0
+- torchvision v0.15.1
+
 ## Install
 ```
 # remove old installations [optional]
@@ -21,8 +24,24 @@ sudo sh NVIDIA-Linux-x86_64-515.76.run -s
 nvidia-smi
 ```
 
+## Pytorch
+- torch 2.1 -> CUDA 12.1
+- torch 2.0 -> CUDA 11.7
+```
+# For torch 2.0
+pip install torch==2.0.0 torchvision==0.15.1
+
+print("torch requires", torch.version.cuda)
+print("Is CUDA available:", torch.cuda.is_available())
+```
+
+
 ## Errors
 ```
+# [2023-10-14] Running pytroch CNN, RuntimeError: cuDNN error: CUDNN_STATUS_NOT_INITIALIZED
+https://pytorch.org/get-started/previous-versions/
+
+
 # One
 ERROR: The Nouveau kernel driver is currently in use by your system.  This driver is
        incompatible with the NVIDIA driver, and must be disabled before proceeding. 
