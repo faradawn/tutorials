@@ -36,19 +36,37 @@ pip install -r requirements-dev.txt
 ```
 
 
-## Logs
+## My Logs
+
+### [2023-10-24] Working on first project
+add python file to import transformer class 
+
+importError: cannot import name '_generate_model_content_hash_value' 
+
+->>> try copy the ML function here
+
+- Following the [notebook example](https://opensearch-project.github.io/opensearch-py-ml/examples/demo_ml_commons_integration.html) of sentence transformers.
+- [Q]: What calls sentencetransformers.py? A: When import opensearch_py_ml library.
+- [Q]: After creating question_answering model, the cannot invoke it through API calls, right?
+- [Q] What function does the API's call? What is the backend -- django?
+- [Q] How are the scripts in the repo called? [A] import
+
+ inside init.py, define all = [MLCommonClient]
+ then import
+  from opensearch_py_ml.ml_commons import MLCommonClient
+  ml_client = MLCommonClient(client)
+
+```
+# Running the notebook
+pip install opensearch-py-ml deprecated
+```
 
 ### [2023-10-12] Questions for Dhurbo 
 - Can I download a ML model after training such as KMeans? No. How to find the undeployed model_id? Cannot find. 
 - Where did my uploaded data (CSV, models) go? Not a filesystem, but a database. When deploy model, will load into cache. 
 - What does it mean a model is responding on two nodes?
-- TODO: download the distil cased model and create a python script. 
-
-
-### Develop ML model
-- Following the [notebook example](https://opensearch-project.github.io/opensearch-py-ml/examples/demo_ml_commons_integration.html) of sentence transformers.
-
-### TODO: try ml demo notebook
+- TODO: download the distil cased model and create a python script.
+- Resolve cannot upload model by enable upload in settings (seek Slack)
 
 ### How to show all indicies?
 Left sidebar, Index Management, Indices, opensearch_dashboards_sample_data_flights
