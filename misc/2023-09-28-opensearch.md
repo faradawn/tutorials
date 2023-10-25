@@ -39,26 +39,25 @@ pip install -r requirements-dev.txt
 ## My Logs
 
 ### [2023-10-24] Working on first project
-add python file to import transformer class 
-
-importError: cannot import name '_generate_model_content_hash_value' 
-
-->>> try copy the ML function here
-
 - Following the [notebook example](https://opensearch-project.github.io/opensearch-py-ml/examples/demo_ml_commons_integration.html) of sentence transformers.
 - [Q]: What calls sentencetransformers.py? A: When import opensearch_py_ml library.
 - [Q]: After creating question_answering model, the cannot invoke it through API calls, right?
 - [Q] What function does the API's call? What is the backend -- django?
 - [Q] How are the scripts in the repo called? [A] import
-
- inside init.py, define all = [MLCommonClient]
- then import
+```
+# Procedure
+inside init.py, define all = [MLCommonClient]
+then import
   from opensearch_py_ml.ml_commons import MLCommonClient
   ml_client = MLCommonClient(client)
 
-```
-# Running the notebook
-pip install opensearch-py-ml deprecated
+# importError: cannot import name '_generate_model_content_hash_value' 
+  Solved by importing sentencetransformer.py as a module instead of a file.
+
+# Create my own
+# Model, 
+how to 
+
 ```
 
 ### [2023-10-12] Questions for Dhurbo 
