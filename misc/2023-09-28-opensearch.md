@@ -39,7 +39,17 @@ pip install -r requirements-dev.txt
 ## My Logs
 
 ### [2023-10-24] Check input to distil bert
+```
+# degbugging tracing model error
+torch.jit.trace(model, (input1, input2)) instead of passing in a dictionary
 
+# use save_pretrained to save the model to get config.json
+#   Check if modal has 1) Transformer, 2) Pooling, 3) Normalize modules
+#   Add config.json
+#   check size in bytes
+
+
+```
 ### [2023-10-24] Working on first project
 - Following the [notebook example](https://opensearch-project.github.io/opensearch-py-ml/examples/demo_ml_commons_integration.html) of sentence transformers.
 - [Q]: What calls sentencetransformers.py? A: When import opensearch_py_ml library.
