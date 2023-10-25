@@ -54,10 +54,12 @@ then import
 # importError: cannot import name '_generate_model_content_hash_value' 
   Solved by importing sentencetransformer.py as a module instead of a file.
 
-# Create my own
-# Model, 
-how to 
+# Cannot import QuestionAnsweringModel
+ Solved by 1) import in init.py, 2) in root directory, pip install .
 
+# HERE: import huggingface module: https://huggingface.co/distilbert-base-cased-distilled-squad#how-to-get-started-with-the-model
+ max_position_embeddings instead of max_sequence_length
+ TODO: move tokenizer file saved places
 ```
 
 ### [2023-10-12] Questions for Dhurbo 
