@@ -47,6 +47,29 @@ torch.jit.trace(model, (input1, input2)) instead of passing in a dictionary
 #   Check if modal has 1) Transformer, 2) Pooling, 3) Normalize modules
 #   Add config.json
 #   check size in bytes
+#   How to CURL with credentials admin admin
+POST /_plugins/_ml/model_groups/_search
+
+curl -XGET "http://localhost:9200/_plugins/_ml/model_groups/_search" -H 'Content-Type: application/json' -d'
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "terms": {
+            "_id": [
+              "Q31OaIsBLjDlmCgoebAH"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}'
+
+# Registering the model with 27 chunks, but at first chunk, got read time out
+# When registering again, it said model group already have a model with the same name.
+# How to delete the model group. (I don't have model id yet)
 
 
 ```
