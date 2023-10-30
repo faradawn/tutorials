@@ -1,4 +1,4 @@
-`# OpenSearch
+# OpenSearch
 - [Dev guide Readme](https://github.com/opensearch-project/opensearch-py-ml/blob/main/DEVELOPER_GUIDE.md) 
 - [API reference for pyml](https://opensearch-project.github.io/opensearch-py-ml/reference/index.html)
 - [Official Documentation](https://opensearch.org/docs/latest/im-plugin/index/)
@@ -37,6 +37,10 @@ pip install -r requirements-dev.txt
 
 
 ## My Logs
+
+### [2023-10-30] How to perform inference on model
+[ ] Search doc, chat gpt, how to create embeddgin. 
+[ ] inputs = tokenizer(question, text, return_tensors="pt"), take in two what means.
 
 ### [2023-10-24] Check input to distil bert
 ```
