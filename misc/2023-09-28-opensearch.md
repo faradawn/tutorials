@@ -42,7 +42,8 @@ pip install -r requirements-dev.txt
 - [x] inputs = tokenizer(question, text, return_tensors="pt"), take in two what means. Answer: simply append text to question as one long string.
 - [x] Change distilbert to questionansweringbert.
 - [x] Done 3 tests. And created a commit.
-- [ ] TODO: move test tests/ml_commons/test_model_files. Create onnx format
+- [ ] TODO: move test tests/ml_commons/test_model_files.
+- [ ] TODO: fix onnx function
 
 
 ### [2023-10-24] Check input to distil bert
