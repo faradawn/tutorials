@@ -39,8 +39,11 @@ pip install -r requirements-dev.txt
 ## My Logs
 
 ### [2023-10-30] How to perform inference on model
-[ ] Search doc, chat gpt, how to create embeddgin. 
-[ ] inputs = tokenizer(question, text, return_tensors="pt"), take in two what means.
+- [x] inputs = tokenizer(question, text, return_tensors="pt"), take in two what means. Answer: simply append text to question as one long string.
+- [x] Change distilbert to questionansweringbert.
+- [x] Done 3 tests. And created a commit.
+- [ ] TODO: move test tests/ml_commons/test_model_files. Create onnx format
+
 
 ### [2023-10-24] Check input to distil bert
 ```
