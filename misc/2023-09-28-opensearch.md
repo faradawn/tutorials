@@ -38,6 +38,15 @@ pip install -r requirements-dev.txt
 
 ## My Logs
 
+### [2023-11-02] Modify PR
+- [ ] Remove the comment # Save our model as pt
+- [ ] In test, 1) Add assertion test. 2) Fix tokenizer file not found.
+- [ ] Remove the other test file
+- [ ] Check how pytest work, work workload failed
+- [ ] Test: ModuleNotFound -- solved. nox -s test
+- [ ] Run pytest tests/filename. pytest tests/filename -k method_name
+- [ ] Next, 1) make unit tests, 2) check distil bert support different modules (auto tokenizer!).
+
 ### [2023-10-30] How to perform inference on model
 - [x] inputs = tokenizer(question, text, return_tensors="pt"), take in two what means. Answer: simply append text to question as one long string.
 - [x] Change distilbert to questionansweringbert.
