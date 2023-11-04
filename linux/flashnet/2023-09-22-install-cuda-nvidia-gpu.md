@@ -31,6 +31,7 @@ nvidia-smi
 # For torch 2.0
 pip install torch==2.0.0 torchvision==0.15.1
 
+import torch
 print("torch requires", torch.version.cuda)
 print("Is CUDA available:", torch.cuda.is_available())
 ```
@@ -38,6 +39,24 @@ print("Is CUDA available:", torch.cuda.is_available())
 
 ## Errors
 ```
+# [2023-11-04] After reboot rtx6000, nvida-smi cannot communicate.
+#   Then, purege and reinstall cuda, got error.
+#   Solved by installing linux headers.
+ERROR: Unable to find the kernel source tree for the currently running kernel. 
+       Please make sure you have installed the kernel source files for your
+       kernel and that they are properly configured; on Red Hat Linux systems,
+       for example, be sure you have the 'kernel-source' or 'kernel-devel' RPM
+       installed.  If you know the correct kernel source files are installed,
+       you may specify the kernel source path with the '--kernel-source-path'
+       command line option.
+
+
+ERROR: Installation has failed.  Please see the file
+       '/var/log/nvidia-installer.log' for details.  You may find suggestions
+       on fixing installation problems in the README available on the Linux
+       driver download page at www.nvidia.com.
+
+
 # [2023-10-14] Running pytroch CNN, RuntimeError: cuDNN error: CUDNN_STATUS_NOT_INITIALIZED
 https://pytorch.org/get-started/previous-versions/
 
