@@ -38,6 +38,28 @@ pip install -r requirements-dev.txt
 
 ## My Logs
 
+### [2023-11-09] Create PR
+- [x] Change to AutoTokenizer.
+- [x] Create basic unit tests.
+- [ ] Create similarity test between output. -> make a commit
+- [ ] Check PR: https://github.com/opensearch-project/opensearch-py-ml/pull/332
+- [ ] Check re-invent time.
+
+```
+# Run test
+python3 setup_test.py
+pytest tests/ml_models/test_sentencetransformermodel_pytest.py -k test_folder_path
+
+# Problem: When runing pytest, got pandas datetime64 error. (Pandas version 2.0.3)
+#   TypeError: Casting to unit-less dtype 'datetime64' is not supported. Pass e.g. 'datetime64[ns]' instead.
+# Solution: Modify line 60 of "tests/common.py" to "datetime64[ns]" from "datatime64".
+
+
+
+```
+
+
+
 ### [2023-11-02] Modify PR
 - [ ] Remove the comment # Save our model as pt
 - [ ] In test, 1) Add assertion test. 2) Fix tokenizer file not found.
