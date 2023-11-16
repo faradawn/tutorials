@@ -39,9 +39,13 @@ pip install -r requirements-dev.txt
 ## My Logs
 
 ### [2023-11-09] Create PR
-- [x] Change to AutoTokenizer.
+- [x] Change to AutoModelForQuestionAnswering and AutoTokenizer to support different bert models.
 - [x] Create basic unit tests.
-- [ ] Create similarity test between output. -> make a commit
+- [x] Create a unit test to check the traced model's output.
+  - The question answering model will output a [start_index, end_index] to identify the answer segment within the input.
+  - Thus, I plan to check the [start_index, end_index] against that of the official model.
+  - Cosine similarity tests can be used to check sentence embedding models.
+-  Amend sign off (in code below)
 - [ ] Check PR: https://github.com/opensearch-project/opensearch-py-ml/pull/332
 - [ ] Check re-invent time.
 
@@ -54,8 +58,16 @@ pytest tests/ml_models/test_sentencetransformermodel_pytest.py -k test_folder_pa
 #   TypeError: Casting to unit-less dtype 'datetime64' is not supported. Pass e.g. 'datetime64[ns]' instead.
 # Solution: Modify line 60 of "tests/common.py" to "datetime64[ns]" from "datatime64".
 
+# New test
+pytest tests/ml_models/test_question_answering_pytest.py -k test_folder_path
 
+# Commit with sign off
+git commit -s -m "added something"
 
+# Sign off previous commits from head
+discard all files
+git rebase HEAD~3 --signoff
+git push --force-with-lease origin feature/summarization_model_conversation
 ```
 
 
