@@ -1,4 +1,4 @@
-# Install CUDA CUDA 11.7.1 for RTX 6000
+# Install CUDA 11.7.1 for RTX 6000
 - RTX6000, CC-Ubuntu20.04 (1.27 GB)
 - python 3.8.10, 
 - pytorch v2.0.0
@@ -39,6 +39,16 @@ print("Is CUDA available:", torch.cuda.is_available())
 
 ## Errors
 ```
+# [2023-11-28] Warning guess X-path.
+#   Warning is okay, nvida-smi is normal.
+WARNING: nvidia-installer was forced to guess the X library path '/usr/lib64'
+         and X module path '/usr/lib64/xorg/modules'; these paths were not
+         queryable from the system.  If X fails to find the NVIDIA X driver
+         module, please install the `pkg-config` utility and the X.Org
+         SDK/development package for your distribution and reinstall the
+         driver.
+
+
 # [2023-11-04] After reboot rtx6000, nvida-smi cannot communicate.
 #   Then, purege and reinstall cuda, got error.
 #   Solved by installing linux headers.
