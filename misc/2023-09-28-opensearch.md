@@ -36,7 +36,17 @@ pip install -r requirements-dev.txt
 ```
 
 
+
+
+
+
 ## My Logs
+
+
+### [2023-11-30] New PR
+- Pull upstream main. Create new branch feature/question_answering_model. Add two new files.
+- Pip install -r requirements-dev.txt, which downgraded my pandas from 2.0.3 to 1.5.3.
+- Python setup tests.
 
 ### [2023-11-09] Create PR
 - [x] Change to AutoModelForQuestionAnswering and AutoTokenizer to support different bert models.
@@ -49,17 +59,26 @@ pip install -r requirements-dev.txt
 - [ ] Check PR: https://github.com/opensearch-project/opensearch-py-ml/pull/332
 - [ ] Check re-invent time.
 
+How to run
 ```
-# Run test
-python3 setup_test.py
+# Install dependencies
+python3 -m venv env
+source env/bin/activate
+pip install -r requirements-dev.txt
+
+# Build the module
+#   Create question_answering_model.py.
+#   In opensearch-py-ml/opensearch_py_ml/ml_models/__init__.py
+#   add import question answering model/
+#   Then, pip install .
+
+# Run a test
+python3 setup_tests.py
 pytest tests/ml_models/test_sentencetransformermodel_pytest.py -k test_folder_path
 
 # Problem: When runing pytest, got pandas datetime64 error. (Pandas version 2.0.3)
 #   TypeError: Casting to unit-less dtype 'datetime64' is not supported. Pass e.g. 'datetime64[ns]' instead.
 # Solution: Modify line 60 of "tests/common.py" to "datetime64[ns]" from "datatime64".
-
-# New test
-pytest tests/ml_models/test_question_answering_pytest.py -k test_folder_path
 
 # Commit with sign off
 git commit -s -m "added something"
