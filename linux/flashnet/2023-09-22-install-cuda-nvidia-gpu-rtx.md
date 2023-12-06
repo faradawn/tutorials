@@ -72,9 +72,12 @@ ERROR: Installation has failed.  Please see the file
 #    In Supported Products, a100 not found. Because it a driver for Desktop/Notebook!
 #    In a100 documentation: https://docs.nvidia.com/datacenter/tesla/hgx-software-guide/index.html#:~:text=For%20A100%20(NVIDIA%20Ampere%20architecture,driver%20is%20a%20minimum%20requirement.
 #    List of datacenter documentations: https://docs.nvidia.com/datacenter/tesla/index.html#r450-driver-release-notes
-
-
 ```
+#### Study nvida meaning
+- Finding the driver for a100 in [advanved search](https://www.nvidia.com/download/find.aspx).
+- 
+
+
 
 ### Old errors
 ```
