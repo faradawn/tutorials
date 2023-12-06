@@ -1,5 +1,7 @@
 # Install CUDA 11.7.1 for RTX 6000
-- RTX6000, CC-Ubuntu20.04 (1.27 GB)
+- [2023-12-06] Tested on A100_pcie, CC-Ubuntu20.04. Don't use the [official guide](Installation guide: https://docs.nvidia.com/datacenter/tesla/hgx-software-guide/index.html
+).
+- [2023-11-01] Tested on RTX6000, CC-Ubuntu20.04 (1.27 GB).
 - python 3.8.10, 
 - pytorch v2.0.0
 - torchvision v0.15.1
@@ -13,7 +15,7 @@ sudo apt-get remove --purge '^cuda-.*' -y
 
 # install essentails 
 sudo apt update && sudo apt upgrade -y
-sudo apt install build-essential linux-headers-$(uname -r)
+sudo apt install -y build-essential linux-headers-$(uname -r)
 
 # install cuda
 wget https://developer.download.nvidia.com/compute/cuda/11.7.1/local_installers/cuda_11.7.1_515.65.01_linux.run
@@ -25,7 +27,6 @@ nvidia-smi
 ```
 
 ## Pytorch
-- torch 2.1 -> CUDA 12.1
 - torch 2.0 -> CUDA 11.7
 ```
 # For torch 2.0
@@ -38,6 +39,44 @@ print("Is CUDA available:", torch.cuda.is_available())
 
 
 ## Errors
+### [2023-12-06] A100 Error
+```
+WARNING: You do not appear to have an NVIDIA GPU supported by the 515.76 NVIDIA
+         Linux graphics driver installed in this system.  For further details,
+         please see the appendix SUPPORTED NVIDIA GRAPHICS CHIPS in the README
+         available on the Linux driver download page at www.nvidia.com.
+
+
+ERROR: Unable to find the kernel source tree for the currently running kernel. 
+       Please make sure you have installed the kernel source files for your
+       kernel and that they are properly configured; on Red Hat Linux systems,
+       for example, be sure you have the 'kernel-source' or 'kernel-devel' RPM
+       installed.  If you know the correct kernel source files are installed,
+       you may specify the kernel source path with the '--kernel-source-path'
+       command line option.
+
+
+ERROR: Installation has failed.  Please see the file
+       '/var/log/nvidia-installer.log' for details.  You may find suggestions
+       on fixing installation problems in the README available on the Linux
+       driver download page at www.nvidia.com.
+
+# === Solution:
+#    The bottom error was caused by not installing linux header.
+#    So purging and install linux-header (need to rebuilt the instance)
+#    can remove the two errors.
+#
+#    However, the warning persisted, and nvidia-smi cannot communicate with NVIDIA driver.
+#    So, look at all supported GPU by the driver: https://www.nvidia.com/en-us/drivers/unix/
+#    Click "archive" at the end of the first section, search "515.76", click.
+#    In Supported Products, a100 not found. Because it a driver for Desktop/Notebook!
+#    In a100 documentation: https://docs.nvidia.com/datacenter/tesla/hgx-software-guide/index.html#:~:text=For%20A100%20(NVIDIA%20Ampere%20architecture,driver%20is%20a%20minimum%20requirement.
+#    List of datacenter documentations: https://docs.nvidia.com/datacenter/tesla/index.html#r450-driver-release-notes
+
+
+```
+
+### Old errors
 ```
 # [2023-11-28] Warning guess X-path.
 #   Warning is okay, nvida-smi is normal.
