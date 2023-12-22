@@ -1,10 +1,62 @@
-# Install CUDA 11.7.1 for RTX 6000
+# Install CUDA 11.7.1 for RTX 6000 Quadro 
+
+## Try CUDA 11.8
+- RTX 6000, CC-Ubuntu22.04. After upgrade: 22.04.3 LTS (GNU/Linux 5.15.0-91-generic x86_64).
+- CUDA compatibility [link](https://docs.nvidia.com/deploy/cuda-compatibility/)
+  - CUDA 12.x needs what driver: >=525.60.13. 
+  - CUDA 11.x needs what driver: >=470.223.02
+- Drivers, old versions of beta [link](https://www.nvidia.com/Download/Find.aspx?lang=en-us)
+  - RTX 6000 is compatible with what driver: 470.223.02 [link](https://www.nvidia.com/Download/Find.aspx?lang=en-us)
+
+- PyTorch 2.1.2 needs CUDA 11.8 or 12.1.
+
+```
+# First try, CUDA first
+wget https://developer.download.nvidia.com/compute/cuda/12.1.0/local_installers/cuda_12.1.0_530.30.02_linux.run
+sudo sh cuda_12.1.0_530.30.02_linux.run --toolkit --silent --override
+
+wget https://us.download.nvidia.com/XFree86/Linux-x86_64/535.146.02/NVIDIA-Linux-x86_64-535.146.02.run
+sudo sh NVIDIA-Linux-x86_64-535.146.02.run -s
+
+# -> CUDA version was wrong: Driver Version: 535.146.02   CUDA Version: 12.2
+
+### Second try, driver first
+# driver 470.223.02
+wget https://us.download.nvidia.com/XFree86/Linux-x86_64/470.223.02/NVIDIA-Linux-x86_64-470.223.02.run
+sudo sh NVIDIA-Linux-x86_64-470.223.02.run -s
+
+# CUDA 11.8
+wget https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_520.61.05_linux.run
+sudo sh cuda_11.8.0_520.61.05_linux.run --toolkit --silent --override
+
+# -> CUDA version was wrong: Driver Version: Driver Version: 470.223.02   CUDA Version: 11.4
+
+
+### Third try, driver first
+# driver 515.105.01
+wget https://us.download.nvidia.com/XFree86/Linux-x86_64/515.105.01/NVIDIA-Linux-x86_64-515.105.01.run
+sudo sh NVIDIA-Linux-x86_64-515.105.01.run -s
+
+# CUDA 11.8, install manually
+wget https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_520.61.05_linux.run
+sudo sh cuda_11.8.0_520.61.05_linux.run
+
+# -> CUDA version was wrong: Driver Version:
+
+# try 525.105.17, max cuda is 12.0.
+-> nvcc not found, cuda-11.8 not complete 
+
+
+```
+
+## CUDA 11.7 (worked)
 - [2023-12-06] Tested on A100_pcie, CC-Ubuntu20.04. Don't use the [official guide](Installation guide: https://docs.nvidia.com/datacenter/tesla/hgx-software-guide/index.html
 ).
 - [2023-11-01] Tested on RTX6000, CC-Ubuntu20.04 (1.27 GB).
 - python 3.8.10, 
 - pytorch v2.0.0
 - torchvision v0.15.1
+```
 
 ## Install
 ```
@@ -28,6 +80,7 @@ nvidia-smi
 
 ## Pytorch
 - torch 2.0 -> CUDA 11.7
+- torch 2.1 -> CUDA 11.8 or 12.1
 ```
 # For torch 2.0
 pip install torch==2.0.0 torchvision==0.15.1
