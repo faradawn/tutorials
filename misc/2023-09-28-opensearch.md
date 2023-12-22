@@ -18,6 +18,28 @@ cd opensearch-py-ml
 python3 -m venv env
 source env/bin/activate
 pip install -r requirements-dev.txt
+
+# Build the module (when testing)
+#   Create question_answering_model.py.
+#   In opensearch-py-ml/opensearch_py_ml/ml_models/__init__.py
+#   add import question answering model/
+#   Then, pip install .
+
+# Run a test
+python3 setup_tests.py
+pytest tests/ml_models/test_question_answering_pytest.py -k test_make_model_config_json_for_torch_script
+
+# Problem: When runing pytest, got pandas datetime64 error. (Pandas version 2.0.3)
+#   TypeError: Casting to unit-less dtype 'datetime64' is not supported. Pass e.g. 'datetime64[ns]' instead.
+# Solution: Modify line 60 of "tests/common.py" to "datetime64[ns]" from "datatime64".
+
+# Commit with sign off
+git commit -s -m "added something"
+
+# Sign off previous commits from head
+discard all files
+git rebase HEAD~3 --signoff
+git push --force-with-lease origin feature/summarization_model_conversation
 ```
 
 ## Configure cluster
@@ -42,6 +64,8 @@ pip install -r requirements-dev.txt
 
 ## My Logs
 
+### [2023-12-21] Add more coverage tests
+
 
 ### [2023-11-30] New PR
 - Pull upstream main. Create new branch feature/question_answering_model. Add two new files.
@@ -58,38 +82,6 @@ pip install -r requirements-dev.txt
 -  Amend sign off (in code below)
 - [ ] Check PR: https://github.com/opensearch-project/opensearch-py-ml/pull/332
 - [ ] Check re-invent time.
-
-How to run
-```
-# Install dependencies
-python3 -m venv env
-source env/bin/activate
-pip install -r requirements-dev.txt
-
-# Build the module
-#   Create question_answering_model.py.
-#   In opensearch-py-ml/opensearch_py_ml/ml_models/__init__.py
-#   add import question answering model/
-#   Then, pip install .
-
-# Run a test
-python3 setup_tests.py
-pytest tests/ml_models/test_sentencetransformermodel_pytest.py -k test_folder_path
-
-# Problem: When runing pytest, got pandas datetime64 error. (Pandas version 2.0.3)
-#   TypeError: Casting to unit-less dtype 'datetime64' is not supported. Pass e.g. 'datetime64[ns]' instead.
-# Solution: Modify line 60 of "tests/common.py" to "datetime64[ns]" from "datatime64".
-
-# Commit with sign off
-git commit -s -m "added something"
-
-# Sign off previous commits from head
-discard all files
-git rebase HEAD~3 --signoff
-git push --force-with-lease origin feature/summarization_model_conversation
-```
-
-
 
 ### [2023-11-02] Modify PR
 - [ ] Remove the comment # Save our model as pt
