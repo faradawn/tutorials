@@ -1,64 +1,42 @@
 # Install CUDA 11.7.1 for RTX 6000 Quadro 
 
-## Try CUDA 11.8
-- RTX 6000, CC-Ubuntu22.04. After upgrade: 22.04.3 LTS (GNU/Linux 5.15.0-91-generic x86_64).
+## [2023-12-24] Install CUDA 11.8 (worked)
+- Goal: install CUDA 11.8 for latest pytorch 2.1.2
+  - Instance RTX 6000, CC-Ubuntu22.04. After upgrade: 22.04.3 LTS (GNU/Linux 5.15.0-91-generic x86_64).
+  - PyTorch 2.1.0 needs CUDA 11.8 or 12.1.
+  - PyTorch 2.0.0 needs CUDA 11.7
 - CUDA compatibility [link](https://docs.nvidia.com/deploy/cuda-compatibility/)
   - CUDA 12.x needs what driver: >=525.60.13. 
   - CUDA 11.x needs what driver: >=470.223.02
-- Drivers, old versions of beta [link](https://www.nvidia.com/Download/Find.aspx?lang=en-us)
-  - RTX 6000 is compatible with what driver: 470.223.02 [link](https://www.nvidia.com/Download/Find.aspx?lang=en-us)
-
-- PyTorch 2.1.2 needs CUDA 11.8 or 12.1.
-
+  - CUDA 11.8 needs driver >= 520
+- Drivers old versions and beta [link](https://www.nvidia.com/Download/Find.aspx?lang=en-us)
+  - Driver 535 -> max CUDA 12.2
+  - Driver 470 -> max CUDA 11.4
+  - Driver 515 -> max CUDA
+  - Driver 525 -> max CUDA 12.0 
 ```
-# First try, CUDA first
-wget https://developer.download.nvidia.com/compute/cuda/12.1.0/local_installers/cuda_12.1.0_530.30.02_linux.run
-sudo sh cuda_12.1.0_530.30.02_linux.run --toolkit --silent --override
+### (Method 1, working) Install Driver 525 and CUDA 11.8
+wget https://us.download.nvidia.com/XFree86/Linux-x86_64/525.105.17/NVIDIA-Linux-x86_64-525.105.17.run
+sudo sh NVIDIA-Linux-x86_64-525.105.17.run -s
 
-wget https://us.download.nvidia.com/XFree86/Linux-x86_64/535.146.02/NVIDIA-Linux-x86_64-535.146.02.run
-sudo sh NVIDIA-Linux-x86_64-535.146.02.run -s
-
-# -> CUDA version was wrong: Driver Version: 535.146.02   CUDA Version: 12.2
-
-### Second try, driver first
-# driver 470.223.02
-wget https://us.download.nvidia.com/XFree86/Linux-x86_64/470.223.02/NVIDIA-Linux-x86_64-470.223.02.run
-sudo sh NVIDIA-Linux-x86_64-470.223.02.run -s
-
-# CUDA 11.8
 wget https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_520.61.05_linux.run
 sudo sh cuda_11.8.0_520.61.05_linux.run --toolkit --silent --override
 
-# -> CUDA version was wrong: Driver Version: Driver Version: 470.223.02   CUDA Version: 11.4
 
+### (Method 2) Install Driver 535 and CUDA 12.1
+wget https://us.download.nvidia.com/XFree86/Linux-x86_64/535.146.02/NVIDIA-Linux-x86_64-535.146.02.run
+sudo sh NVIDIA-Linux-x86_64-535.146.02.run -s
 
-### Third try, driver first
-# driver 515.105.01
-wget https://us.download.nvidia.com/XFree86/Linux-x86_64/515.105.01/NVIDIA-Linux-x86_64-515.105.01.run
-sudo sh NVIDIA-Linux-x86_64-515.105.01.run -s
-
-# CUDA 11.8, install manually
-wget https://developer.download.nvidia.com/compute/cuda/11.8.0/local_installers/cuda_11.8.0_520.61.05_linux.run
-sudo sh cuda_11.8.0_520.61.05_linux.run
-
-# -> CUDA version was wrong: Driver Version:
-
-# try 525.105.17, max cuda is 12.0.
--> nvcc not found, cuda-11.8 not complete 
-
-
+wget https://developer.download.nvidia.com/compute/cuda/12.1.0/local_installers/cuda_12.1.0_530.30.02_linux.run
+sudo sh cuda_12.1.0_530.30.02_linux.run --toolkit --silent --override
 ```
 
-## CUDA 11.7 (worked)
-- [2023-12-06] Tested on A100_pcie, CC-Ubuntu20.04. Don't use the [official guide](Installation guide: https://docs.nvidia.com/datacenter/tesla/hgx-software-guide/index.html
-).
-- [2023-11-01] Tested on RTX6000, CC-Ubuntu20.04 (1.27 GB).
+## [2023-11-01] Install CUDA 11.7 (worked)
+- Instance RTX6000, CC-Ubuntu20.04 (1.27 GB).
 - python 3.8.10, 
 - pytorch v2.0.0
 - torchvision v0.15.1
-```
 
-## Install
 ```
 # remove old installations [optional]
 sudo apt-get remove --purge '^nvidia-.*' -y
@@ -78,7 +56,7 @@ sudo sh NVIDIA-Linux-x86_64-515.76.run -s
 nvidia-smi
 ```
 
-## Pytorch
+## Test pytorch using CUDA
 - torch 2.0 -> CUDA 11.7
 - torch 2.1 -> CUDA 11.8 or 12.1
 ```
@@ -86,12 +64,55 @@ nvidia-smi
 pip install torch==2.0.0 torchvision==0.15.1
 
 import torch
-print("torch requires", torch.version.cuda)
-print("Is CUDA available:", torch.cuda.is_available())
+print("torch requires CUDA version:", torch.version.cuda)
+print("is CUDA available:", torch.cuda.is_available())
+print("device name:",torch.cuda.get_device_name(0))
 ```
 
 
 ## Errors
+
+### [2023-12-23] nvcc not found is okay. CUDA install incomplete is okay.
+```
+WARNING: nvidia-installer was forced to guess the X library path '/usr/lib64' and X module
+         path '/usr/lib64/xorg/modules'; these paths were not queryable from the system. 
+         If X fails to find the NVIDIA X driver module, please install the `pkg-config`
+         utility and the X.Org SDK/development package for your distribution and reinstall
+         the driver.
+
+
+WARNING: This NVIDIA driver package includes Vulkan components, but no Vulkan ICD loader
+         was detected on this system. The NVIDIA Vulkan ICD will not function without the
+         loader. Most distributions package the Vulkan loader; try installing the
+         "vulkan-loader", "vulkan-icd-loader", or "libvulkan1" package.
+
+# Solution
+#    Warning is okay
+
+cc@rtx6000:~$ sudo sh cuda_11.8.0_520.61.05_linux.run
+===========
+= Summary =
+===========
+
+Driver:   Not Selected
+Toolkit:  Installed in /usr/local/cuda-11.8/
+
+Please make sure that
+ -   PATH includes /usr/local/cuda-11.8/bin
+ -   LD_LIBRARY_PATH includes /usr/local/cuda-11.8/lib64, or, add /usr/local/cuda-11.8/lib64 to /etc/ld.so.conf and run ldconfig as root
+
+To uninstall the CUDA Toolkit, run cuda-uninstaller in /usr/local/cuda-11.8/bin
+***WARNING: Incomplete installation! This installation did not install the CUDA Driver. A driver of version at least 520.00 is required for CUDA 11.8 functionality to work.
+To install the driver using this installer, run the following command, replacing <CudaInstaller> with the name of this run file:
+    sudo <CudaInstaller>.run --silent --driver
+
+Logfile is /var/log/cuda-installer.log
+
+# Solution
+#    Incomplete install is okay.
+
+```
+
 ### [2023-12-06] A100 Error
 ```
 WARNING: You do not appear to have an NVIDIA GPU supported by the 515.76 NVIDIA
