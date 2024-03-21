@@ -6,7 +6,7 @@
 ## Installing OpenSearch on Intel Macbook
 - Install docker desktop.
 - Download [docker-compose.yaml](https://opensearch.org/downloads.html#docker-compose).
-- Run `docker-compose up` and open in browswer. admin admin login.
+- Run `docker-compose up` and open in browswer. Log in with Username `admin` and Password `admin`.
 
 ## Installing py-ml
 ```
